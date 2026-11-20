@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>révision brevet — cours, méthodes et brevet blanc de 3ᵉ</title>
+<meta name="description" content="Révisions de 3ᵉ : cours par matière et par zone thématique, fiches méthode, et programme de révision du brevet blanc (l'essentiel, QCM, exercices et corrigés). Gratuit, sans compte et sans publicité.">
+
+<!-- icônes -->
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<!-- ajout à l'écran d'accueil -->
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FBFCFE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="révision brevet">
+<meta name="application-name" content="révision brevet">
+
+<!-- aperçu quand on partage le lien -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="révision brevet">
+<meta property="og:title" content="révision brevet">
+<meta property="og:description" content="Cours, méthodes et programme du brevet blanc de 3ᵉ, au même endroit.">
+<meta property="og:locale" content="fr_FR">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="brevet.css">
+</head>
+<body>
+
+<div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <button class="back" id="back" style="display:none">
+      <svg viewBox="0 0 11 18" fill="none"><path d="M9.5 1.5 2 9l7.5 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Retour
+    </button>
+    <a class="brand" href="#/">
+      <svg viewBox="0 0 512 512" aria-hidden="true">
+        <defs>
+          <linearGradient id="lc" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#5E5CE6"/><stop offset="1" stop-color="#0A84FF"/>
+          </linearGradient>
+        </defs>
+        <rect x="53.6" y="33.8" width="309.5" height="357.2" rx="59.5" fill="#5E5CE6" opacity=".28"/>
+        <rect x="132.9" y="105.3" width="325.5" height="372.9" rx="69.8" fill="url(#lc)"/>
+        <path d="M202.1 298.1 262.4 363.2 392.6 213.9" fill="none" stroke="#fff"
+              stroke-width="49.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brandtxt">
+        <span class="brandname">révision brevet</span>
+        <small class="avis-brand" id="avisTop"></small>
+      </span>
+    </a>
+    <nav class="topnav">
+      <a href="#/" data-tab="accueil">Accueil</a>
+      <a href="#/brevet" data-tab="brevet">Brevet blanc</a>
+      <a href="#/methodes" data-tab="methodes">Méthodes</a>
+      <a href="#/calendrier" data-tab="calendrier">Calendrier</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app" role="main"><div class="view seed">
+  <h1 class="title">Révisions de 3ᵉ</h1>
+  <p class="subtitle">Cours, méthodes et programme du brevet blanc. Gratuit, sans compte.</p>
+  <div class="glass" style="min-height:96px"></div>
+  <noscript><p class="avis avis-bas">Ce site a besoin de JavaScript pour s'afficher.</p></noscript>
+</div></main>
+
+<nav class="tabbar">
+  <a href="#/" data-tab="accueil" class="on">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 10.2 12 3.5l8.5 6.7V20a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1z"/><path d="M9.5 21v-6.5h5V21"/></svg>
+    Accueil
+  </a>
+  <a href="#/brevet" data-tab="brevet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4.5" y="3.5" width="15" height="17.5" rx="3"/><path d="M8.5 9.5l1.6 1.6 3-3.2M8.5 15.5h7"/></svg>
+    Brevet blanc
+  </a>
+  <a href="#/methodes" data-tab="methodes">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.5 4.5l5 5L9 20H4v-5z"/><path d="M12.5 6.5l5 5"/></svg>
+    Méthodes
+  </a>
+  <a href="#/calendrier" data-tab="calendrier">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.2" y="5" width="17.6" height="16" rx="3.4"/><path d="M3.2 9.6h17.6M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none"/></svg>
+    Calendrier
+  </a>
+</nav>
+
+<script src="data.js"></script>
+<script src="cours/zones.js"></script>
+<script src="cours/francais.js"></script>
+<script src="cours/maths-a.js"></script>
+<script src="cours/maths-b.js"></script>
+<script src="cours/histoire.js"></script>
+<script src="cours/svt.js"></script>
+<script src="cours/physique.js"></script>
+<script src="cours/techno.js"></script>
+<script src="brevet/brevet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

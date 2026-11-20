@@ -1,0 +1,24 @@
+{
+  "name": "révision brevet",
+  "short_name": "révision brevet",
+  "description": "Cours par matière, fiches méthode et programme de révision du brevet blanc de 3ᵉ.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBFCFE",
+  "theme_color": "#FBFCFE",
+  "categories": ["education"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Programme du brevet blanc", "short_name": "Brevet blanc", "url": "./#/brevet" },
+    { "name": "Fiches méthode", "short_name": "Méthodes", "url": "./#/methodes" }
+  ]
+}

@@ -1,0 +1,177 @@
+/* =========================================================
+   révision brevet — styles ajoutés au site llm révision
+   (programme du brevet blanc, sessions, méthodes, zones)
+   ========================================================= */
+
+a.row { text-decoration: none; }
+h2.section small { font-weight: 500; color: var(--ink-3); }
+h2.section.auj { color: var(--blue); }
+
+/* --- barre de progression --- */
+.prog { height: 8px; border-radius: 99px; background: rgba(16,24,48,.08); overflow: hidden; margin: 12px 0 8px; }
+.prog i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--indigo), var(--blue)); transition: width .6s var(--ios); }
+.card .prog { margin-top: 2px; }
+.progtxt { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+
+/* --- remarque « chapitre ajouté » --- */
+.note-ajout {
+  font-size: 13.5px; color: var(--ink-2); margin: -6px 0 16px;
+  padding: 9px 12px; border-radius: 12px; background: rgba(94,92,230,.08);
+  border: 1px solid rgba(94,92,230,.18);
+}
+
+/* --- étapes numérotées et exemples rédigés (fiches méthode) --- */
+.card ol.etapes { margin: 0; padding: 0; list-style: none; counter-reset: etape; }
+.card ol.etapes > li {
+  counter-increment: etape; position: relative; padding-left: 34px; margin-bottom: 12px;
+  font-size: 16px; line-height: 1.5; color: var(--ink-2);
+}
+.card ol.etapes > li:last-child { margin-bottom: 0; }
+.card ol.etapes > li::before {
+  content: counter(etape); position: absolute; left: 0; top: 0;
+  width: 23px; height: 23px; border-radius: 7px; display: grid; place-items: center;
+  font-size: 12.5px; font-weight: 700; color: var(--indigo); background: rgba(94,92,230,.13);
+}
+.card ol.etapes > li b { color: var(--ink); font-weight: 600; }
+.exemple {
+  margin-top: 14px; padding: 12px 14px; border-radius: 12px;
+  background: rgba(10,132,255,.06); border-left: 4px solid var(--blue);
+  font-size: 15.5px; line-height: 1.55; color: var(--ink);
+}
+.exemple > span {
+  display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--blue-deep); margin-bottom: 4px;
+}
+
+/* --- programme : filtres par matière --- */
+.filtres { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 6px; }
+.chipf {
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  padding: 7px 13px; border-radius: 999px; color: var(--ink-2);
+  background: rgba(255,255,255,.7); border: 1px solid var(--glass-edge);
+  box-shadow: var(--shadow-sm);
+}
+.chipf.on { color: #fff; background: var(--c, var(--blue)); border-color: transparent; }
+
+/* --- programme : une session avec ses liens --- */
+.sesslist { border-radius: var(--r-lg); overflow: hidden; }
+.sess { border-bottom: 1px solid var(--hairline); }
+.sess:last-child { border-bottom: 0; }
+.sess .row { border-bottom: 0; padding-bottom: 8px; }
+.sess.fait .txt b { color: var(--ink-2); }
+.sesslinks { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 17px 14px 64px; }
+.sesslinks a, .sommaire-s a, .sommaire-s button {
+  font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer;
+  padding: 4px 10px; border-radius: 999px; color: var(--blue-deep);
+  background: rgba(10,132,255,.09); border: 0; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sesslinks a.cours, .sommaire-s a.cours { color: #1E7A3C; background: rgba(48,209,88,.14); }
+.sesslinks a.meth, .sommaire-s a.meth { color: #4B49C9; background: rgba(94,92,230,.12); }
+
+/* --- épreuves --- */
+.epreuves div { padding: 4px 0 10px; border-bottom: 1px solid var(--hairline); }
+.epreuves div:last-child { border-bottom: 0; padding-bottom: 0; }
+.epreuves b { display: flex; align-items: center; gap: 8px; font-size: 15.5px; }
+.epreuves b span { margin-left: auto; color: var(--ink-3); font-weight: 600; font-size: 14px; }
+.epreuves .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.epreuves p { margin: 4px 0 0 16px; font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+
+/* --- session : minutage et sommaire --- */
+.timing { display: flex; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-edge); margin: 2px 0 12px; box-shadow: var(--shadow-sm); }
+.timing div { padding: 7px 11px; display: flex; flex-direction: column; min-width: 0; background: rgba(255,255,255,.7); font-size: 14px; }
+.timing div:nth-child(2) { background: rgba(10,132,255,.08); }
+.timing div:nth-child(3) { background: rgba(94,92,230,.08); }
+.timing span { font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sommaire-s { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 6px; }
+
+/* --- session : contenu des fiches (HTML d'origine) --- */
+.fiche-b { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.fiche-b > :first-child { margin-top: 0; }
+.fiche-b b { color: var(--ink); }
+.fiche-b h4 { margin: 14px 0 6px; font-size: 15.5px; color: var(--ink); }
+.fiche-b p { margin: 6px 0; }
+.fiche-b ol:not(.etapes):not(.repqcm) { padding-left: 22px; margin: 6px 0; }
+.fiche-b ol:not(.etapes) > li { padding-left: 2px; margin-bottom: 4px; }
+.fiche-b ol:not(.etapes) > li::before { content: none; }
+.fiche-b .ex { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hairline); }
+.fiche-b .ex:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.fiche-b .ex h4 { margin-top: 0; }
+.fiche-b .tip { background: rgba(255,214,10,.16); border-radius: 10px; padding: 8px 12px; font-size: 15px; margin-top: 10px; }
+.fiche-b .redac { border-left: 4px solid var(--blue); background: rgba(10,132,255,.06); padding: 8px 12px; border-radius: 0 10px 10px 0; }
+.fiche-b .formule { font-size: 19px; font-weight: 700; text-align: center; color: var(--ink); margin: 10px 0; }
+.fiche-b .chaine { font-weight: 700; text-align: center; padding: 8px; background: rgba(16,24,48,.05); border-radius: 10px; color: var(--ink); }
+.fiche-b table { border-collapse: collapse; font-size: 14.5px; margin: 6px 0 10px; max-width: 100%; }
+.fiche-b .reperes { width: 100%; }
+.fiche-b .reperes th { text-align: left; white-space: nowrap; padding: 4px 12px 4px 0; color: var(--blue-deep); vertical-align: top; }
+.fiche-b .reperes td { padding: 4px 0; border-bottom: 1px solid var(--hairline); }
+.fiche-b .valeurs th, .fiche-b .valeurs td { border: 1px solid #C9D1DE; padding: 4px 10px; text-align: center; }
+.fiche-b .proc { width: 100%; }
+.fiche-b .proc th { text-align: left; vertical-align: top; padding: 4px 12px 4px 0; color: var(--blue-deep); }
+.fiche-b .proc td { padding: 4px 0; border-bottom: 1px solid var(--hairline); }
+.fiche-b .fig-row { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 16px; align-items: center; }
+.fiche-b .fig { width: 100%; height: auto; }
+.fiche-b .fig .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
+.fiche-b .fig .acc { stroke: var(--blue); stroke-width: 3; }
+.fiche-b .fig text { fill: var(--ink); font-size: 16px; font-weight: 700; font-family: inherit; }
+.fiche-b .fig text.sm { font-size: 12px; font-weight: 400; fill: var(--ink-3); }
+.fiche-b .flash { columns: 2; column-gap: 28px; }
+.fiche-b .flash li { break-inside: avoid; }
+.fiche-b code { font-family: inherit; font-size: .93em; background: rgba(16,24,48,.05); border: 1px solid var(--hairline); border-radius: 5px; padding: 0 4px; }
+.fiche-b ul { margin: 0; padding-left: 0; list-style: none; }
+
+/* --- session : QCM interactif --- */
+.qcmcard .qq { padding: 4px 0 14px; border-bottom: 1px solid var(--hairline); margin-bottom: 14px; }
+.qcmcard .qq:last-of-type { border-bottom: 0; margin-bottom: 4px; }
+.qcmcard .cq .cn { background: rgba(10,132,255,.12); color: var(--blue-deep); }
+.qcmcard .cq { margin: 0 0 10px; }
+.qq-opts { display: grid; grid-template-columns: 1fr; gap: 0; }
+.qq-opts .opt { margin-bottom: 8px; padding: 11px 14px; font-size: 15.5px; }
+.opt.lettre .mark { color: var(--ink-3); font-size: 12.5px; }
+.opt.lettre.good .mark, .opt.lettre.bad .mark { color: #fff; }
+#qqscore .why { margin-top: 6px; }
+#qqscore .btn { margin-top: 4px; }
+
+/* --- session : corrigé --- */
+.corrige .cache { margin: 0 0 12px; color: var(--ink-3); font-size: 15px; }
+.corrige h4:first-child { margin-top: 0; }
+.repqcm { margin: 0 0 6px; padding-left: 24px; }
+.repqcm li { margin-bottom: 3px; }
+.repqcm li b { color: #1E9E43; }
+#faitbtn { margin-top: 6px; }
+
+/* --- calendrier : jours de révision --- */
+.cal .grid button.rev { box-shadow: inset 0 0 0 2px rgba(94,92,230,.55); color: var(--indigo); font-weight: 700; }
+.cal .legend.rev { margin-top: 4px; }
+.cal .legend.rev i { background: transparent !important; box-shadow: inset 0 0 0 2px rgba(94,92,230,.55); }
+
+/* --- liens sous le site --- */
+.avis-bas a { color: inherit; }
+
+@media (min-width: 640px) {
+  .qq-opts { grid-template-columns: 1fr 1fr; column-gap: 10px; }
+}
+@media (max-width: 560px) {
+  .fiche-b .fig-row { grid-template-columns: minmax(0, 1fr); }
+  .fiche-b .fig { max-width: 240px; margin: 0 auto; }
+  .fiche-b .flash { columns: 1; }
+  .sesslinks { padding-left: 17px; }
+  .timing div { padding: 6px 8px; font-size: 13px; }
+}
+@media (min-width: 1000px) {
+  .sesslist { border: 1px solid #E4E8EF; border-radius: var(--r-md); }
+  .note-ajout { border-radius: 8px; }
+  .chap-main .list { grid-template-columns: repeat(2, 1fr); }
+  .chap-side .list .row { border: 0; border-bottom: 1px solid #EDF0F5; border-radius: 0; }
+  .chap-side .list .row:last-child { border-bottom: 0; }
+  .chap-side .card { margin-bottom: 0; }
+  .chap-side .hero { margin-bottom: 0; }
+  .chipf { box-shadow: none; border-color: #DDE3EC; background: #fff; }
+  .chipf.on { background: var(--c, var(--blue)); }
+  .timing { box-shadow: none; border-color: #E4E8EF; }
+}
+@media print {
+  .topbar, .tabbar, .backdrop, .sommaire-s, .actions, .filtres, .sesslinks, .avis-bas { display: none !important; }
+  body { padding: 0; background: #fff; }
+  .glass { background: #fff !important; box-shadow: none !important; border: 1px solid #ddd !important; }
+}
