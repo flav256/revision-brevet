@@ -24,7 +24,7 @@ DATA.brevet = {
   {
    "matiere": "maths",
    "duree": "2 h",
-   "detail": "Automatismes et exercices de problèmes. Calculs écrits, propriétés citées, phrase réponse avec unité."
+   "detail": "Partie 1 : automatismes, 20 min sans calculatrice. Partie 2 : problèmes, 1 h 40 avec calculatrice. Calculs écrits, propriétés citées, phrase réponse avec unité."
   },
   {
    "matiere": "histoire",

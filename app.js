@@ -312,7 +312,7 @@ function vueChapitre(id) {
     + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)} · ${esc(c.numero)}${c.zone && !c.fiche ? ' · ' + esc(c.zone) : ''}</span>
     <h1 class="title">${esc(c.titre)}</h1>
     <p class="subtitle">${esc(c.periode || '')}${c.theme ? ' · ' + esc(c.theme) : ''}</p>`;
-  if (c.ajout) html += `<p class="note-ajout">${c.fiche ? 'Fiche' : 'Chapitre'} ajouté d'après le programme de 3<sup>e</sup>. Si le cahier emploie d'autres mots ou d'autres exemples, garder ceux du cahier.</p>`;
+  if (c.ajout) html += `<p class="note-ajout">${c.fiche ? 'Fiche ajoutée' : 'Chapitre ajouté'} d'après le programme de 3<sup>e</sup>. Si le cahier emploie d'autres mots ou d'autres exemples, garder ceux du cahier.</p>`;
 
   html += `<div class="chap"><div class="chap-main">`;
 
