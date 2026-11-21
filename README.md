@@ -15,6 +15,9 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
   Sur grand écran les branches rayonnent autour du chapitre ; sur téléphone et tablette en hauteur, c'est un
   arbre vertical. Deux boutons flottants : « Cacher les mots-clés » (mode révision) et « PDF ». La carte
   est mise à l'échelle pour remplir une page A4 paysage ; mots-clés cachés, on obtient une carte à compléter.
+- **Affichage** (bouton « Aa » en haut à droite) : taille du texte (petit, normal, grand, très grand) et
+  mode relief (mots-clés et vocabulaire du chapitre en gras, en couleur, surlignés). Réglages gardés sur
+  l'appareil. Toutes les tailles de texte du contenu dépendent de la variable CSS `--fs`.
 - **Examens blancs** : trois sujets par matière (français, maths, histoire-géographie-EMC, SVT,
   physique-chimie, technologie) au format des épreuves du brevet 2027, sur les chapitres du 1er trimestre.
   Chaque sujet a sa page de garde, son chronomètre, son impression, et une page de corrigé (réponses,

@@ -29,6 +29,14 @@
 <meta property="og:description" content="Cours, méthodes et zone de révision de 3ᵉ, au même endroit.">
 <meta property="og:locale" content="fr_FR">
 
+<script>
+/* préférences d'affichage (taille du texte, mode relief) posées avant le premier affichage */
+try {
+  var fs = parseFloat(localStorage.getItem('pref:fs'));
+  if (fs >= 0.8 && fs <= 1.5) document.documentElement.style.setProperty('--fs', fs);
+  if (localStorage.getItem('pref:relief') === '1') document.documentElement.classList.add('relief');
+} catch (e) {}
+</script>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="brevet.css">
 <link rel="stylesheet" href="examens.css">

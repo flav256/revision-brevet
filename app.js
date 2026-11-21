@@ -147,6 +147,7 @@ function peindre(html, dir, apres, estAccueil) {
     if (mien !== noPeinture) return;
     const cls = dir > 0 ? 'in-r' : dir < 0 ? 'in-l' : 'in-f';
     app.innerHTML = `<div class="view ${SOBRE ? '' : cls}">${complet}</div>`;
+    if (Prefs.relief) appliquerRelief();
     window.scrollTo(0, 0);
     if (apres) requestAnimationFrame(apres);
   };
@@ -193,7 +194,7 @@ function vueAccueil() {
         <h3>${esc(e.titre)}</h3>
         ${ligneChapitreEval(e)}
         <p class="when">${esc(texteQuand(e))}</p>
-        ${e.info ? `<p class="when" style="color:var(--ink-3);font-size:14px">${esc(e.info)}</p>` : ''}
+        ${e.info ? `<p class="when" style="color:var(--ink-3);font-size:calc(14px * var(--fs, 1))">${esc(e.info)}</p>` : ''}
       </a>`;
   }
 
@@ -1019,7 +1020,7 @@ function carteEval(e) {
     <span class="flag"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)}</span>
     <h3 style="margin-top:10px">${esc(e.titre)}</h3>
     ${ligneChapitreEval(e)}
-    <p style="color:var(--ink-2);margin:6px 0 ${chs.length ? 14 : 0}px;font-size:15px">
+    <p style="color:var(--ink-2);margin:6px 0 ${chs.length ? 14 : 0}px;font-size:calc(15px * var(--fs, 1))">
       ${esc(texteQuand(e))}${e.info ? '<br>' + esc(e.info) : ''}</p>
     ${chs.map(c => `<button class="btn ghost" style="margin-top:8px" onclick="go('#/chapitre/${c.id}')">${chs.length > 1 ? 'Réviser : ' + esc(c.titre) : 'Réviser ce chapitre'}</button>`).join('')}
   </div>`;
@@ -1671,6 +1672,160 @@ function echelleApercu() {
   a.style.height = Math.ceil(fs.offsetHeight * k) + 'px';
 }
 window.addEventListener('resize', () => { if (document.querySelector('.apercu')) echelleApercu(); });
+
+/* =========================================================
+   AFFICHAGE — taille du texte et mode relief
+   Réglages enregistrés sur l'appareil (localStorage), posés
+   avant le premier affichage par le petit script de index.html.
+   La taille agit par la variable CSS --fs : toutes les tailles
+   de texte du contenu en dépendent (pas les barres de navigation,
+   ni les fiches A4, mises en page en points).
+   Le mode relief met en gras et en couleur les mots-clés déjà en
+   gras, et repère dans le texte le vocabulaire du chapitre (une
+   fois par bloc, pour ne pas tout surligner).
+   ========================================================= */
+const TAILLES = [[0.9, 'Petit'], [1, 'Normal'], [1.15, 'Grand'], [1.3, 'Très grand']];
+const Prefs = {
+  fs: 1, relief: false,
+  charger() {
+    try {
+      const f = parseFloat(localStorage.getItem('pref:fs'));
+      if (TAILLES.some(([v]) => v === f)) this.fs = f;
+      this.relief = localStorage.getItem('pref:relief') === '1';
+    } catch { /* stockage indisponible : réglages par défaut */ }
+    this.appliquer();
+  },
+  appliquer() {
+    document.documentElement.style.setProperty('--fs', String(this.fs));
+    document.documentElement.classList.toggle('relief', this.relief);
+  },
+  ecrire() {
+    try { localStorage.setItem('pref:fs', String(this.fs)); localStorage.setItem('pref:relief', this.relief ? '1' : '0'); }
+    catch { /* ignoré */ }
+  }
+};
+Prefs.charger();
+
+/* le vocabulaire de la page : celui du chapitre, ou des chapitres liés à la session ou à l'examen */
+function vocabulairePage() {
+  const [vue, id] = (location.hash || '').replace(/^#\/?/, '').split('/');
+  let ids = [];
+  if (vue === 'chapitre') ids = [id];
+  else if (vue === 'session') { const s = session(id); ids = s ? s.cours || [] : []; }
+  else if (vue === 'corrige') { const x = examen(id); ids = x ? x.cours || [] : []; }
+  const termes = new Set();
+  for (const c of ids.map(chapitre).filter(Boolean)) {
+    for (const [mot] of c.mots || []) {
+      for (const t of mot.replace(/\(.*?\)/g, '').split(/\s*\/\s*|\s+et\s+|\s*,\s*/)) {
+        if (t.trim().length >= 3) termes.add(t.trim());
+      }
+    }
+  }
+  return [...termes].sort((a, b) => b.length - a.length);
+}
+function appliquerRelief() {
+  if (!Prefs.relief) return;
+  const termes = vocabulairePage();
+  if (!termes.length) return;
+  let re;
+  try {
+    re = new RegExp('(?<![\\p{L}\\p{N}])(' + termes.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')(?:s|x)?(?![\\p{L}\\p{N}])', 'giu');
+  } catch { return; }   // navigateur trop ancien : seuls les mots déjà en gras sont mis en relief
+  app.querySelectorAll('.chap-main .card, .fiche-b, .fiche-c').forEach(bloc => {
+    if (bloc.dataset.relief) return;
+    bloc.dataset.relief = '1';
+    const vus = new Set([...bloc.querySelectorAll('b, strong')].map(b => b.textContent.trim().toLowerCase()));
+    const marcheur = document.createTreeWalker(bloc, NodeFilter.SHOW_TEXT, {
+      acceptNode: n => n.parentElement.closest('b, strong, a, button, mark, code, svg, h2, h3, h4, .calc, .rq, .repqcm')
+        ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    });
+    const noeuds = [];
+    while (marcheur.nextNode()) noeuds.push(marcheur.currentNode);
+    for (const n of noeuds) {
+      const txt = n.nodeValue;
+      let m, dernier = 0, frag = null;
+      re.lastIndex = 0;
+      while ((m = re.exec(txt))) {
+        const cle = m[1].toLowerCase();
+        if (vus.has(cle)) continue;
+        vus.add(cle);
+        frag = frag || document.createDocumentFragment();
+        frag.append(txt.slice(dernier, m.index));
+        const mk = document.createElement('mark');
+        mk.className = 'voc';
+        mk.textContent = m[0];
+        frag.append(mk);
+        dernier = m.index + m[0].length;
+      }
+      if (frag) { frag.append(txt.slice(dernier)); n.replaceWith(frag); }
+    }
+  });
+}
+function retirerRelief() {
+  app.querySelectorAll('mark.voc').forEach(mk => mk.replaceWith(document.createTextNode(mk.textContent)));
+  app.querySelectorAll('[data-relief]').forEach(b => { delete b.dataset.relief; b.normalize(); });
+}
+
+/* le bouton « Aa » de la barre du haut et son panneau */
+const btnReglages = document.createElement('button');
+btnReglages.type = 'button';
+btnReglages.className = 'reglages-btn';
+btnReglages.title = 'Affichage';
+btnReglages.setAttribute('aria-haspopup', 'dialog');
+btnReglages.setAttribute('aria-expanded', 'false');
+btnReglages.setAttribute('aria-label', 'Affichage : taille du texte et mode relief');
+btnReglages.innerHTML = '<span aria-hidden="true">A<small>A</small></span>';
+(document.querySelector('.topbar .wrap') || document.body).appendChild(btnReglages);
+const panneau = document.createElement('div');
+panneau.className = 'reglages';
+panneau.setAttribute('role', 'dialog');
+panneau.setAttribute('aria-label', 'Affichage');
+panneau.hidden = true;
+document.body.appendChild(panneau);
+panneau.addEventListener('click', e => e.stopPropagation());   // le contenu est redessiné à chaque choix
+
+function remplirReglages() {
+  panneau.innerHTML = `<p class="rg-titre">Taille du texte</p>
+    <div class="rg-tailles" role="radiogroup" aria-label="Taille du texte">${TAILLES.map(([v, nom], i) =>
+      `<button type="button" role="radio" aria-checked="${Prefs.fs === v}" class="${Prefs.fs === v ? 'on' : ''}" onclick="choisirTaille(${v})"><span style="font-size:${14 + i * 3}px">A</span><small>${nom}</small></button>`).join('')}</div>
+    <div class="rg-ligne">
+      <div><b>Mode relief</b><small>Le vocabulaire clé en gras et en couleur</small></div>
+      <button type="button" class="rg-switch${Prefs.relief ? ' on' : ''}" role="switch" aria-checked="${Prefs.relief}" aria-label="Mode relief" onclick="basculerRelief()"><i></i></button>
+    </div>
+    <p class="rg-exemple">Exemple : la <b>méiose</b> produit des <b>gamètes</b> à 23 chromosomes.</p>`;
+}
+function ouvrirReglages(ouvrir) {
+  const o = ouvrir === undefined ? panneau.hidden : ouvrir;
+  if (o) {
+    remplirReglages();
+    const r = btnReglages.getBoundingClientRect();
+    panneau.style.top = Math.round(r.bottom + 8) + 'px';
+    panneau.style.right = Math.max(10, Math.round(window.innerWidth - r.right)) + 'px';
+  }
+  panneau.hidden = !o;
+  btnReglages.setAttribute('aria-expanded', String(o));
+  btnReglages.classList.toggle('on', o);
+  if (o) { const b = panneau.querySelector('.rg-tailles .on'); if (b) b.focus({ preventScroll: true }); }
+}
+btnReglages.addEventListener('click', e => { e.stopPropagation(); ouvrirReglages(); });
+document.addEventListener('click', () => { if (!panneau.hidden) ouvrirReglages(false); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !panneau.hidden) { ouvrirReglages(false); btnReglages.focus(); }
+});
+window.addEventListener('resize', () => { if (!panneau.hidden) ouvrirReglages(true); });
+
+function choisirTaille(v) {
+  Prefs.fs = v;
+  Prefs.appliquer(); Prefs.ecrire(); remplirReglages();
+  const b = panneau.querySelector('.rg-tailles .on'); if (b) b.focus({ preventScroll: true });
+  if (document.getElementById('mm')) requestAnimationFrame(() => dessinerCarte());
+}
+function basculerRelief() {
+  Prefs.relief = !Prefs.relief;
+  Prefs.appliquer(); Prefs.ecrire(); remplirReglages();
+  const b = panneau.querySelector('.rg-switch'); if (b) b.focus({ preventScroll: true });
+  if (Prefs.relief) appliquerRelief(); else retirerRelief();
+}
 
 /* =========================================================
    ROUTEUR

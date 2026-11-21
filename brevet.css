@@ -11,11 +11,11 @@ h2.section.auj { color: var(--blue); }
 .prog { height: 8px; border-radius: 99px; background: rgba(16,24,48,.08); overflow: hidden; margin: 12px 0 8px; }
 .prog i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--indigo), var(--blue)); transition: width .6s var(--ios); }
 .card .prog { margin-top: 2px; }
-.progtxt { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+.progtxt { margin: 0; font-size: calc(14.5px * var(--fs, 1)); color: var(--ink-2); }
 
 /* --- remarque « chapitre ajouté » --- */
 .note-ajout {
-  font-size: 13.5px; color: var(--ink-2); margin: -6px 0 16px;
+  font-size: calc(13.5px * var(--fs, 1)); color: var(--ink-2); margin: -6px 0 16px;
   padding: 9px 12px; border-radius: 12px; background: rgba(94,92,230,.08);
   border: 1px solid rgba(94,92,230,.18);
 }
@@ -24,29 +24,29 @@ h2.section.auj { color: var(--blue); }
 .card ol.etapes { margin: 0; padding: 0; list-style: none; counter-reset: etape; }
 .card ol.etapes > li {
   counter-increment: etape; position: relative; padding-left: 34px; margin-bottom: 12px;
-  font-size: 16px; line-height: 1.5; color: var(--ink-2);
+  font-size: calc(16px * var(--fs, 1)); line-height: 1.5; color: var(--ink-2);
 }
 .card ol.etapes > li:last-child { margin-bottom: 0; }
 .card ol.etapes > li::before {
   content: counter(etape); position: absolute; left: 0; top: 0;
   width: 23px; height: 23px; border-radius: 7px; display: grid; place-items: center;
-  font-size: 12.5px; font-weight: 700; color: var(--indigo); background: rgba(94,92,230,.13);
+  font-size: calc(12.5px * var(--fs, 1)); font-weight: 700; color: var(--indigo); background: rgba(94,92,230,.13);
 }
 .card ol.etapes > li b { color: var(--ink); font-weight: 600; }
 .exemple {
   margin-top: 14px; padding: 12px 14px; border-radius: 12px;
   background: rgba(10,132,255,.06); border-left: 4px solid var(--blue);
-  font-size: 15.5px; line-height: 1.55; color: var(--ink);
+  font-size: calc(15.5px * var(--fs, 1)); line-height: 1.55; color: var(--ink);
 }
 .exemple > span {
-  display: block; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  display: block; font-size: calc(12px * var(--fs, 1)); font-weight: 700; letter-spacing: .04em;
   text-transform: uppercase; color: var(--blue-deep); margin-bottom: 4px;
 }
 
 /* --- programme : filtres par matière --- */
 .filtres { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 6px; }
 .chipf {
-  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+  font: inherit; font-size: calc(14px * var(--fs, 1)); font-weight: 600; cursor: pointer;
   padding: 7px 13px; border-radius: 999px; color: var(--ink-2);
   background: rgba(255,255,255,.7); border: 1px solid var(--glass-edge);
   box-shadow: var(--shadow-sm);
@@ -61,7 +61,7 @@ h2.section.auj { color: var(--blue); }
 .sess.fait .txt b { color: var(--ink-2); }
 .sesslinks { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 17px 14px 64px; }
 .sesslinks a, .sommaire-s a, .sommaire-s button {
-  font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer;
+  font: inherit; font-size: calc(13px * var(--fs, 1)); font-weight: 600; text-decoration: none; cursor: pointer;
   padding: 4px 10px; border-radius: 999px; color: var(--blue-deep);
   background: rgba(10,132,255,.09); border: 0; max-width: 100%;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -81,20 +81,20 @@ h2.section.auj { color: var(--blue); }
 /* --- épreuves --- */
 .epreuves div { padding: 4px 0 10px; border-bottom: 1px solid var(--hairline); }
 .epreuves div:last-child { border-bottom: 0; padding-bottom: 0; }
-.epreuves b { display: flex; align-items: center; gap: 8px; font-size: 15.5px; }
-.epreuves b span { margin-left: auto; color: var(--ink-3); font-weight: 600; font-size: 14px; }
+.epreuves b { display: flex; align-items: center; gap: 8px; font-size: calc(15.5px * var(--fs, 1)); }
+.epreuves b span { margin-left: auto; color: var(--ink-3); font-weight: 600; font-size: calc(14px * var(--fs, 1)); }
 .epreuves .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.epreuves p { margin: 4px 0 0 16px; font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+.epreuves p { margin: 4px 0 0 16px; font-size: calc(14.5px * var(--fs, 1)); color: var(--ink-2); line-height: 1.45; }
 
 /* --- session : les pastilles du sommaire --- */
 .sommaire-s { display: flex; flex-wrap: wrap; gap: 7px; margin: 4px 0 6px; }
-.sommaire-s a, .sommaire-s button { font-size: 14px; padding: 6px 12px; }
+.sommaire-s a, .sommaire-s button { font-size: calc(14px * var(--fs, 1)); padding: 6px 12px; }
 
 /* --- session : contenu des fiches (HTML d'origine) --- */
-.fiche-b { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.fiche-b { font-size: calc(16px * var(--fs, 1)); line-height: 1.55; color: var(--ink-2); }
 .fiche-b > :first-child { margin-top: 0; }
 .fiche-b b { color: var(--ink); }
-.fiche-b h4 { margin: 14px 0 6px; font-size: 15.5px; color: var(--ink); }
+.fiche-b h4 { margin: 14px 0 6px; font-size: calc(15.5px * var(--fs, 1)); color: var(--ink); }
 .fiche-b p { margin: 6px 0; }
 .fiche-b ol:not(.etapes):not(.repqcm) { padding-left: 22px; margin: 6px 0; }
 .fiche-b ol:not(.etapes) > li { padding-left: 2px; margin-bottom: 4px; }
@@ -102,11 +102,11 @@ h2.section.auj { color: var(--blue); }
 .fiche-b .ex { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hairline); }
 .fiche-b .ex:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
 .fiche-b .ex h4 { margin-top: 0; }
-.fiche-b .tip { background: rgba(255,214,10,.16); border-radius: 10px; padding: 8px 12px; font-size: 15px; margin-top: 10px; }
+.fiche-b .tip { background: rgba(255,214,10,.16); border-radius: 10px; padding: 8px 12px; font-size: calc(15px * var(--fs, 1)); margin-top: 10px; }
 .fiche-b .redac { border-left: 4px solid var(--blue); background: rgba(10,132,255,.06); padding: 8px 12px; border-radius: 0 10px 10px 0; }
-.fiche-b .formule { font-size: 19px; font-weight: 700; text-align: center; color: var(--ink); margin: 10px 0; }
+.fiche-b .formule { font-size: calc(19px * var(--fs, 1)); font-weight: 700; text-align: center; color: var(--ink); margin: 10px 0; }
 .fiche-b .chaine { font-weight: 700; text-align: center; padding: 8px; background: rgba(16,24,48,.05); border-radius: 10px; color: var(--ink); }
-.fiche-b table { border-collapse: collapse; font-size: 14.5px; margin: 6px 0 10px; max-width: 100%; }
+.fiche-b table { border-collapse: collapse; font-size: calc(14.5px * var(--fs, 1)); margin: 6px 0 10px; max-width: 100%; }
 .fiche-b .reperes { width: 100%; }
 .fiche-b .reperes th { text-align: left; white-space: nowrap; padding: 4px 12px 4px 0; color: var(--blue-deep); vertical-align: top; }
 .fiche-b .reperes td { padding: 4px 0; border-bottom: 1px solid var(--hairline); }
@@ -118,8 +118,8 @@ h2.section.auj { color: var(--blue); }
 .fiche-b .fig { width: 100%; height: auto; }
 .fiche-b .fig .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
 .fiche-b .fig .acc { stroke: var(--blue); stroke-width: 3; }
-.fiche-b .fig text { fill: var(--ink); font-size: 16px; font-weight: 700; font-family: inherit; }
-.fiche-b .fig text.sm { font-size: 12px; font-weight: 400; fill: var(--ink-3); }
+.fiche-b .fig text { fill: var(--ink); font-size: calc(16px * var(--fs, 1)); font-weight: 700; font-family: inherit; }
+.fiche-b .fig text.sm { font-size: calc(12px * var(--fs, 1)); font-weight: 400; fill: var(--ink-3); }
 .fiche-b .flash { columns: 2; column-gap: 28px; }
 .fiche-b .flash li { break-inside: avoid; }
 .fiche-b code { font-family: inherit; font-size: .93em; background: rgba(16,24,48,.05); border: 1px solid var(--hairline); border-radius: 5px; padding: 0 4px; }
@@ -131,14 +131,14 @@ h2.section.auj { color: var(--blue); }
 .qcmcard .cq .cn { background: rgba(10,132,255,.12); color: var(--blue-deep); }
 .qcmcard .cq { margin: 0 0 10px; }
 .qq-opts { display: grid; grid-template-columns: 1fr; gap: 0; }
-.qq-opts .opt { margin-bottom: 8px; padding: 11px 14px; font-size: 15.5px; }
-.opt.lettre .mark { color: var(--ink-3); font-size: 12.5px; }
+.qq-opts .opt { margin-bottom: 8px; padding: 11px 14px; font-size: calc(15.5px * var(--fs, 1)); }
+.opt.lettre .mark { color: var(--ink-3); font-size: calc(12.5px * var(--fs, 1)); }
 .opt.lettre.good .mark, .opt.lettre.bad .mark { color: #fff; }
 #qqscore .why { margin-top: 6px; }
 #qqscore .btn { margin-top: 4px; }
 
 /* --- session : corrigé --- */
-.corrige .cache { margin: 0 0 12px; color: var(--ink-3); font-size: 15px; }
+.corrige .cache { margin: 0 0 12px; color: var(--ink-3); font-size: calc(15px * var(--fs, 1)); }
 .corrige h4:first-child { margin-top: 0; }
 .repqcm { margin: 0 0 6px; padding-left: 24px; }
 .repqcm li { margin-bottom: 3px; }
@@ -151,10 +151,10 @@ h2.section.auj { color: var(--blue); }
    Les tailles de la feuille sont en em : le script baisse la
    taille du texte jusqu'à ce que chaque face tienne sur une page.
    ========================================================= */
-.imp-outils .title { font-size: 24px; margin: 0 0 6px; }
-.imp-outils p { margin: 0 0 12px; color: var(--ink-2); font-size: 15.5px; }
+.imp-outils .title { font-size: calc(24px * var(--fs, 1)); margin: 0 0 6px; }
+.imp-outils p { margin: 0 0 12px; color: var(--ink-2); font-size: calc(15.5px * var(--fs, 1)); }
 .imp-outils .actions { margin: 4px 0 10px; }
-.imp-outils .aide { font-size: 13.5px; color: var(--ink-3); margin: 0; }
+.imp-outils .aide { font-size: calc(13.5px * var(--fs, 1)); color: var(--ink-3); margin: 0; }
 .apercu { position: relative; margin: 16px 0 6px; overflow: hidden; }
 .feuilles { width: 210mm; transform-origin: 0 0; margin: 0 auto; }
 
@@ -281,3 +281,57 @@ body.vue-carte .haut-page { bottom: calc(var(--tab-h) + env(safe-area-inset-bott
   body.vue-carte .haut-page { bottom: 152px; }
 }
 @media print { .haut-page { display: none !important; } }
+
+/* --- affichage : le bouton « Aa » de la barre du haut et son panneau --- */
+.reglages-btn {
+  margin-left: auto; flex: none; width: 42px; height: 38px; border-radius: 12px; border: 0; padding: 0; cursor: pointer;
+  display: grid; place-items: center; background: transparent; color: var(--ink);
+  font: inherit; font-size: 19px; font-weight: 700; letter-spacing: -.02em; line-height: 1;
+}
+.reglages-btn small { font-size: 13px; font-weight: 700; margin-left: 1px; }
+.reglages-btn:hover, .reglages-btn.on { background: rgba(16,24,48,.07); }
+@media (min-width: 1000px) { .reglages-btn { margin-left: 18px; } }
+
+.reglages {
+  position: fixed; z-index: 80; width: min(330px, calc(100vw - 20px)); padding: 14px 14px 12px; border-radius: 18px;
+  background: rgba(255,255,255,.97); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  border: 1px solid rgba(16,24,48,.07); box-shadow: 0 18px 48px rgba(16,24,48,.22), 0 2px 6px rgba(16,24,48,.08);
+  color: var(--ink); font-size: 15px; line-height: 1.35;
+}
+.reglages[hidden] { display: none; }
+.rg-titre { margin: 0 0 8px; font-size: 12px; font-weight: 700; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.rg-tailles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+.rg-tailles button {
+  font: inherit; cursor: pointer; color: var(--ink); background: #fff; border: 1px solid #DDE3EC; border-radius: 12px;
+  padding: 7px 2px 6px; display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.rg-tailles button span { font-weight: 700; line-height: 1; height: 24px; display: flex; align-items: flex-end; }
+.rg-tailles button small { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+.rg-tailles button.on { border-color: var(--blue); background: rgba(10,132,255,.08); box-shadow: inset 0 0 0 1px var(--blue); }
+.rg-tailles button.on small { color: var(--blue-deep); font-weight: 600; }
+.rg-ligne { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0 9px; border-top: 1px solid var(--hairline); }
+.rg-ligne b { display: block; font-size: 15.5px; }
+.rg-ligne small { display: block; font-size: 13px; color: var(--ink-3); margin-top: 1px; }
+.rg-switch { flex: none; position: relative; width: 51px; height: 31px; border: 0; padding: 0; border-radius: 999px; cursor: pointer; background: #E1E5EB; transition: background .2s; }
+.rg-switch i { position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,.22); transition: transform .22s var(--ios); }
+.rg-switch.on { background: #34C759; }
+.rg-switch.on i { transform: translateX(20px); }
+.rg-exemple { margin: 4px 0 0; padding: 8px 10px; border-radius: 10px; background: #F5F7FA; font-size: 14px; color: var(--ink-2); }
+.rg-exemple b { color: var(--ink); }
+
+/* --- mode relief : mots-clés et vocabulaire en gras, en couleur, surlignés --- */
+html.relief .card li b, html.relief .card p b, html.relief .keycard b, html.relief .exemple b,
+html.relief .fiche-b b, html.relief .fiche-c b, html.relief .rg-exemple b, html.relief .wbody b, html.relief mark.voc {
+  color: #0B4FA8; font-weight: 700; border-radius: 2px; padding: 0 .08em;
+  background: linear-gradient(transparent 58%, rgba(255,214,10,.45) 58%);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+mark.voc { background: none; color: inherit; }
+/* jamais dans les fiches A4 ni sur la copie d'examen */
+html.relief .feuille b, html.relief .copie-sujet b { color: inherit; background: none; padding: 0; }
+@media print { .reglages, .reglages-btn { display: none !important; } }
+
+/* l'animation d'entrée des pages fait glisser la vue de 28 px : sur téléphone, ce
+   dépassement élargissait la page (défilement de côté). On le coupe à la zone de contenu. */
+#app { overflow-x: clip; }
