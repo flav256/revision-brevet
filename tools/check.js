@@ -13,7 +13,10 @@ let fichiers = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => 
 if (process.argv.length > 2) fichiers = ['data.js', ...process.argv.slice(2)];
 
 const ctx = vm.createContext({ console });
+const absents = [];
 for (const f of fichiers) {
+  /* un fichier d'examen pas encore écrit : on le signale sans bloquer */
+  if (f.startsWith('examens/') && !fs.existsSync(path.join(racine, f))) { absents.push(f); continue; }
   const code = fs.readFileSync(path.join(racine, f), 'utf8');
   try { vm.runInContext(code, ctx, { filename: f }); }
   catch (e) { console.error('ERREUR de syntaxe dans', f, ':', e.message); process.exit(1); }
@@ -70,8 +73,67 @@ if (B) {
   for (const r of B.methodes || []) if (!ids.has(r)) err('brevet', 'méthode inconnue : ' + r);
 }
 
+/* ---------- examens blancs ---------- */
+const avert = [];
+const E = DATA.examens || [];
+const eids = new Set();
+const MATS_EX = new Set(['francais', 'maths', 'histoire', 'svt', 'physique', 'techno']);
+const equilibre = (h, t) => (h.match(new RegExp('<' + t + '[\\s>]', 'g')) || []).length === (h.match(new RegExp('</' + t + '>', 'g')) || []).length;
+for (const x of E) {
+  const id = x.id || '(examen sans id)';
+  if (!str(x.id) || eids.has(x.id)) err(id, 'id manquant ou en double');
+  eids.add(x.id);
+  if (!MATS_EX.has(x.matiere)) err(id, 'matière inconnue : ' + x.matiere);
+  if (!Number.isInteger(x.numero)) err(id, 'numero manquant');
+  for (const k of ['titre', 'epreuve', 'duree', 'methode']) if (!str(x[k])) err(id, k + ' manquant');
+  if (typeof x.points !== 'number') err(id, 'points manquant');
+  for (const r of [...(x.cours || []), ...(x.methodes || [])]) if (!ids.has(r)) err(id, 'chapitre inconnu : ' + r);
+  if (!(x.cours || []).length) err(id, 'aucun chapitre couvert (cours)');
+  if (!Array.isArray(x.garde) || !x.garde.every(str)) err(id, 'garde : liste de lignes attendue');
+  if (!Array.isArray(x.parties) || !x.parties.length) { err(id, 'parties manquantes'); continue; }
+  const somme = x.parties.reduce((n, p) => n + (p.points || 0), 0) + (x.pointsRedaction || 0);
+  if (Math.abs(somme - x.points) > 1e-9) err(id, `points : parties + rédaction = ${somme}, total annoncé ${x.points}`);
+  const tout = [...x.parties.map(p => p.html || ''), x.annexe || '', ...(x.corrige || []).map(c => c.html || ''), x.methode || ''];
+  x.parties.forEach((p, i) => {
+    if (!str(p.titre) || !str(p.html)) err(id, `partie ${i + 1} : titre ou html manquant`);
+    const pts = [...(p.html || '').matchAll(/class="pts">\s*\((\d+(?:[.,]\d+)?)\s*points?\)/g)].map(m => parseFloat(m[1].replace(',', '.')));
+    const s2 = pts.reduce((a, b) => a + b, 0);
+    if (pts.length && Math.abs(s2 - (p.points || 0)) > 1e-9) avert.push(`${id} partie ${i + 1} : questions = ${s2} pts, partie = ${p.points} pts (vérifier)`);
+  });
+  tout.forEach((h, i) => { for (const t of ['div', 'table', 'ol', 'ul', 'svg', 'figure', 'blockquote']) if (!equilibre(h, t)) err(id, `bloc ${i + 1} : balises <${t}> non fermées`); });
+  if (!Array.isArray(x.corrige) || x.corrige.length !== x.parties.length) err(id, 'corrigé : une entrée par partie attendue');
+  else x.corrige.forEach((c, i) => { if (!str(c.titre) || !str(c.html)) err(id, `corrigé ${i + 1} vide`); });
+  if (x.matiere === 'francais') {
+    const d = x.dictee || {};
+    if (!str(d.texte) || !str(d.source)) err(id, 'dictée : texte et source attendus');
+    else {
+      if (d.texte.length < 400 || d.texte.length > 900) avert.push(`${id} : dictée de ${d.texte.length} signes (≈ 600 attendus)`);
+      if (x.parties.some(p => (p.html || '').includes(d.texte.slice(20, 60)))) err(id, 'le texte de la dictée apparaît dans le sujet');
+    }
+    if (!x.parties.some(p => p.type === 'dictee')) err(id, "aucune partie de type 'dictee'");
+  }
+  for (const m of tout.join(' ').matchAll(/src="([^"]+)"/g)) {
+    if (!/^https?:/.test(m[1]) && !fs.existsSync(path.join(racine, m[1]))) err(id, 'image absente : ' + m[1]);
+  }
+}
+if (absents.length) console.log('Examens pas encore écrits : ' + absents.join(', '));
+
+/* ---------- cartes mentales ---------- */
+const CARTES = DATA.cartes || {};
+for (const [cid, carte] of Object.entries(CARTES)) {
+  if (!ids.has(cid)) err('carte ' + cid, 'chapitre inconnu');
+  const br = carte.branches || [];
+  if (br.length < 3 || br.length > 6) err('carte ' + cid, `${br.length} branches (3 à 6 attendues)`);
+  br.forEach((b, i) => {
+    if (!str(b.titre) || !Array.isArray(b.feuilles) || !b.feuilles.length || !b.feuilles.every(str)) err('carte ' + cid, `branche ${i + 1} invalide`);
+    else for (const f of b.feuilles) if (f.replace(/<[^>]+>/g, '').length > 60) avert.push(`carte ${cid} : feuille longue (${f.replace(/<[^>]+>/g, '').length} car.) : ${f}`);
+  });
+}
+
 const nouveaux = DATA.chapitres.filter(c => c.ajout);
-console.log(`${DATA.chapitres.length} chapitres (dont ${nouveaux.length} ajoutés), ${B ? B.sessions.length + ' sessions' : 'pas de brevet chargé'}`);
+console.log(`${DATA.chapitres.length} chapitres (dont ${nouveaux.length} ajoutés), ${B ? B.sessions.length + ' sessions' : 'pas de brevet chargé'}, ${E.length} examens blancs, ${Object.keys(CARTES).length} cartes mentales`);
+for (const x of E) console.log(`  ${x.id.padEnd(14)} ${String(x.points).padStart(3)} pts · ${x.parties.length} parties · ${x.cours.join(', ')} · ${x.titre}`);
+if (avert.length) console.log('Avertissements :\n  ' + avert.join('\n  '));
 for (const c of (process.argv.length > 2 ? nouveaux : [])) {
   const rep = [0, 0, 0, 0];
   (c.quiz || []).forEach(q => rep[q.bonne]++);

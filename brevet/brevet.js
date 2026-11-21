@@ -22,23 +22,23 @@ DATA.brevet = {
   {
    "matiere": "francais",
    "duree": "3 h",
-   "detail": "Compréhension et analyse d'un texte, grammaire, réécriture, dictée, puis rédaction (imagination ou réflexion)."
+   "detail": "Texte littéraire et image : compréhension (32 points) et grammaire avec réécriture (18 points), 1 h 10. Dictée (10 points, 20 min). Rédaction (40 points, 1 h 30) : réflexion ou imagination."
   },
   {
    "matiere": "maths",
    "duree": "2 h",
-   "detail": "Partie 1 : automatismes, 20 min sans calculatrice. Partie 2 : problèmes, 1 h 40 avec calculatrice. Calculs écrits, propriétés citées, phrase réponse avec unité."
+   "detail": "Partie 1 : automatismes, 6 points en 20 min, sans calculatrice. Partie 2 : problèmes, 14 points en 1 h 40, avec calculatrice, dont 2 points de rédaction. Calculs écrits, propriétés citées, phrase réponse avec unité."
   },
   {
    "matiere": "histoire",
    "duree": "2 h",
-   "detail": "Analyse de documents, développement construit, repères et EMC."
+   "detail": "Histoire-géographie sur 40 : documents (15 points), développement construit d'au moins trente lignes (18 points), frise, croquis ou schéma (7 points). EMC sur 20 : une situation pratique."
   },
   {
    "matiere": "svt",
    "duree": "1 h",
    "nom": "Sciences",
-   "detail": "Deux matières parmi physique-chimie, SVT et technologie : environ 30 minutes chacune."
+   "detail": "Deux disciplines sur trois (physique-chimie, SVT, technologie), annoncées deux mois avant : 30 minutes et 10 points chacune."
   }
  ],
  "note": "Contenu rédigé d'après le programme de 3e. Si le cahier emploie d'autres mots ou d'autres exemples, garder ceux du cahier.",

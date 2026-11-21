@@ -181,6 +181,7 @@ function vueAccueil() {
               <p class="subtitle">${dateLongue(today())}</p>`;
 
   html += carteRevision();
+  html += carteExamens();
 
   if (prochaines.length) {
     const e = prochaines[0];
@@ -268,6 +269,11 @@ function vueMatiere(id) {
                                      fiches.length ? fiches.length + (fiches.length > 1 ? ' méthodes' : ' méthode') : '']
                                      .filter(Boolean).join(' · ')}</p>`;
 
+  const cartes = cartesMatiere(id);
+  if (cartes.length) {
+    html += `<nav class="sommaire-s mm-autres" aria-label="Cartes mentales"><span class="lbl">${ICONE_CARTE}Cartes mentales</span>${
+      cartes.map(c => `<a href="#/carte/${c.id}">${esc(c.numero)}</a>`).join('')}</nav>`;
+  }
   if (chs.length) {
     html += zonesDe(id).map(([z, l]) =>
       `<h2 class="section">${esc(z)}</h2><div class="glass list">${l.map(ligneChapitre).join('')}</div>`).join('');
@@ -284,6 +290,11 @@ function vueMatiere(id) {
   if (sess.length) {
     html += `<h2 class="section">Révision <small>· l'essentiel, QCM, exercices, corrigé</small></h2>
              <div class="glass sesslist">${sess.map(lienSession).join('')}</div>`;
+  }
+  const exs = examensDe(id);
+  if (exs.length) {
+    html += `<h2 class="section">Examens blancs <small>· format du brevet 2027</small></h2>
+             <div class="glass sesslist">${exs.map(ligneExamen).join('')}</div>`;
   }
   return html;
 }
@@ -323,6 +334,7 @@ function vueChapitre(id) {
   html += `<div class="actions">
              ${aQuiz ? `<button class="btn" onclick="go('#/quiz/${c.id}')">${c.fiche ? "S'entraîner" : 'Faire les exercices'}</button>` : ''}
              <button class="btn quiet" onclick="versLeCours()">${c.fiche ? 'Lire la méthode en entier' : 'Lire le cours en entier'}</button>
+             ${CARTES[c.id] ? `<button class="btn quiet imp carte" onclick="go('#/carte/${c.id}')">${ICONE_CARTE}Carte mentale</button>` : ''}
              <button class="btn quiet imp" onclick="go('#/imprimer/chapitre/${c.id}')">${ICONE_IMP}Imprimer / PDF</button>
            </div>`;
   if (s) html += `<p class="record">Ton record sur ce ${c.fiche ? 'quiz' : 'chapitre'} : ${s.pct}%
@@ -340,6 +352,12 @@ function vueChapitre(id) {
           + sess.map(x => ligneSessionCourte(x)).join('') + `</div>`
       : `<h2 class="section">Réviser ce chapitre</h2><div class="glass sesslist sidelist">`
           + sess.map(lienSession).join('') + `</div>`;
+  }
+
+  const exs = examensChapitre(c.id);
+  if (exs.length) {
+    html += `<h2 class="section">En conditions d'examen</h2><div class="glass list sidelist">`
+          + exs.map(ligneExamenCourte).join('') + `</div>`;
   }
 
   /* les méthodes utiles depuis un chapitre, les chapitres où appliquer depuis une méthode */
@@ -1032,6 +1050,411 @@ function choisirJour(jour) {
 }
 
 /* =========================================================
+   CARTES MENTALES — une carte par chapitre (DATA.cartes,
+   dans cours/cartes-*.js). Au centre le chapitre, autour ses
+   grandes idées, au bout les mots-clés. La mise en page est
+   en CSS ; les liaisons sont dessinées en SVG ensuite, et
+   redessinées quand la largeur change ou à l'impression.
+   Grand écran : les branches rayonnent à gauche et à droite.
+   Téléphone et tablette en hauteur : un arbre vertical.
+   ========================================================= */
+const CARTES = DATA.cartes || {};
+const COULEURS_CARTE = ['#0A6FE0', '#1E9E50', '#E07800', '#9B3FD0', '#E0245E', '#128A9E'];
+const ICONE_CARTE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="5" r="2"/><circle cx="20" cy="5" r="2"/><circle cx="4" cy="19" r="2"/><circle cx="20" cy="19" r="2"/><path d="M9.6 10.4 5.6 6.6M14.4 10.4l4-3.8M9.6 13.6l-4 3.8M14.4 13.6l4 3.8"/></svg>';
+const LARGEUR_CARTE = 900;   // en dessous : arbre vertical
+const cartesMatiere = mid => Object.keys(CARTES).map(chapitre).filter(c => c && c.matiere === mid);
+
+function vueCarte(id) {
+  const c = chapitre(id), carte = CARTES[id];
+  if (!c || !carte) return `<div class="glass"><p class="empty">Cette carte mentale n'existe pas.<br><a href="#/" style="color:var(--blue)">Retour à l'accueil</a></p></div>`;
+  const m = matiere(c.matiere);
+  const br = carte.branches || [];
+  const moitie = Math.ceil(br.length / 2);
+  const bloc = (b, i) => `<div class="mm-br" style="--c:${COULEURS_CARTE[i % COULEURS_CARTE.length]}">
+      <div class="mm-noeud">${esc(b.titre)}</div>
+      <ul class="mm-feuilles">${(b.feuilles || []).map(f => `<li>${f}</li>`).join('')}</ul></div>`;
+  const liste = cartesMatiere(c.matiere);
+  const i = liste.indexOf(c);
+  const large = (app.clientWidth || window.innerWidth) >= LARGEUR_CARTE;
+  return fil([['Accueil', '#/'], [m.nom, '#/matiere/' + m.id], [c.numero, '#/chapitre/' + c.id], ['Carte mentale', null]])
+    + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)} · ${esc(c.numero)} · carte mentale</span>
+    <h1 class="title">${esc(c.titre)}</h1>
+    <p class="subtitle">Les idées clés du chapitre en un coup d'œil. Pour réviser : cacher les mots-clés et les retrouver à partir des branches.</p>
+    <div class="actions mm-actions">
+      <button class="btn quiet" onclick="go('#/chapitre/${c.id}')">Lire le cours</button>
+      <button class="btn quiet" id="mmcache" onclick="cacherFeuilles()">Cacher les mots-clés</button>
+      <button class="btn quiet imp" onclick="window.print()">${ICONE_IMP}Imprimer / PDF</button>
+    </div>
+    <div class="mm${large ? ' large' : ''}" id="mm" style="--mc:${m.couleur}">
+      <svg class="mm-liens" id="mmliens" aria-hidden="true"></svg>
+      <div class="mm-cote gauche">${br.slice(0, moitie).map(bloc).join('')}</div>
+      <div class="mm-centre" id="mmcentre"><small>${esc(m.nom)} · ${esc(c.numero)}</small><b>${esc(carte.centre || c.titre)}</b></div>
+      <div class="mm-cote droite">${br.slice(moitie).map((b, j) => bloc(b, j + moitie)).join('')}</div>
+    </div>
+    ${liste.length > 1 ? `<nav class="sommaire-s mm-autres" aria-label="Les autres cartes">${
+      liste.map(x => x === c ? `<span class="on">${esc(x.numero)}</span>` : `<a href="#/carte/${x.id}">${esc(x.numero)} · ${esc(x.titre)}</a>`).join('')}</nav>` : ''}
+    <div class="actions mm-nav">
+      ${liste[i - 1] ? `<button class="btn ghost" onclick="go('#/carte/${liste[i - 1].id}')">‹ ${esc(liste[i - 1].numero)}</button>` : ''}
+      ${liste[i + 1] ? `<button class="btn ghost" onclick="go('#/carte/${liste[i + 1].id}')">${esc(liste[i + 1].numero)} ›</button>` : ''}
+    </div>`;
+}
+
+function cacherFeuilles() {
+  const mm = document.getElementById('mm');
+  if (!mm) return;
+  const cache = mm.classList.toggle('cache');
+  const b = document.getElementById('mmcache');
+  if (b) b.textContent = cache ? 'Montrer les mots-clés' : 'Cacher les mots-clés';
+}
+/* en mode « caché », toucher une feuille la révèle */
+document.addEventListener('click', e => {
+  const li = e.target.closest && e.target.closest('.mm.cache .mm-feuilles li');
+  if (li) li.classList.toggle('vu');
+});
+
+const courbe = (x1, y1, x2, y2) => {
+  const dx = (x2 - x1) * 0.5;
+  return `M${x1.toFixed(1)} ${y1.toFixed(1)} C${(x1 + dx).toFixed(1)} ${y1.toFixed(1)} ${(x2 - dx).toFixed(1)} ${y2.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+};
+const coude = (x, y1, y2, x2) => {   // descend en x, puis tourne vers la droite jusqu'à x2
+  const r = Math.min(10, Math.max(0, y2 - y1));
+  return `M${x.toFixed(1)} ${y1.toFixed(1)} V${(y2 - r).toFixed(1)} Q${x.toFixed(1)} ${y2.toFixed(1)} ${(x + r).toFixed(1)} ${y2.toFixed(1)} H${x2.toFixed(1)}`;
+};
+
+function dessinerCarte(forcerLarge) {
+  const mm = document.getElementById('mm');
+  const svg = document.getElementById('mmliens');
+  const ce = document.getElementById('mmcentre');
+  if (!mm || !svg || !ce) return;
+  const large = forcerLarge || mm.clientWidth >= LARGEUR_CARTE - 40;
+  mm.classList.toggle('large', large);
+  const R = mm.getBoundingClientRect();
+  const pos = el => { const b = el.getBoundingClientRect(); return { x: b.left - R.left, y: b.top - R.top, w: b.width, h: b.height }; };
+  const C = pos(ce);
+  let traits = '';
+  mm.querySelectorAll('.mm-br').forEach(br => {
+    const col = br.style.getPropertyValue('--c');
+    const n = pos(br.querySelector('.mm-noeud'));
+    const ny = n.y + n.h / 2;
+    const gauche = br.parentElement.classList.contains('gauche');
+    if (large) {
+      traits += `<path d="${courbe(gauche ? C.x : C.x + C.w, C.y + C.h / 2, gauche ? n.x + n.w : n.x, ny)}" stroke="${col}" stroke-width="3.2"/>`;
+      br.querySelectorAll('.mm-feuilles li').forEach(li => {
+        const f = pos(li);
+        traits += `<path d="${courbe(gauche ? n.x : n.x + n.w, ny, gauche ? f.x + f.w : f.x, f.y + f.h / 2)}" stroke="${col}" stroke-width="1.6" stroke-opacity=".7"/>`;
+      });
+    } else {
+      traits += `<path d="${coude(C.x + 18, C.y + C.h, ny, n.x)}" stroke="#C3CAD6" stroke-width="2.4"/>`;
+      const xb = n.x + 16;
+      br.querySelectorAll('.mm-feuilles li').forEach(li => {
+        const f = pos(li);
+        traits += `<path d="${coude(xb, n.y + n.h, f.y + f.h / 2, f.x)}" stroke="${col}" stroke-width="1.6" stroke-opacity=".75"/>`;
+      });
+    }
+  });
+  svg.setAttribute('width', R.width);
+  svg.setAttribute('height', R.height);
+  svg.setAttribute('viewBox', `0 0 ${R.width} ${R.height}`);
+  svg.innerHTML = `<g fill="none" stroke-linecap="round">${traits}</g>`;
+}
+let dessinPrevu = 0;
+window.addEventListener('resize', () => {
+  if (!document.getElementById('mm')) return;
+  cancelAnimationFrame(dessinPrevu);
+  dessinPrevu = requestAnimationFrame(() => dessinerCarte());
+});
+/* à l'impression (A4 paysage) : disposition large, puis retour à l'écran */
+if (window.matchMedia) {
+  const mq = window.matchMedia('print');
+  const surImpression = e => { if (document.getElementById('mm')) dessinerCarte(e.matches); };
+  if (mq.addEventListener) mq.addEventListener('change', surImpression); else if (mq.addListener) mq.addListener(surImpression);
+}
+window.addEventListener('beforeprint', () => { if (document.getElementById('mm')) dessinerCarte(true); });
+window.addEventListener('afterprint', () => { if (document.getElementById('mm')) dessinerCarte(); });
+
+/* =========================================================
+   EXAMENS BLANCS — trois sujets par matière, au format des
+   épreuves du DNB 2027, sur les chapitres du 1er trimestre.
+   Le contenu est dans examens/*.js (DATA.examens).
+   ========================================================= */
+const EXAMENS = DATA.examens || [];
+const examen = id => EXAMENS.find(x => x.id === id);
+const ORDRE_EX = ['francais', 'maths', 'histoire', 'svt', 'physique', 'techno'];
+const NOM_EX = { francais: 'Français', maths: 'Mathématiques', histoire: 'Histoire-géographie et EMC',
+                 svt: 'Sciences · SVT', physique: 'Sciences · physique-chimie', techno: 'Sciences · technologie' };
+const examensDe = mid => EXAMENS.filter(x => x.matiere === mid).sort((a, b) => a.numero - b.numero);
+const examensChapitre = cid => EXAMENS.filter(x => (x.cours || []).includes(cid) || (x.methodes || []).includes(cid));
+const fmtPts = n => `${String(n).replace('.', ',')} point${n >= 2 ? 's' : ''}`;
+/* maths : les 2 points de rédaction s'ajoutent à la dernière partie (14 = 12 + 2) */
+function ptsPartie(x, i) {
+  const p = x.parties[i];
+  const r = x.pointsRedaction && i === x.parties.length - 1 ? x.pointsRedaction : 0;
+  return r ? `${fmtPts(p.points + r)}, dont ${fmtPts(r)} pour la rédaction` : fmtPts(p.points);
+}
+let filtreEx = '';
+
+/* la note que l'élève se met après avoir corrigé sa copie */
+const NoteEx = {
+  lire(id) { try { const v = parseFloat(localStorage.getItem('exnote:' + id)); return isFinite(v) ? v : null; } catch { return null; } },
+  ecrire(id, v) { try { if (v === null) localStorage.removeItem('exnote:' + id); else localStorage.setItem('exnote:' + id, String(v)); } catch { /* ignoré */ } }
+};
+function noteSur20(x, v) { return Math.round(v / x.points * 200) / 10; }
+
+const EPREUVES_2027 = [
+  ['francais', 'Français', '3 h · 100 points', "Texte littéraire et image : compréhension (32 points) et grammaire avec réécriture (18 points), 1 h 10. Dictée (10 points, 20 minutes). Rédaction (40 points, 1 h 30) : sujet de réflexion ou d'imagination, dictionnaire autorisé."],
+  ['maths', 'Mathématiques', '2 h · 20 points', "Partie 1 : automatismes, 6 points en 20 minutes, sans calculatrice, réponses courtes. Partie 2 : problèmes, 14 points en 1 h 40, avec calculatrice, dont 2 points pour la clarté des raisonnements et la rédaction."],
+  ['histoire', 'Histoire-géographie et EMC', '2 h · 40 + 20 points', "Histoire-géographie sur 40 : analyse de documents (15 points), développement construit d'au moins trente lignes (18 points) et repères : frise, croquis ou schéma (7 points). EMC sur 20 : une situation pratique et des questions."],
+  ['svt', 'Sciences', '1 h · 20 points', "Deux disciplines sur trois (physique-chimie, SVT, technologie), annoncées deux mois avant : 30 minutes et 10 points chacune, sur la même copie."]
+];
+
+function ligneExamen(x) {
+  const m = matiere(x.matiere);
+  const n = NoteEx.lire(x.id);
+  const chs = (x.cours || []).map(chapitre).filter(Boolean);
+  return `<div class="sess${n !== null ? ' fait' : ''}">
+    <a class="row" href="#/examen/${x.id}">
+      <span class="pill" style="${pastille(m)}">${n !== null ? '✓' : x.numero}</span>
+      <span class="txt"><b>Sujet ${x.numero} · ${esc(x.titre)}</b><small>${[esc(x.duree), fmtPts(x.points), chs.map(c => esc(c.numero)).join(', '), n !== null ? `ma note ${String(noteSur20(x, n)).replace('.', ',')}/20` : ''].filter(Boolean).join(' · ')}</small></span>
+      ${chevron}</a>
+    <nav class="sesslinks" aria-label="Sujet ${x.numero}"><a class="p-ess" href="#/examen/${x.id}">Sujet</a><a class="p-cor" href="#/corrige/${x.id}">Corrigé et méthode</a>${
+      chs.map(c => `<a class="cours" href="#/chapitre/${c.id}">${esc(c.numero)} · ${esc(c.titre)}</a>`).join('')}<a class="imp" href="#/examen/${x.id}/imprimer">${ICONE_IMP}PDF</a></nav>
+  </div>`;
+}
+function ligneExamenCourte(x) {
+  const m = matiere(x.matiere);
+  return `<button class="row" onclick="go('#/examen/${x.id}')">
+    <span class="pill" style="${pastille(m)}">${x.numero}</span>
+    <span class="txt"><b>${esc(NOM_EX[x.matiere] || m.nom)} · sujet ${x.numero}</b><small>${esc(x.titre)} · ${esc(x.duree)}</small></span>
+    ${chevron}</button>`;
+}
+
+function carteExamens() {
+  if (!EXAMENS.length) return '';
+  const faits = EXAMENS.filter(x => NoteEx.lire(x.id) !== null).length;
+  const mats = ORDRE_EX.filter(id => examensDe(id).length).map(id => matiere(id).nom);
+  return `<a class="glass hero" href="#/examens">
+      <span class="flag"><i class="dot" style="background:#FF9F0A"></i>Examens blancs · ${EXAMENS.length} sujets</span>
+      <h3>Examens blancs du brevet</h3>
+      <p class="chapline">Trois sujets par matière, au format officiel 2027, sur les chapitres du 1er trimestre. Corrigés et méthode de rédaction.</p>
+      <p class="when">${faits} sujet${faits > 1 ? 's' : ''} corrigé${faits > 1 ? 's' : ''} sur ${EXAMENS.length} · ${esc(mats.join(', '))}</p>
+    </a>`;
+}
+
+function vueExamens() {
+  const mats = ORDRE_EX.filter(id => examensDe(id).length);
+  let html = `<h1 class="title">Examens blancs</h1>
+    <p class="subtitle">Trois sujets par matière, au format des épreuves du brevet 2027, sur les chapitres du 1<sup>er</sup> trimestre.</p>`;
+  if (!mats.length) return html + `<div class="glass"><p class="empty">Les sujets arrivent bientôt.</p></div>`;
+  html += `<div class="chap"><div class="chap-main">`;
+  html += `<div class="filtres" role="group" aria-label="Filtrer par matière">` +
+    ['', ...mats].map(id => `<button class="chipf${filtreEx === id ? ' on' : ''}" onclick="filtrerEx('${id}')"${id ? ` style="--c:${matiere(id).couleur}"` : ''}>${id ? esc(matiere(id).nom) : 'Toutes les matières'}</button>`).join('') + `</div>`;
+  for (const id of mats) {
+    if (filtreEx && filtreEx !== id) continue;
+    const l = examensDe(id);
+    const x0 = l[0];
+    html += `<h2 class="section" id="ex-${id}">${esc(NOM_EX[id])} <small>· ${esc(x0.duree)} · ${fmtPts(x0.points)}</small></h2>
+      <div class="glass sesslist">${l.map(ligneExamen).join('')}</div>`;
+  }
+  html += `</div><aside class="chap-side">
+    <h2 class="section">Passer un examen blanc</h2>
+    <div class="glass card keycard"><ol class="etapes">
+      <li>Se mettre <b>en conditions réelles</b> : sans le cours, une copie, et le chronomètre de la page du sujet.</li>
+      <li>Lire <b>tout le sujet</b> avant de commencer, puis traiter les questions dans l'ordre.</li>
+      <li>Rédiger des <b>phrases complètes</b> : la maîtrise de la langue compte dans toutes les épreuves.</li>
+      <li>Ouvrir le <b>corrigé</b> seulement à la fin, se corriger avec le barème, puis noter sa note.</li>
+      <li>Relire le <b>cours</b> et la <b>méthode</b> liés à chaque erreur (liens sous chaque sujet).</li>
+    </ol></div>
+    <h2 class="section">Les épreuves du brevet 2027</h2>
+    <div class="glass card epreuves">${EPREUVES_2027.map(([mid, nom, d, t]) =>
+      `<div><b><i class="dot" style="background:${matiere(mid).couleur}"></i>${esc(nom)} <span>${esc(d)}</span></b><p>${esc(t)}</p></div>`).join('')}</div>
+    <p class="note-ajout">Format d'après la note de service du 11 septembre 2026 (BO spécial n° 4 du 17 septembre 2026), qui définit les épreuves à partir de la session 2027, les sujets officiels de 2026 et les sujets de référence publiés sur Éduscol. La maîtrise de la langue (orthographe, syntaxe, lexique, organisation du propos) compte dans chaque épreuve, pour 2 points au moins. Sujets d'entraînement, non officiels.</p>
+  </aside></div>`;
+  return html;
+}
+function filtrerEx(id) { filtreEx = id; rendre(); }
+
+/* ---------- la page de garde et le sujet ---------- */
+function minutesDuree(t) {
+  const h = /(\d+)\s*h\s*(\d*)/.exec(t || '');
+  return h ? Number(h[1]) * 60 + Number(h[2] || 0) : parseInt(t, 10) || 0;
+}
+
+function vueExamen(id) {
+  const x = examen(id);
+  if (!x) return `<div class="glass"><p class="empty">Ce sujet n'existe pas.<br><a href="#/examens" style="color:var(--blue)">Retour aux examens blancs</a></p></div>`;
+  const m = matiere(x.matiere);
+  const chs = (x.cours || []).map(chapitre).filter(Boolean);
+  const meths = (x.methodes || []).map(chapitre).filter(Boolean);
+  const total = x.matiere === 'histoire' ? 'Histoire-géographie : 40 points · EMC : 20 points' : `Sujet noté sur ${fmtPts(x.points)}`;
+  let html = fil([['Accueil', '#/'], ['Examens blancs', '#/examens'], [`${NOM_EX[x.matiere] || m.nom} · sujet ${x.numero}`, null]])
+    + `<div class="ex-outils">
+        <div class="chrono" id="chrono" data-min="${minutesDuree(x.duree)}"><span id="chronotxt">0:00:00 / ${esc(x.duree)}</span>
+          <button onclick="chrono('go')" id="chronobtn">Démarrer</button><button onclick="chrono('raz')">Remettre à zéro</button></div>
+        <div class="actions">
+          <button class="btn quiet imp" onclick="window.print()">${ICONE_IMP}Imprimer / PDF</button>
+          <button class="btn ghost" onclick="go('#/corrige/${x.id}')">Corrigé et méthode</button>
+        </div>
+      </div>
+      <article class="copie-sujet" style="--mc:${m.couleur}">
+        <header class="garde">
+          <p class="g-dnb">DIPLÔME NATIONAL DU BREVET</p>
+          <p class="g-sess">Sujet d'entraînement · format de la session 2027</p>
+          <h1>${esc(x.epreuve)}</h1>
+          <p class="g-serie">Série générale</p>
+          <p class="g-titre">Sujet ${x.numero} : ${esc(x.titre)}</p>
+          <p class="g-duree">Durée : ${esc(x.duree)} · ${esc(total)}</p>
+          <ul class="g-lignes">${(x.garde || []).map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+        </header>
+        ${x.parties.map((p, i) => `<section class="ex-partie${p.type === 'dictee' ? ' dictee' : ''}" id="p${i + 1}">
+          <h2>${esc(p.titre)}${p.points && !/\bpoints?\b/.test(p.titre) ? ` <span class="pts">(${ptsPartie(x, i)})</span>` : ''}</h2>
+          ${p.type === 'dictee' ? outilDictee(x) : ''}${p.html}</section>`).join('')}
+        ${x.annexe ? `<section class="ex-partie annexe" id="annexe"><h2>ANNEXE <span class="pts">(à rendre avec la copie)</span></h2>${x.annexe}</section>` : ''}
+        <p class="ex-fin">Fin du sujet</p>
+      </article>
+      <div class="actions ex-bas"><button class="btn" onclick="go('#/corrige/${x.id}')">Voir le corrigé et la méthode</button></div>`;
+  if (chs.length || meths.length) {
+    html += `<h2 class="section">Revoir avant ou après</h2><div class="glass list">${[...chs, ...meths].map(ligneChapitre).join('')}</div>`;
+  }
+  return html;
+}
+
+/* ---------- le chronomètre ---------- */
+const Chrono = { debut: 0, cumul: 0, marche: false, tic: null };
+function chronoAffiche() {
+  const z = document.getElementById('chronotxt');
+  const box = document.getElementById('chrono');
+  if (!z || !box) { clearInterval(Chrono.tic); Chrono.tic = null; return; }
+  const s = Math.floor((Chrono.cumul + (Chrono.marche ? Date.now() - Chrono.debut : 0)) / 1000);
+  const h = Math.floor(s / 3600), mi = Math.floor(s / 60) % 60, se = s % 60;
+  const max = Number(box.dataset.min) * 60;
+  z.textContent = `${h}:${String(mi).padStart(2, '0')}:${String(se).padStart(2, '0')} / ${duree2(max / 60)}`;
+  box.classList.toggle('depasse', max > 0 && s > max);
+}
+const duree2 = n => n >= 60 ? `${Math.floor(n / 60)} h ${String(n % 60).padStart(2, '0')}` : `${n} min`;
+function chrono(action) {
+  const b = document.getElementById('chronobtn');
+  if (action === 'raz') { Chrono.marche = false; Chrono.cumul = 0; }
+  else if (action === 'affiche') { /* retour sur la page : on remet juste l'affichage */ }
+  else if (Chrono.marche) { Chrono.cumul += Date.now() - Chrono.debut; Chrono.marche = false; }
+  else { Chrono.debut = Date.now(); Chrono.marche = true; }
+  if (b) b.textContent = Chrono.marche ? 'Pause' : Chrono.cumul ? 'Reprendre' : 'Démarrer';
+  if (!Chrono.tic) Chrono.tic = setInterval(chronoAffiche, 1000);
+  chronoAffiche();
+}
+
+/* ---------- la dictée, lue par la synthèse vocale du navigateur ---------- */
+const PONCT = { ',': 'virgule', '.': 'point', ';': 'point-virgule', ':': 'deux-points', '!': "point d'exclamation",
+  '?': "point d'interrogation", '…': 'points de suspension', '«': 'ouvrez les guillemets', '»': 'fermez les guillemets',
+  '(': 'ouvrez la parenthèse', ')': 'fermez la parenthèse', '—': 'tiret' };
+let jetonDictee = 0;
+function outilDictee(x) {
+  if (!x.dictee) return '';
+  const peut = 'speechSynthesis' in window;
+  return `<div class="dictee-outil">
+    <p><b>Mots écrits au tableau :</b> ${(x.dictee.mots || []).map(esc).join(' · ') || '—'}<br><span class="source">${esc(x.dictee.source || '')}</span></p>
+    ${peut ? `<div class="actions">
+        <button class="btn quiet" onclick="dicter('${x.id}', 1)">1. Lecture</button>
+        <button class="btn" onclick="dicter('${x.id}', 2)">2. Dictée</button>
+        <button class="btn quiet" onclick="dicter('${x.id}', 3)">3. Relecture</button>
+        <button class="btn ghost" onclick="arreterDictee()">Arrêter</button></div>
+      <p class="aide">Le navigateur lit le texte comme le surveillant : d'abord une lecture complète, puis la dictée groupe par groupe en annonçant la ponctuation, enfin une relecture. Écris une ligne sur deux. Le texte est sur la page du corrigé.</p>`
+      : `<p class="aide">Demande à quelqu'un de te dicter le texte : il est sur la page du corrigé.</p>`}
+  </div>`;
+}
+function voixFr() {
+  const v = window.speechSynthesis.getVoices();
+  return v.find(x => /^fr[-_]FR/i.test(x.lang) && /google|amélie|thomas|audrey|marie/i.test(x.name)) || v.find(x => /^fr[-_]FR/i.test(x.lang)) || v.find(x => /^fr/i.test(x.lang)) || null;
+}
+/* groupes de 3 à 6 mots, coupés à la ponctuation */
+function groupesDictee(texte) {
+  const jetons = texte.replace(/\s+/g, ' ').match(/[«»()—…]|[.,;:!?]|[^\s.,;:!?«»()—…]+/g) || [];
+  const groupes = [];
+  let mots = [];
+  const pousser = p => { if (mots.length || p) groupes.push({ mots: mots.join(' '), ponct: p || '' }); mots = []; };
+  for (const j of jetons) {
+    if (PONCT[j]) pousser(j);
+    else { mots.push(j); if (mots.length >= 5) pousser(''); }
+  }
+  pousser('');
+  return groupes.filter(g => g.mots || g.ponct);
+}
+function dire(txt, vitesse) {
+  return new Promise(ok => {
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'fr-FR'; u.rate = vitesse;
+    const v = voixFr(); if (v) u.voice = v;
+    u.onend = ok; u.onerror = ok;
+    window.speechSynthesis.speak(u);
+  });
+}
+const pause = ms => new Promise(ok => setTimeout(ok, ms));
+async function dicter(id, etape) {
+  const x = examen(id);
+  if (!x || !x.dictee || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const moi = ++jetonDictee;
+  const texte = x.dictee.texte;
+  if (etape !== 2) { await dire(texte, etape === 1 ? 0.9 : 0.8); return; }
+  for (const g of groupesDictee(texte)) {
+    if (moi !== jetonDictee) return;
+    if (g.mots) await dire(g.mots, 0.72);
+    if (moi !== jetonDictee) return;
+    if (g.ponct) await dire(PONCT[g.ponct], 0.9);
+    const n = g.mots ? g.mots.split(' ').length : 0;
+    await pause(900 + n * 750);
+  }
+}
+function arreterDictee() { jetonDictee++; if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+
+/* ---------- le corrigé ---------- */
+function vueCorrige(id) {
+  const x = examen(id);
+  if (!x) return `<div class="glass"><p class="empty">Ce corrigé n'existe pas.<br><a href="#/examens" style="color:var(--blue)">Retour aux examens blancs</a></p></div>`;
+  const m = matiere(x.matiere);
+  const chs = (x.cours || []).map(chapitre).filter(Boolean);
+  const meths = (x.methodes || []).map(chapitre).filter(Boolean);
+  const n = NoteEx.lire(x.id);
+  let html = fil([['Accueil', '#/'], ['Examens blancs', '#/examens'], [`${NOM_EX[x.matiere] || m.nom} · sujet ${x.numero}`, '#/examen/' + x.id], ['Corrigé', null]])
+    + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(NOM_EX[x.matiere] || m.nom)} · sujet ${x.numero} · corrigé</span>
+    <h1 class="title">${esc(x.titre)}</h1>
+    <p class="subtitle">Réponses attendues, explications et méthode de rédaction. Barème : ${fmtPts(x.points)}${x.pointsRedaction ? `, dont ${fmtPts(x.pointsRedaction)} pour la clarté des raisonnements et la rédaction` : ''}.</p>
+    <nav class="sommaire-s">${x.corrige.map((c, i) => `<a class="p-ess" href="#/corrige/${x.id}/c${i + 1}">${esc(c.titre)}</a>`).join('')}<a class="p-cor" href="#/corrige/${x.id}/methode">Méthode de rédaction</a><a class="imp" href="#/examen/${x.id}">Revoir le sujet</a></nav>
+    <div class="chap"><div class="chap-main corrige-ex" style="--mc:${m.couleur}">`;
+  x.corrige.forEach((c, i) => {
+    const p = x.parties[i] || {};
+    html += `<h2 class="section" id="c${i + 1}">${esc(c.titre)}${p.points && !/\bpoints?\b/.test(c.titre) ? ` <small>· ${ptsPartie(x, i)}</small>` : ''}</h2>`;
+    if (p.type === 'dictee' && x.dictee) {
+      html += `<div class="glass card dictee-texte"><p class="mots">Au tableau : ${(x.dictee.mots || []).map(esc).join(' · ')}</p><p class="dtexte">${esc(x.dictee.texte)}</p><p class="source">${esc(x.dictee.source)}</p></div>`;
+    }
+    html += `<div class="glass card fiche-c">${c.html}</div>`;
+  });
+  html += `<h2 class="section" id="methode">Méthode de rédaction</h2><div class="glass card keycard fiche-c">${x.methode}</div>`;
+  html += `<h2 class="section">Ma note</h2><div class="glass card">
+      <p class="progtxt">Corrige ta copie avec le barème, puis note ta note sur ${fmtPts(x.points)} : elle s'affiche dans la liste des examens.</p>
+      <div class="note-ex"><input id="noteex" type="number" inputmode="decimal" min="0" max="${x.points}" step="0.5" value="${n !== null ? n : ''}" aria-label="Ma note"> <span>/ ${x.points}</span>
+      <button class="btn" onclick="enregistrerNote('${x.id}')">Enregistrer</button>${n !== null ? `<button class="btn quiet" onclick="enregistrerNote('${x.id}', true)">Effacer</button>` : ''}</div>
+      <p class="progtxt" id="notemsg">${n !== null ? `Soit ${String(noteSur20(x, n)).replace('.', ',')} sur 20.` : ''}</p></div>`;
+  html += `</div><aside class="chap-side">`;
+  if (chs.length) html += `<h2 class="section">Le cours à revoir</h2><div class="glass list sidelist">${chs.map(ligneChapitre).join('')}</div>`;
+  if (meths.length) html += `<h2 class="section">Les fiches méthode</h2><div class="glass list sidelist">${meths.map(ligneChapitre).join('')}</div>`;
+  const autres = examensDe(x.matiere).filter(y => y.id !== x.id);
+  if (autres.length) html += `<h2 class="section">Les autres sujets</h2><div class="glass list sidelist">${autres.map(ligneExamenCourte).join('')}</div>`;
+  html += `</aside></div>`;
+  return html;
+}
+function enregistrerNote(id, effacer) {
+  const x = examen(id);
+  const z = document.getElementById('noteex');
+  if (!x || !z) return;
+  if (effacer) { NoteEx.ecrire(id, null); rendre(); return; }
+  const v = parseFloat(String(z.value).replace(',', '.'));
+  const msg = document.getElementById('notemsg');
+  if (!isFinite(v) || v < 0 || v > x.points) { if (msg) msg.textContent = `Entre une note entre 0 et ${x.points}.`; return; }
+  NoteEx.ecrire(id, v);
+  if (msg) msg.textContent = `Enregistré : ${String(noteSur20(x, v)).replace('.', ',')} sur 20.`;
+}
+
+/* =========================================================
    IMPRESSION — une feuille A4 recto verso, à imprimer ou à
    enregistrer en PDF depuis la fenêtre d'impression.
    Recto : le rappel de cours. Verso : le QCM (et les exercices
@@ -1174,7 +1597,7 @@ window.addEventListener('resize', () => { if (document.querySelector('.apercu'))
 /* =========================================================
    ROUTEUR
    ========================================================= */
-const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'chapitre': 2, 'quiz': 3, 'imprimer': 3 };
+const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examens': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'examen': 1, 'corrige': 2, 'chapitre': 2, 'quiz': 3, 'imprimer': 3, 'carte': 3 };
 let profPrec = null;
 let hashPrecedent = '';
 
@@ -1197,6 +1620,25 @@ function rendre() {
   } else if (vue === 'revision' || vue === 'brevet') {   // « brevet » : ancienne adresse, gardée
     html = vueRevision(); onglet = 'revision';
     titre = 'Révision · ' + NOM;
+  } else if (vue === 'carte') {
+    const c = chapitre(parts[1]);
+    html = vueCarte(parts[1]); retour = c ? '#/chapitre/' + c.id : '#/';
+    if (c) titre = `Carte mentale - ${c.titre} · ${NOM}`;
+    apres = () => { dessinerCarte(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => dessinerCarte()); };
+  } else if (vue === 'examens') {
+    html = vueExamens(); onglet = 'examens';
+    titre = 'Examens blancs · ' + NOM;
+  } else if (vue === 'examen') {
+    const x = examen(parts[1]);
+    html = vueExamen(parts[1]); onglet = 'examens'; retour = '#/examens';
+    if (x) titre = `${matiere(x.matiere).nom} - sujet ${x.numero} - ${x.titre}`;
+    if (parts[2] === 'imprimer') apres = () => setTimeout(() => window.print(), 400);
+    else if (Chrono.marche || Chrono.cumul) apres = () => { chrono('affiche'); };
+  } else if (vue === 'corrige') {
+    const x = examen(parts[1]);
+    html = vueCorrige(parts[1]); onglet = 'examens'; retour = x ? '#/examen/' + x.id : '#/examens';
+    if (x) titre = `${matiere(x.matiere).nom} - sujet ${x.numero} - corrigé`;
+    if (parts[2]) apres = () => allerA(parts[2]);
   } else if (vue === 'imprimer') {
     const r = vueImprimer(parts[1], parts[2]);
     html = r.html; titre = r.titre; retour = r.retour;
@@ -1239,6 +1681,12 @@ function rendre() {
   hashPrecedent = hashActuel;
 
   document.title = titre;
+  /* marges de la page imprimée : aucune pour les fiches A4 (déjà mises en page), normales sinon */
+  let stylePage = document.getElementById('stylepage');
+  if (!stylePage) { stylePage = document.createElement('style'); stylePage.id = 'stylepage'; document.head.appendChild(stylePage); }
+  stylePage.textContent = vue === 'imprimer' ? '@page { size: A4; margin: 0; }'
+    : vue === 'carte' ? '@page { size: A4 landscape; margin: 10mm; }' : '@page { size: A4; margin: 14mm 13mm; }';
+  if (vue !== 'examen') arreterDictee();
   const btn = document.getElementById('back');
   btn.style.display = retour ? 'inline-flex' : 'none';
   btn.onclick = () => { if (retour) location.hash = retour; };

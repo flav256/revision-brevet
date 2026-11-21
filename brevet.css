@@ -243,11 +243,11 @@ h2.section.auj { color: var(--blue); }
   .chipf { box-shadow: none; border-color: #DDE3EC; background: #fff; }
   .chipf.on { background: var(--c, var(--blue)); }
 }
-@page { size: A4; margin: 0; }
+/* les marges de page (@page) sont posées par app.js selon la page imprimée */
 @media print {
   .topbar, .tabbar, .backdrop, .sommaire-s, .actions, .filtres, .sesslinks, .avis-bas, .fil { display: none !important; }
   body { padding: 0 !important; background: #fff !important; }
-  body:not(.vue-imprimer) #app { padding: 12mm 14mm; }
+  #app { padding: 0 !important; max-width: none !important; }
   .glass { background: #fff !important; box-shadow: none !important; border: 1px solid #ddd !important; }
 
   /* la page « Imprimer » : seulement les feuilles */

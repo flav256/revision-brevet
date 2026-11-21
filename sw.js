@@ -7,15 +7,17 @@
    Le cache ne sert que de filet de sécurité : plus de connexion, ou réseau
    trop lent (au-delà de 3 secondes). */
 
-const CACHE = 'revision-brevet-v4';
+const CACHE = 'revision-brevet-v6';
 const DELAI = 3000;
 
 const FICHIERS = [
   './', 'index.html', 'style.css', 'brevet.css', 'data.js', 'app.js',
   'cours/zones.js', 'cours/francais.js', 'cours/maths-a.js', 'cours/maths-b.js',
-  'cours/histoire.js', 'cours/svt.js', 'cours/svt-rappels-5e.js', 'cours/svt-rappels-4e.js',
+  'cours/histoire.js', 'cours/svt.js', 'cours/svt-rappels-5e.js', 'cours/svt-rappels-4e.js', 'cours/cartes-svt.js',
   'cours/physique.js', 'cours/techno.js',
   'brevet/brevet.js',
+  'examens.css', 'cartes.css', 'examens/francais.js', 'examens/maths.js', 'examens/histoire.js',
+  'examens/svt.js', 'examens/physique.js', 'examens/techno.js',
   'manifest.webmanifest', 'favicon.svg', 'favicon.ico',
   'icon-192.png', 'icon-512.png'
 ];

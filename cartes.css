@@ -1,0 +1,80 @@
+/* =========================================================
+   révision brevet — cartes mentales
+   Par défaut (téléphone, tablette en hauteur) : un arbre
+   vertical, le chapitre en haut, les branches en dessous.
+   .mm.large (grand écran, impression) : le chapitre au centre,
+   les branches à gauche et à droite, les mots-clés au bout.
+   Les liaisons sont un SVG posé derrière (dessiné par app.js).
+   ========================================================= */
+.mm {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px;
+  margin: 8px 0 16px; padding: 18px 14px 20px; border-radius: var(--r-lg);
+  background: #fff; box-shadow: 0 1px 3px rgba(16,24,48,.08), 0 10px 30px rgba(16,24,48,.08);
+  color: #1B2232;
+}
+.mm-liens { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; z-index: 0; }
+.mm > :not(svg) { position: relative; z-index: 1; min-width: 0; }
+
+.mm-centre {
+  order: -1; justify-self: start; max-width: 100%; padding: 13px 18px 14px; border-radius: 18px; text-align: left;
+  color: #fff; background: linear-gradient(150deg, color-mix(in srgb, var(--mc, #30D158) 78%, #000), color-mix(in srgb, var(--mc, #30D158) 55%, #001));
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--mc, #30D158) 35%, transparent);
+}
+.mm-centre small { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .85; margin-bottom: 3px; }
+.mm-centre b { display: block; font-size: 19px; line-height: 1.25; letter-spacing: -.01em; }
+
+.mm-cote { display: flex; flex-direction: column; gap: 16px; }
+.mm-br { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; padding-left: 38px; }
+.mm-noeud {
+  background: var(--c); color: #fff; font-weight: 700; font-size: 15.5px; line-height: 1.25;
+  padding: 7px 13px; border-radius: 12px; box-shadow: 0 2px 8px color-mix(in srgb, var(--c) 35%, transparent);
+}
+.mm-feuilles { list-style: none; margin: 0; padding: 0 0 0 30px; display: flex; flex-direction: column; gap: 6px; }
+.mm-feuilles li {
+  margin: 0; padding: 5px 10px; border-radius: 9px; font-size: 14.5px; line-height: 1.35; color: #1B2232;
+  background: color-mix(in srgb, var(--c) 9%, #fff); border: 1px solid color-mix(in srgb, var(--c) 28%, #fff);
+}
+.mm-feuilles li::before { content: none; }
+.mm-feuilles li b { color: color-mix(in srgb, var(--c) 78%, #000); font-weight: 700; }
+
+/* mode révision : mots-clés cachés, un toucher les révèle */
+.mm.cache .mm-feuilles li { color: transparent; cursor: pointer; background: color-mix(in srgb, var(--c) 16%, #fff); }
+.mm.cache .mm-feuilles li b, .mm.cache .mm-feuilles li sup { color: transparent; }
+.mm.cache .mm-feuilles li.vu { color: #1B2232; background: color-mix(in srgb, var(--c) 9%, #fff); }
+.mm.cache .mm-feuilles li.vu b { color: color-mix(in srgb, var(--c) 78%, #000); }
+
+/* grand écran : le chapitre au centre, les branches de part et d'autre */
+.mm.large { grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) minmax(0, 1fr); column-gap: 44px; align-items: center; padding: 30px 24px; }
+.mm.large .gauche { grid-column: 1; grid-row: 1; }
+.mm.large .mm-centre { grid-column: 2; grid-row: 1; justify-self: stretch; text-align: center; padding: 18px 16px; border-radius: 22px; }
+.mm.large .mm-centre b { font-size: 18px; }
+.mm.large .droite { grid-column: 3; grid-row: 1; }
+.mm.large .mm-cote { gap: 22px; }
+.mm.large .mm-br { flex-direction: row; align-items: center; gap: 28px; padding-left: 0; }
+.mm.large .gauche .mm-br { flex-direction: row-reverse; }
+.mm.large .mm-noeud { flex: none; max-width: 150px; text-align: center; }
+.mm.large .mm-feuilles { padding: 0; min-width: 0; flex: 1 1 auto; }
+.mm.large .gauche .mm-feuilles { align-items: flex-end; }
+.mm.large .droite .mm-feuilles { align-items: flex-start; }
+.mm.large .mm-feuilles li { font-size: 14px; max-width: 100%; }
+.mm.large .gauche .mm-feuilles li { text-align: right; }
+
+/* les autres cartes, et le lien depuis la page matière */
+.mm-actions { margin-top: 4px; }
+.mm-autres { margin: 4px 0 8px; }
+.mm-autres span.on { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 999px; color: #fff; background: var(--blue); }
+.mm-autres .lbl { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink-2); padding: 4px 4px 4px 0; }
+.mm-nav { justify-content: space-between; }
+.btn.carte svg { flex: none; }
+
+@media (min-width: 1000px) {
+  .mm { box-shadow: none; border: 1px solid #E4E8EF; border-radius: var(--r-md); }
+}
+@media print {
+  body.vue-carte .mm-actions, body.vue-carte .mm-autres, body.vue-carte .mm-nav, body.vue-carte .subtitle,
+  body.vue-carte .chapflag { display: none !important; }
+  body.vue-carte .title { font-size: 18pt; margin: 0 0 4mm; }
+  body.vue-carte .mm { box-shadow: none !important; border: 0 !important; padding: 0 !important; margin: 0; break-inside: avoid; }
+  .mm, .mm * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .mm.cache .mm-feuilles li { color: #1B2232 !important; }
+}
