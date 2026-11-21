@@ -1778,8 +1778,28 @@ function rendre() {
 
 window.addEventListener('hashchange', rendre);
 const barreHaut = document.querySelector('.topbar');
+/* bouton flottant « haut de page » : il apparaît quand on est descendu.
+   Il est posé directement dans le body, hors de la vue animée, pour rester fixe à l'écran. */
+const btnHaut = document.createElement('button');
+btnHaut.type = 'button';
+btnHaut.className = 'haut-page';
+btnHaut.title = 'Haut de page';
+btnHaut.setAttribute('aria-label', 'Revenir en haut de la page');
+btnHaut.tabIndex = -1;
+btnHaut.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5.5M5.5 12 12 5.5 18.5 12"/></svg>';
+btnHaut.onclick = () => window.scrollTo({ top: 0, behavior: SOBRE ? 'auto' : 'smooth' });
+document.body.appendChild(btnHaut);
+function majBtnHaut() {
+  const visible = window.scrollY > Math.max(450, window.innerHeight * 0.75);
+  if (visible !== btnHaut.classList.contains('visible')) {
+    btnHaut.classList.toggle('visible', visible);
+    btnHaut.tabIndex = visible ? 0 : -1;   // caché : on ne peut pas l'atteindre au clavier
+  }
+}
+
 window.addEventListener('scroll', () => {
   if (barreHaut) barreHaut.classList.toggle('scrolled', window.scrollY > 4);
+  majBtnHaut();
 }, { passive: true });
 
 const avisTop = document.getElementById('avisTop');

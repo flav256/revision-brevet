@@ -7,7 +7,7 @@
    Le cache ne sert que de filet de sécurité : plus de connexion, ou réseau
    trop lent (au-delà de 3 secondes). */
 
-const CACHE = 'revision-brevet-v7';
+const CACHE = 'revision-brevet-v8';
 const DELAI = 3000;
 
 const FICHIERS = [
