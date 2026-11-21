@@ -5,8 +5,10 @@
    même moteur et même style, avec en plus
    - des zones thématiques dans chaque matière,
    - les fiches méthode (rédaction, analyse de documents…),
-   - le programme de révision du brevet blanc : sessions
-     (l'essentiel, QCM, exercices, corrigé) reliées au cours.
+   - la zone « Révision » : une session par chapitre
+     (l'essentiel, QCM, exercices, corrigé) reliée au cours,
+   - l'export pour l'impression (PDF A4 recto verso) des
+     chapitres et des sessions.
 
    Rien à modifier ici : le contenu est dans data.js, cours/
    et brevet/brevet.js.
@@ -91,7 +93,7 @@ function fil(etapes) {
 }
 
 /* ---------- avertissement ---------- */
-const AVIS = "Version brevet blanc du site llm révision. Pour les élèves, par les élèves. Non affilié au LLM.";
+const AVIS = "Version révision brevet du site llm révision. Pour les élèves, par les élèves. Non affilié au LLM.";
 const avisBas = () => `<p class="avis avis-bas">${esc(AVIS)}<br>
   Site d'origine : <a href="https://llmrevision.com/" rel="noopener">llmrevision.com</a></p>`;
 
@@ -122,17 +124,15 @@ const Fait = {
   }
 };
 
-/* ---------- brevet blanc : sessions et liens avec le cours ---------- */
+/* ---------- révision : sessions et liens avec le cours ---------- */
 const BREVET = DATA.brevet || { sessions: [], methodes: [], epreuves: [], mode: [] };
 const session = id => BREVET.sessions.find(s => s.id === id);
 const sessionsDe = cid => BREVET.sessions.filter(s =>
   (s.cours || []).includes(cid) || (s.methodes || []).includes(cid));
-const minutes = txt => {
-  const h = /(\d+)\s*h\s*(\d*)/.exec(txt);
-  return h ? Number(h[1]) * 60 + Number(h[2] || 0) : parseInt(txt, 10) || 0;
-};
-const duree = n => n >= 60 ? `${Math.floor(n / 60)} h ${String(n % 60).padStart(2, '0')}` : `${n} min`;
+/* les sessions d'une matière, dans l'ordre du fichier */
+const sessionsMatiere = id => BREVET.sessions.filter(s => s.matiere === id);
 const LETTRES = 'abcd';
+const ICONE_IMP = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v6.5H7z"/></svg>';
 
 /* =========================================================
    MOTEUR DE TRANSITION
@@ -159,21 +159,19 @@ function peindre(html, dir, apres, estAccueil) {
 /* =========================================================
    ACCUEIL
    ========================================================= */
-function carteBrevet() {
+function carteRevision() {
   const S = BREVET.sessions;
   if (!S.length) return '';
   const faites = S.filter(s => Fait.lire(s.id)).length;
-  const auj = iso(today().getFullYear(), today().getMonth(), today().getDate());
-  const duJour = S.filter(s => s.date === auj);
   const pct = Math.round(faites / S.length * 100);
+  const mats = [...new Set(S.map(s => matiere(s.matiere).nom))];
   return `
-    <a class="glass hero" href="#/brevet">
-      <span class="flag"><i class="dot" style="background:var(--indigo)"></i>Programme de révision</span>
-      <h3>${esc(BREVET.titre)}</h3>
-      <p class="chapline">${esc(BREVET.sousTitre)}</p>
+    <a class="glass hero" href="#/revision">
+      <span class="flag"><i class="dot" style="background:var(--indigo)"></i>Zone révision · ${S.length} sessions</span>
+      <h3>${esc(BREVET.titre || 'Révision')}</h3>
+      <p class="chapline">${esc(BREVET.sousTitre || '')}</p>
       <div class="prog"><i style="width:${pct}%"></i></div>
-      <p class="when">${faites} session${faites > 1 ? 's' : ''} faite${faites > 1 ? 's' : ''} sur ${S.length}${duJour.length
-        ? ` · aujourd'hui : ${duJour.map(s => esc(matiere(s.matiere).nom)).join(', ')}` : ''}</p>
+      <p class="when">${faites} session${faites > 1 ? 's' : ''} faite${faites > 1 ? 's' : ''} sur ${S.length} · ${esc(mats.join(', '))}</p>
     </a>`;
 }
 
@@ -182,7 +180,7 @@ function vueAccueil() {
   let html = `<h1 class="title">Révisions</h1>
               <p class="subtitle">${dateLongue(today())}</p>`;
 
-  html += carteBrevet();
+  html += carteRevision();
 
   if (prochaines.length) {
     const e = prochaines[0];
@@ -236,13 +234,14 @@ function ligneChapitre(c) {
     ${chevron}</button>`;
 }
 
-/* une ligne de session, version courte (pages chapitre, matière, calendrier) */
+/* une ligne de session, version courte (page chapitre, autres sessions) */
 function ligneSessionCourte(s, etiquette) {
   const m = matiere(s.matiere);
   const fait = Fait.lire(s.id);
+  const sc = Score.lire('s:' + s.id);
   return `<button class="row" onclick="go('#/session/${s.id}')">
     <span class="pill" style="${pastille(m)}">${fait ? '✓' : esc(m.nom[0])}</span>
-    <span class="txt"><b>${esc(s.titre)}</b><small>${esc(etiquette || s.jour)} · ${esc(s.duree)}${fait ? ' · faite' : ''}</small></span>
+    <span class="txt"><b>${esc(s.titre)}</b><small>${[esc(etiquette || 'Révision · ' + m.nom), sc ? 'QCM ' + sc.pct + '%' : '', fait ? 'faite' : ''].filter(Boolean).join(' · ')}</small></span>
     ${chevron}</button>`;
 }
 
@@ -283,8 +282,8 @@ function vueMatiere(id) {
   }
 
   if (sess.length) {
-    html += `<h2 class="section">Sessions du brevet blanc</h2>
-             <div class="glass list">${sess.map(s => ligneSessionCourte(s)).join('')}</div>`;
+    html += `<h2 class="section">Révision <small>· l'essentiel, QCM, exercices, corrigé</small></h2>
+             <div class="glass sesslist">${sess.map(lienSession).join('')}</div>`;
   }
   return html;
 }
@@ -324,6 +323,7 @@ function vueChapitre(id) {
   html += `<div class="actions">
              ${aQuiz ? `<button class="btn" onclick="go('#/quiz/${c.id}')">${c.fiche ? "S'entraîner" : 'Faire les exercices'}</button>` : ''}
              <button class="btn quiet" onclick="versLeCours()">${c.fiche ? 'Lire la méthode en entier' : 'Lire le cours en entier'}</button>
+             <button class="btn quiet imp" onclick="go('#/imprimer/chapitre/${c.id}')">${ICONE_IMP}Imprimer / PDF</button>
            </div>`;
   if (s) html += `<p class="record">Ton record sur ce ${c.fiche ? 'quiz' : 'chapitre'} : ${s.pct}%
     <button class="lienclair" onclick="effacerRecord('${c.id}')">réinitialiser</button></p>`;
@@ -335,8 +335,11 @@ function vueChapitre(id) {
 
   const sess = sessionsDe(c.id);
   if (sess.length) {
-    html += `<h2 class="section">Réviser pour le brevet blanc</h2><div class="glass list sidelist">`
-          + sess.map(x => ligneSessionCourte(x)).join('') + `</div>`;
+    html += c.fiche
+      ? `<h2 class="section">S'entraîner en révision</h2><div class="glass list sidelist">`
+          + sess.map(x => ligneSessionCourte(x)).join('') + `</div>`
+      : `<h2 class="section">Réviser ce chapitre</h2><div class="glass sesslist sidelist">`
+          + sess.map(lienSession).join('') + `</div>`;
   }
 
   /* les méthodes utiles depuis un chapitre, les chapitres où appliquer depuis une méthode */
@@ -675,24 +678,30 @@ function calcBascule() {
 }
 
 /* =========================================================
-   BREVET BLANC — le programme
+   RÉVISION — les sessions, rangées par matière
    ========================================================= */
 let filtreBrevet = '';
+
+/* les pastilles d'une session : ses quatre parties, puis le cours et la méthode */
+function pastillesSession(s, cours, meths) {
+  return `<a class="p-ess" href="#/session/${s.id}/essentiel">L'essentiel</a><a class="p-qcm" href="#/session/${s.id}/qcm">QCM</a><a class="p-exo" href="#/session/${s.id}/exercices">Exercices</a><a class="p-cor" href="#/session/${s.id}/corrige">Corrigé</a>${
+    cours.map(c => `<a class="cours" href="#/chapitre/${c.id}">Cours · ${esc(c.titre)}</a>`).join('')}${
+    meths.map(c => `<a class="meth" href="#/chapitre/${c.id}">Méthode · ${esc(c.titre)}</a>`).join('')}`;
+}
 
 function lienSession(s) {
   const m = matiere(s.matiere);
   const fait = Fait.lire(s.id);
   const sc = Score.lire('s:' + s.id);
+  const cours = (s.cours || []).map(chapitre).filter(Boolean);
+  const meths = (s.methodes || []).slice(0, 1).map(chapitre).filter(Boolean);
+  const sous = cours.length ? cours.map(c => c.numero).filter(Boolean).join(', ') : m.nom;
   return `<div class="sess${fait ? ' fait' : ''}">
     <a class="row" href="#/session/${s.id}">
       <span class="pill" style="${pastille(m)}">${fait ? '✓' : esc(m.nom[0])}</span>
-      <span class="txt"><b>${esc(s.titre)}</b><small>${esc(m.nom)} · ${esc(s.duree)}${sc ? ' · QCM ' + sc.pct + '%' : ''}${fait ? ' · faite' : ''}</small></span>
+      <span class="txt"><b>${esc(s.titre)}</b><small>${[esc(m.nom + (sous !== m.nom ? ' · ' + sous : '')), sc ? 'QCM ' + sc.pct + '%' : '', fait ? 'faite' : ''].filter(Boolean).join(' · ')}</small></span>
       ${chevron}</a>
-    <nav class="sesslinks" aria-label="Parties de la session">
-      <a href="#/session/${s.id}/essentiel">L'essentiel</a><a href="#/session/${s.id}/qcm">QCM</a><a href="#/session/${s.id}/exercices">Exercices</a><a href="#/session/${s.id}/corrige">Corrigé</a>${
-      (s.cours || []).map(chapitre).filter(Boolean).map(c => `<a class="cours" href="#/chapitre/${c.id}">Cours · ${esc(c.titre)}</a>`).join('')}${
-      (s.methodes || []).slice(0, 1).map(chapitre).filter(Boolean).map(c => `<a class="meth" href="#/chapitre/${c.id}">Méthode · ${esc(c.titre)}</a>`).join('')}
-    </nav>
+    <nav class="sesslinks" aria-label="Parties de la session">${pastillesSession(s, cours, meths)}<a class="imp" href="#/imprimer/session/${s.id}">${ICONE_IMP}PDF</a></nav>
   </div>`;
 }
 
@@ -705,15 +714,14 @@ function listeMethodes() {
     : `<div class="glass"><p class="empty">Les fiches méthode arrivent bientôt.</p></div>`;
 }
 
-function vueBrevet() {
+function vueRevision() {
   const S = BREVET.sessions;
   const faites = S.filter(s => Fait.lire(s.id)).length;
-  const total = S.reduce((n, s) => n + minutes(s.duree), 0);
-  const mats = [...new Set(S.map(s => s.matiere))];
+  const mats = DATA.matieres.filter(m => S.some(s => s.matiere === m.id)).map(m => m.id);
   const pct = S.length ? Math.round(faites / S.length * 100) : 0;
 
-  let html = `<h1 class="title">${esc(BREVET.titre || 'Brevet blanc')}</h1>
-    <p class="subtitle">${esc(BREVET.sousTitre || '')} · ${S.length} sessions · ${duree(total)}</p>
+  let html = `<h1 class="title">${esc(BREVET.titre || 'Révision')}</h1>
+    <p class="subtitle">${esc(BREVET.sousTitre || '')}</p>
     <div class="glass card">
       <div class="prog"><i style="width:${pct}%"></i></div>
       <p class="progtxt">${faites} session${faites > 1 ? 's' : ''} faite${faites > 1 ? 's' : ''} sur ${S.length}. Coche une session à la fin de sa page.</p>
@@ -725,15 +733,11 @@ function vueBrevet() {
     ['', ...mats].map(id => `<button class="chipf${filtreBrevet === id ? ' on' : ''}" onclick="filtrer('${id}')"${id ? ` style="--c:${matiere(id).couleur}"` : ''}>${id ? esc(matiere(id).nom) : 'Toutes les matières'}</button>`).join('') +
     `</div>`;
 
-  const jours = [...new Set(S.map(s => s.date))];
-  const auj = iso(today().getFullYear(), today().getMonth(), today().getDate());
-  for (const d of jours) {
-    const duJour = S.filter(s => s.date === d);
-    const vis = duJour.filter(s => !filtreBrevet || s.matiere === filtreBrevet);
-    if (!vis.length) continue;
-    const tot = duJour.reduce((n, s) => n + minutes(s.duree), 0);
-    html += `<h2 class="section${d === auj ? ' auj' : ''}" id="j-${d}">${esc(duJour[0].jour)} · ${duree(tot)}${d === auj ? ' · aujourd\'hui' : ''}</h2>
-      <div class="glass sesslist">${vis.map(lienSession).join('')}</div>`;
+  for (const id of mats) {
+    if (filtreBrevet && filtreBrevet !== id) continue;
+    const l = sessionsMatiere(id);
+    html += `<h2 class="section" id="m-${id}">${esc(matiere(id).nom)} <small>· ${l.length} session${l.length > 1 ? 's' : ''}</small></h2>
+      <div class="glass sesslist">${l.map(lienSession).join('')}</div>`;
   }
 
   html += `</div><aside class="chap-side">`;
@@ -857,24 +861,24 @@ function allerA(ancre) {
 function vueSession(id) {
   const s = session(id);
   if (!s) return `<div class="glass"><p class="empty">Cette session n'existe pas.<br>
-    <a href="#/brevet" style="color:var(--blue)">Retour au programme</a></p></div>`;
+    <a href="#/revision" style="color:var(--blue)">Retour à la révision</a></p></div>`;
   const m = matiere(s.matiere);
-  const i = BREVET.sessions.indexOf(s);
-  const prec = BREVET.sessions[i - 1], suiv = BREVET.sessions[i + 1];
+  const memes = sessionsMatiere(s.matiere);
+  const i = memes.indexOf(s);
+  const prec = memes[i - 1], suiv = memes[i + 1];
   const cours = (s.cours || []).map(chapitre).filter(Boolean);
   const meths = (s.methodes || []).map(chapitre).filter(Boolean);
   const fait = Fait.lire(s.id);
   const ancre = b => b.type === 'qcm' ? 'qcm' : /essentiel/i.test(b.titre) ? 'essentiel' : 'exercices';
+  const classe = { essentiel: 'p-ess', qcm: 'p-qcm', exercices: 'p-exo' };
 
-  let html = fil([['Accueil', '#/'], ['Brevet blanc', '#/brevet'], [s.jour, null]])
-    + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)} · ${esc(s.jour)}</span>
+  let html = fil([['Accueil', '#/'], ['Révision', '#/revision'], [m.nom, null]])
+    + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)} · Révision${cours.length ? ' · ' + esc(cours.map(c => c.numero).join(', ')) : ''}</span>
     <h1 class="title">${esc(s.titre)}</h1>
-    <p class="subtitle">Session de ${esc(s.duree)} · ${esc(m.nom)}</p>
-    <div class="timing" role="img" aria-label="${esc(s.timing.map(([t, l]) => l + ' ' + t).join(', '))}">${s.timing.map(([t, l]) =>
-      `<div style="flex:${minutes(t)} 1 0"><b>${esc(t)}</b><span>${esc(l)}</span></div>`).join('')}</div>
-    <nav class="sommaire-s">${s.blocs.map(b => `<button onclick="allerA('${ancre(b)}')">${esc(b.titre)}</button>`).join('')}<button onclick="allerA('corrige')">Corrigé</button>${
+    <p class="subtitle">L'essentiel du cours, un QCM, des exercices, et le corrigé à ouvrir à la fin.</p>
+    <nav class="sommaire-s">${s.blocs.map(b => `<button class="${classe[ancre(b)]}" onclick="allerA('${ancre(b)}')">${esc(b.titre)}</button>`).join('')}<button class="p-cor" onclick="allerA('corrige')">Corrigé</button>${
       cours.map(c => `<a class="cours" href="#/chapitre/${c.id}">Cours · ${esc(c.titre)}</a>`).join('')}${
-      meths.map(c => `<a class="meth" href="#/chapitre/${c.id}">Méthode · ${esc(c.titre)}</a>`).join('')}</nav>`;
+      meths.map(c => `<a class="meth" href="#/chapitre/${c.id}">Méthode · ${esc(c.titre)}</a>`).join('')}<a class="imp" href="#/imprimer/session/${s.id}">${ICONE_IMP}Imprimer / PDF</a></nav>`;
 
   html += `<div class="chap"><div class="chap-main">`;
   for (const b of s.blocs) {
@@ -892,13 +896,11 @@ function vueSession(id) {
   html += `</div><aside class="chap-side">`;
   if (cours.length) html += `<h2 class="section">Revoir le cours</h2><div class="glass list sidelist">${cours.map(ligneChapitre).join('')}</div>`;
   if (meths.length) html += `<h2 class="section">La méthode</h2><div class="glass list sidelist">${meths.map(ligneChapitre).join('')}</div>`;
-  if (prec || suiv) {
-    html += `<h2 class="section">Les autres sessions</h2><div class="glass list sidelist">`
-      + (prec ? ligneSessionCourte(prec, 'Précédente · ' + prec.jour) : '')
-      + (suiv ? ligneSessionCourte(suiv, 'Suivante · ' + suiv.jour) : '')
-      + `<button class="row" onclick="go('#/brevet')"><span class="pill" style="background:linear-gradient(160deg,var(--indigo),#7d7bf0)">≡</span><span class="txt"><b>Tout le programme</b><small>${BREVET.sessions.length} sessions</small></span>${chevron}</button>`
-      + `</div>`;
-  }
+  html += `<h2 class="section">Les autres sessions de ${esc(m.nom)}</h2><div class="glass list sidelist">`
+    + (prec ? ligneSessionCourte(prec, 'Précédente') : '')
+    + (suiv ? ligneSessionCourte(suiv, 'Suivante') : '')
+    + `<button class="row" onclick="go('#/revision')"><span class="pill" style="background:linear-gradient(160deg,var(--indigo),#7d7bf0)">≡</span><span class="txt"><b>Toute la révision</b><small>${BREVET.sessions.length} sessions</small></span>${chevron}</button>`
+    + `</div>`;
   html += `</aside></div>`;
   return html;
 }
@@ -923,13 +925,13 @@ function vueMethodes() {
         return `<div><b><i class="dot" style="background:${e.nom ? 'var(--indigo)' : m.couleur}"></i>${esc(e.nom || m.nom)} <span>${esc(e.duree)}</span></b><p>${esc(e.detail)}</p></div>`;
       }).join('') + `</div>`;
   }
-  html += `<div class="actions" style="margin-top:14px"><button class="btn ghost" onclick="go('#/brevet')">Voir le programme du brevet blanc</button></div>`;
+  html += `<div class="actions" style="margin-top:14px"><button class="btn ghost" onclick="go('#/revision')">Ouvrir la zone révision</button></div>`;
   html += `</aside></div>`;
   return html;
 }
 
 /* =========================================================
-   CALENDRIER — les évaluations et les sessions du brevet blanc
+   CALENDRIER — les évaluations
    ========================================================= */
 let calMois = new Date(today().getFullYear(), today().getMonth(), 1);
 let calSel = null;
@@ -946,8 +948,7 @@ function calCarte() {
   for (let d = 1; d <= nb; d++) {
     const jour = iso(y, mo, d);
     const evs = DATA.evaluations.filter(e => e.date === jour);
-    const ses = BREVET.sessions.filter(s => s.date === jour);
-    const cls = ['', evs.length ? 'has' : '', !evs.length && ses.length ? 'rev' : '',
+    const cls = ['', evs.length ? 'has' : '',
                  (t.getFullYear() === y && t.getMonth() === mo && t.getDate() === d) ? 'today' : '',
                  calSel === jour ? 'sel' : ''].join(' ').trim();
     const col = evs.length ? ` style="--ev-color:${matiere(evs[0].matiere).couleur}"` : '';
@@ -958,7 +959,6 @@ function calCarte() {
 
   const prefixe = `${y}-${String(mo+1).padStart(2,'0')}`;
   const combien = DATA.evaluations.filter(e => e.date.startsWith(prefixe)).length;
-  const revisions = BREVET.sessions.some(s => s.date.startsWith(prefixe));
 
   return `<header>
       <button onclick="moisSuivant(-1)" aria-label="Mois précédent">‹</button>
@@ -967,18 +967,14 @@ function calCarte() {
     </header>
     <div class="dow"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
     <div class="grid">${cases}</div>
-    <p class="legend"><i></i>${combien ? 'Les jours en couleur sont des évaluations. Appuie dessus.' : 'Aucune évaluation ce mois-ci.'}</p>
-    ${revisions ? `<p class="legend rev"><i></i>Les jours entourés ont des sessions de révision du brevet blanc.</p>` : ''}`;
+    <p class="legend"><i></i>${combien ? 'Les jours en couleur sont des évaluations. Appuie dessus.' : 'Aucune évaluation ce mois-ci.'}</p>`;
 }
 
 function detailJour() {
   if (!calSel) return '';
   const evs = DATA.evaluations.filter(e => e.date === calSel);
-  const ses = BREVET.sessions.filter(s => s.date === calSel);
   return `<div class="popin"><h2 class="section">${dateLongue(parseDate(calSel))}</h2>`
-       + (evs.length ? evs.map(carteEval).join('') : '')
-       + (ses.length ? `<div class="glass list">${ses.map(s => ligneSessionCourte(s, matiere(s.matiere).nom)).join('')}</div>` : '')
-       + (!evs.length && !ses.length ? `<div class="glass"><p class="empty">Rien de prévu ce jour-là.</p></div>` : '')
+       + (evs.length ? evs.map(carteEval).join('') : `<div class="glass"><p class="empty">Rien de prévu ce jour-là.</p></div>`)
        + `</div>`;
 }
 
@@ -993,7 +989,7 @@ function vueCalendrier() {
       </div>
       <div class="colB">
         ${avenir.length ? `<h2 class="section">Les prochaines évals</h2>` + avenir.map(carteEval).join('') : ''}
-        ${BREVET.sessions.length ? `<h2 class="section">Brevet blanc</h2>${carteBrevet()}` : ''}
+        ${BREVET.sessions.length ? `<h2 class="section">Révision</h2>${carteRevision()}` : ''}
       </div>
     </div>`;
 }
@@ -1036,9 +1032,149 @@ function choisirJour(jour) {
 }
 
 /* =========================================================
+   IMPRESSION — une feuille A4 recto verso, à imprimer ou à
+   enregistrer en PDF depuis la fenêtre d'impression.
+   Recto : le rappel de cours. Verso : le QCM (et les exercices
+   pour une session). Le corrigé reste à l'écran.
+   Chaque face est ajustée pour tenir sur une page : la taille
+   du texte baisse jusqu'à ce que tout rentre.
+   ========================================================= */
+const SITE = 'flav256.github.io/revision-brevet';
+const QCM_IMP_MAX = 20;   // questions de quiz imprimées au plus pour un chapitre
+
+function teteFeuille(m, sur, titre, face) {
+  return `<header class="f-tete">
+    <div><span class="f-mat">${esc(m.nom)} · ${esc(sur)}</span><h1>${esc(titre)}</h1></div>
+    <span class="f-face">${esc(face)}</span></header>`;
+}
+function feuille(m, tete, corps, pied, opts = {}) {
+  return `<section class="feuille" style="--mc:${m.couleur}" data-max="${opts.max || 11}" data-min="${opts.min || 7.5}">
+    ${tete}<div class="f-corps">${corps}</div>
+    <footer class="f-pied"><span>${pied}</span><span>révision brevet · ${SITE}</span></footer></section>`;
+}
+/* brut : le texte des QCM de session contient du HTML ; celui des quiz de chapitre est du texte simple */
+function qcmImprime(questions, brut, coupe) {
+  const t = x => brut ? x : esc(x);
+  return `<ol class="f-qcm"${coupe ? ' data-coupe' : ''}>${questions.map(q => `<li><p>${t(q.q)}</p><ul>${
+    q.choix.map((c, k) => `<li><i></i><b>${LETTRES[k]}</b><span>${t(c)}</span></li>`).join('')}</ul></li>`).join('')}</ol>`;
+}
+
+function feuillesSession(s) {
+  const m = matiere(s.matiere);
+  const cours = (s.cours || []).map(chapitre).filter(Boolean);
+  const sur = 'Révision' + (cours.length ? ' · ' + cours.map(c => c.numero).join(', ') : '');
+  const ess = s.blocs.find(b => b.type === 'html' && /essentiel/i.test(b.titre));
+  const exo = s.blocs.find(b => b.type === 'html' && !/essentiel/i.test(b.titre));
+  const q = qcmDe(s);
+  const recto = feuille(m, teteFeuille(m, sur, s.titre, "Recto · L'essentiel du cours"),
+    `<div class="f-cle fiche-b">${ess ? ess.html : ''}</div>`,
+    cours.length ? 'Le cours complet : ' + cours.map(c => esc(c.titre)).join(' · ') : 'Le cours complet sur le site', { max: 12.5 });
+  const verso = feuille(m, teteFeuille(m, sur, s.titre, 'Verso · QCM et exercices'),
+    (q ? `<h2>QCM <small>une seule bonne réponse : cocher la case</small></h2>${qcmImprime(q.questions, true)}` : '')
+    + (exo ? `<h2>${esc(exo.titre)} <small>au brouillon ou sur une copie</small></h2><div class="fiche-b f-exo">${exo.html}</div>` : ''),
+    `Corrigé à l'écran : ${SITE}/#/session/${s.id}/corrige`, { max: 11.5 });
+  return recto + verso;
+}
+
+function feuillesChapitre(c) {
+  const m = matiere(c.matiere);
+  const sur = c.fiche ? 'Méthode' : [c.numero, c.zone].filter(Boolean).join(' · ');
+  let corps = `<h2>${c.fiche ? 'Les réflexes' : "L'essentiel"}</h2><div class="f-cle"><ul>${(c.essentiel || []).map(p => `<li>${p}</li>`).join('')}</ul></div>`;
+  if (c.fiche) {
+    corps += `<h2>La méthode</h2><div class="f-sections">${(c.sections || []).map(sec =>
+      `<div class="f-sec"><h3>${esc(sec.titre)}</h3>${sec.etapes
+        ? `<ol>${sec.points.map(p => `<li>${p}</li>`).join('')}</ol>`
+        : `<ul>${sec.points.map(p => `<li>${p}</li>`).join('')}</ul>`}</div>`).join('')}</div>`;
+  } else {
+    if (c.mots && c.mots.length) corps += `<h2>Le vocabulaire</h2><div class="f-mots">${c.mots.map(([mot, def]) =>
+      `<p><b>${esc(mot)}</b> : ${esc(def)}</p>`).join('')}</div>`;
+    if (c.dates && c.dates.length) corps += `<h2>Les dates</h2><div class="f-mots f-dates">${c.dates.map(([d, t]) =>
+      `<p><b>${esc(d)}</b> ${esc(t)}</p>`).join('')}</div>`;
+  }
+  const recto = feuille(m, teteFeuille(m, sur, c.titre, c.fiche ? 'Recto · La méthode' : 'Recto · Rappel de cours'),
+    corps, `Le cours complet : ${SITE}/#/chapitre/${c.id}`, { max: 12 });
+  const qs = (c.quiz || []).slice(0, QCM_IMP_MAX);
+  if (!qs.length) return recto;
+  const verso = feuille(m, teteFeuille(m, sur, c.titre, 'Verso · QCM'),
+    `<h2>QCM <small>une seule bonne réponse : cocher la case · <span class="f-nq">${qs.length} questions</span></small></h2>${qcmImprime(qs, false, true)}`,
+    `Corrigé à l'écran : ${SITE}/#/imprimer/chapitre/${c.id}/corrige`, { max: 11.5, min: 8 });
+  return recto + verso;
+}
+
+function vueImprimer(type, id) {
+  const s = type === 'session' ? session(id) : null;
+  const c = type === 'chapitre' ? chapitre(id) : null;
+  if (!s && !c) return { html: `<div class="glass"><p class="empty">Cette fiche n'existe pas.<br>
+    <a href="#/" style="color:var(--blue)">Retour à l'accueil</a></p></div>`, titre: NOM, retour: '#/' };
+  const m = matiere((s || c).matiere);
+  const retour = s ? '#/session/' + s.id : '#/chapitre/' + c.id;
+  const verso = s ? 'le QCM et les exercices' : (c.quiz && c.quiz.length ? 'le QCM' : '');
+  const html = fil([['Accueil', '#/'], [s ? 'Révision' : m.nom, s ? '#/revision' : '#/matiere/' + m.id], [(s || c).titre, retour], ['Imprimer', null]])
+    + `<div class="glass card imp-outils">
+      <h1 class="title">Imprimer ou enregistrer en PDF</h1>
+      <p>Une feuille A4 : au recto ${s ? "l'essentiel du cours" : c.fiche ? 'la méthode' : 'le rappel de cours'}${verso ? ', au verso ' + verso : ''}. Le corrigé n'est pas imprimé : il reste à l'écran, en bas de cette page.</p>
+      <div class="actions">
+        <button class="btn" onclick="window.print()">${ICONE_IMP}Imprimer / Enregistrer en PDF</button>
+        <button class="btn quiet" onclick="go('${retour}')">Retour à la fiche</button>
+      </div>
+      <p class="aide">Dans la fenêtre d'impression : choisir « Enregistrer au format PDF » pour obtenir le fichier, format A4, échelle 100 %, et « recto verso » si l'imprimante le permet.</p>
+    </div>
+    <div class="apercu"><div class="feuilles">${s ? feuillesSession(s) : feuillesChapitre(c)}</div></div>
+    <div class="imp-corr">
+      <h2 class="section" id="corrige">Corrigé <small>· à l'écran seulement, non imprimé</small></h2>
+      <div class="glass card fiche-b corrige" id="corrimp"><p class="cache">Fais d'abord le QCM${s ? ' et les exercices' : ''} sur la feuille, puis affiche le corrigé.</p>
+        <button class="btn ghost" onclick="montrerCorrImp()">Afficher le corrigé</button></div>
+    </div>`;
+  return { html, retour, titre: `${m.nom} - ${(s || c).titre} - fiche ${s ? 'de révision' : c.fiche ? 'méthode' : 'de cours'}` };
+}
+
+function montrerCorrImp() {
+  const z = document.getElementById('corrimp');
+  if (!z) return;
+  const [, type, id] = (location.hash || '').replace(/^#\/?/, '').split('/');
+  if (type === 'session') { const s = session(id); if (s) z.innerHTML = corrigeHTML(s); return; }
+  const c = chapitre(id);
+  if (!c) return;
+  /* seulement les questions imprimées (la feuille a pu en retirer pour tenir sur une page) */
+  const n = document.querySelectorAll('.f-qcm > li').length || Math.min((c.quiz || []).length, QCM_IMP_MAX);
+  z.innerHTML = `<h4>QCM</h4><ol class="repqcm">${(c.quiz || []).slice(0, n).map(q =>
+    `<li><b>${LETTRES[q.bonne]})</b> ${esc(q.choix[q.bonne])}${q.why ? ` <span class="pourquoi">· ${esc(q.why)}</span>` : ''}</li>`).join('')}</ol>`;
+}
+
+function ajusterFeuilles() {
+  document.querySelectorAll('.feuille').forEach(f => {
+    const corps = f.querySelector('.f-corps');
+    const deborde = () => corps.scrollHeight > corps.clientHeight + 1;
+    let t = Number(f.dataset.max) || 11;
+    const min = Number(f.dataset.min) || 7.5;
+    f.style.fontSize = t + 'pt';
+    while (deborde() && t > min) { t = Math.round((t - 0.25) * 100) / 100; f.style.fontSize = t + 'pt'; }
+    /* un quiz trop long : on retire les dernières questions */
+    const qs = [...corps.querySelectorAll('.f-qcm[data-coupe] > li')];
+    let n = qs.length;
+    while (deborde() && n > 6) qs[--n].remove();
+    if (n < qs.length) { const z = f.querySelector('.f-nq'); if (z) z.textContent = n + ' questions'; }
+    f.classList.toggle('deborde', deborde());
+  });
+  echelleApercu();
+}
+
+/* à l'écran, l'aperçu A4 est réduit pour tenir dans la largeur */
+function echelleApercu() {
+  const a = document.querySelector('.apercu');
+  const fs = a && a.querySelector('.feuilles');
+  if (!fs) return;
+  fs.style.transform = '';
+  const k = Math.min(1, a.clientWidth / fs.offsetWidth);
+  if (k < 1) fs.style.transform = `scale(${k})`;
+  a.style.height = Math.ceil(fs.offsetHeight * k) + 'px';
+}
+window.addEventListener('resize', () => { if (document.querySelector('.apercu')) echelleApercu(); });
+
+/* =========================================================
    ROUTEUR
    ========================================================= */
-const PROFONDEUR = { '': 0, 'calendrier': 0, 'brevet': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'chapitre': 2, 'quiz': 3 };
+const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'chapitre': 2, 'quiz': 3, 'imprimer': 3 };
 let profPrec = null;
 let hashPrecedent = '';
 
@@ -1058,15 +1194,20 @@ function rendre() {
     titre = 'Calendrier · ' + NOM;
     /* si on vient d'une leçon ou d'une matière, un bouton Retour permet d'y revenir */
     if (/^#\/(chapitre|matiere|session)\//.test(hashPrecedent)) retour = hashPrecedent;
-  } else if (vue === 'brevet') {
-    html = vueBrevet(); onglet = 'brevet';
-    titre = 'Brevet blanc · ' + NOM;
+  } else if (vue === 'revision' || vue === 'brevet') {   // « brevet » : ancienne adresse, gardée
+    html = vueRevision(); onglet = 'revision';
+    titre = 'Révision · ' + NOM;
+  } else if (vue === 'imprimer') {
+    const r = vueImprimer(parts[1], parts[2]);
+    html = r.html; titre = r.titre; retour = r.retour;
+    onglet = parts[1] === 'session' ? 'revision' : 'accueil';
+    apres = () => { ajusterFeuilles(); if (parts[3] === 'corrige') { montrerCorrImp(); allerA('corrige'); } };
   } else if (vue === 'methodes') {
     html = vueMethodes(); onglet = 'methodes';
     titre = 'Méthodes · ' + NOM;
   } else if (vue === 'session') {
     const s = session(parts[1]);
-    html = vueSession(parts[1]); onglet = 'brevet'; retour = '#/brevet';
+    html = vueSession(parts[1]); onglet = 'revision'; retour = '#/revision';
     if (s) titre = s.titre + ' · ' + NOM;
     if (parts[2]) apres = () => allerA(parts[2]);
   } else if (vue === 'matiere') {
@@ -1077,9 +1218,9 @@ function rendre() {
     html = vueChapitre(parts[1]);
     retour = c ? '#/matiere/' + c.matiere : '#/';
     /* venu d'une session ou des méthodes : le bouton Retour y ramène */
-    if (/^#\/(session\/[^/]+|methodes|brevet)/.test(hashPrecedent)) {
+    if (/^#\/(session\/[^/]+|methodes|brevet|revision)/.test(hashPrecedent)) {
       retour = hashPrecedent.replace(/^(#\/session\/[^/]+).*$/, '$1');
-      onglet = /^#\/methodes/.test(hashPrecedent) ? 'methodes' : 'brevet';
+      onglet = /^#\/methodes/.test(hashPrecedent) ? 'methodes' : 'revision';
     } else if (c && c.fiche) onglet = 'methodes';
     if (c) titre = c.titre + ' · ' + NOM;
   } else if (vue === 'quiz') {

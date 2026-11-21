@@ -1,7 +1,7 @@
 {
   "name": "révision brevet",
   "short_name": "révision brevet",
-  "description": "Cours par matière, fiches méthode et programme de révision du brevet blanc de 3ᵉ.",
+  "description": "Cours par matière, fiches méthode et zone de révision de 3ᵉ.",
   "lang": "fr",
   "dir": "ltr",
   "start_url": "./",
@@ -18,7 +18,7 @@
     { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Programme du brevet blanc", "short_name": "Brevet blanc", "url": "./#/brevet" },
+    { "name": "Zone révision", "short_name": "Révision", "url": "./#/revision" },
     { "name": "Fiches méthode", "short_name": "Méthodes", "url": "./#/methodes" }
   ]
 }

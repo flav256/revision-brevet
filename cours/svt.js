@@ -6,7 +6,7 @@
 DATA.chapitres.push(
 
   /* ------------------------------------------------------------
-     CHAPITRE 1 — Génétique
+     CHAPITRE 1 — Une diversité au sein de chaque espèce
   ------------------------------------------------------------ */
   {
     id: 'svt-ch1',
@@ -14,38 +14,229 @@ DATA.chapitres.push(
     ajout: true,
     zone: 'Le vivant et son évolution',
     numero: 'Chapitre 1',
-    titre: "Génétique : ADN, chromosomes, gènes et allèles",
-    periode: "Hérédité et diversité génétique",
-    theme: "Le vivant et son évolution — stabilité et diversité génétique des individus",
+    titre: "Une diversité au sein de chaque espèce",
+    periode: "Espèce, caractères héréditaires et influence de l'environnement",
+    theme: "Le vivant et son évolution — diversité des individus au sein d'une espèce",
 
     essentiel: [
-      "L'information génétique est rangée ainsi : <b>cellule → noyau → chromosomes → ADN → gène → allèles</b>. Un gène est une portion d'ADN qui détermine un caractère ; ses différentes versions sont les allèles.",
-      "Chaque cellule humaine contient <b>46 chromosomes, soit 23 paires</b>. La 23<sup>e</sup> paire est <b>XX</b> chez la fille, <b>XY</b> chez le garçon. Le <b>caryotype</b> permet de les observer, et de repérer une anomalie comme la <b>trisomie 21</b> (47 chromosomes).",
-      "La <b>mitose</b> donne deux cellules identiques à 46 chromosomes : l'ADN est copié avant, l'information génétique est <b>conservée</b>.",
-      "La <b>méiose</b> produit des <b>gamètes à 23 chromosomes</b> (un de chaque paire). La <b>fécondation</b> réunit 23 + 23 = 46. Ce double <b>brassage</b> rend chaque individu unique.",
-      "Un allèle <b>dominant</b> s'exprime même en un seul exemplaire, un allèle <b>récessif</b> seulement en deux. Les <b>mutations</b> créent de nouveaux allèles, et le phénotype dépend aussi de l'<b>environnement</b>."
+      "Une <b>espèce</b> est un ensemble d'individus qui se ressemblent et qui peuvent se reproduire entre eux en donnant des <b>descendants fertiles</b> : c'est le critère d'<b>interfécondité</b>.",
+      "Tous les individus d'une espèce partagent des <b>caractères communs à l'espèce</b>, mais chacun possède des <b>variations individuelles</b> qui le rendent unique.",
+      "Les <b>caractères héréditaires</b> sont transmis par les parents grâce aux <b>gamètes</b> : groupe sanguin, couleur naturelle des yeux, maladies héréditaires comme la <b>mucoviscidose</b>. Les caractères <b>acquis</b> (bronzage, cicatrice, muscles, langue parlée) ne se transmettent pas.",
+      "Le <b>phénotype</b>, ensemble des caractères observables, dépend de l'information génétique <b>et de l'environnement</b> : vrais jumeaux qui deviennent différents, pelage du lapin russe selon la température, fleurs de l'hortensia selon le sol.",
+      "La <b>biodiversité</b> existe à trois niveaux : la diversité des <b>écosystèmes</b>, la diversité des <b>espèces</b> et la <b>diversité génétique</b> des individus au sein de chaque espèce."
     ],
 
     sections: [
       {
-        titre: "De la cellule à l'ADN : où se trouve l'information génétique ?",
+        titre: "La notion d'espèce",
         points: [
-          "Le corps humain est formé de milliards de <b>cellules</b>. La plupart possèdent un <b>noyau</b>, qui contient l'<b>information génétique</b> : les instructions nécessaires au développement et au fonctionnement de l'organisme.",
-          "Le noyau contient des <b>chromosomes</b>. Chaque chromosome est formé d'une très longue molécule d'<b>ADN</b> enroulée sur elle-même. Déroulé, l'ADN d'une seule cellule humaine mesure environ 2 mètres.",
-          "L'<b>ADN</b> est une molécule en forme de <b>double hélice</b>. C'est le support de l'information génétique chez tous les êtres vivants : on dit qu'il est <b>universel</b>.",
-          "Un <b>gène</b> est une portion d'ADN située à un endroit précis d'un chromosome. Il contient l'information pour fabriquer une protéine, qui participe à un <b>caractère héréditaire</b> (le groupe sanguin, par exemple).",
-          "Un même gène peut exister en plusieurs versions : ce sont les <b>allèles</b>. Exemple : le gène du groupe sanguin existe sous les allèles A, B et O.",
-          "À retenir dans l'ordre : <b>cellule → noyau → chromosomes → ADN → gène → allèles</b>."
+          "Une <b>espèce</b> est un ensemble d'êtres vivants qui se ressemblent et qui peuvent se reproduire entre eux.",
+          "Critère d'<b>interfécondité</b> : deux individus sont de la même espèce s'ils peuvent se reproduire ensemble <b>et</b> avoir des descendants eux-mêmes <b>fertiles</b>, c'est-à-dire capables de se reproduire à leur tour.",
+          "Exemple : le cheval et l'âne peuvent avoir un petit, le <b>mulet</b>. Mais le mulet est presque toujours <b>stérile</b> : le cheval et l'âne sont donc deux espèces différentes.",
+          "À l'inverse, un chihuahua et un saint-bernard se ressemblent peu, mais leurs descendants sont fertiles : tous les chiens appartiennent à la <b>même espèce</b>.",
+          "Tous les êtres humains, quelle que soit leur origine, appartiennent à une seule espèce : <b>Homo sapiens</b>."
         ]
       },
       {
-        titre: "Le caryotype : 23 paires de chromosomes",
+        titre: "Caractères de l'espèce et variations individuelles",
         points: [
+          "Un <b>caractère</b> est un trait que l'on peut observer ou mesurer chez un être vivant : la forme du visage, la couleur des yeux, le groupe sanguin, la taille…",
+          "Les <b>caractères communs à l'espèce</b> sont partagés par tous ses individus. Chez l'être humain : se tenir debout et marcher sur deux jambes, avoir une main avec un pouce qui s'oppose aux autres doigts, avoir un grand cerveau.",
+          "Chaque individu possède aussi des <b>caractères qui lui sont propres</b> : un même caractère prend une forme différente d'une personne à l'autre. Ce sont les <b>variations individuelles</b>.",
+          "Exemple : tous les humains ont des yeux (caractère de l'espèce), mais leur couleur change d'une personne à l'autre (variation individuelle).",
+          "On observe ces variations chez tous les êtres vivants : le pelage des chats, la couleur des fleurs d'une même espèce. Grâce à elles, chaque individu est <b>unique</b>."
+        ]
+      },
+      {
+        titre: "Caractères héréditaires et caractères acquis",
+        points: [
+          "Un caractère <b>héréditaire</b> est transmis des parents aux enfants. Il est déterminé par l'<b>information génétique</b>, que chaque parent transmet par ses <b>gamètes</b> (spermatozoïde ou ovule) au moment de la fécondation.",
+          "Exemples de caractères héréditaires : le <b>groupe sanguin</b>, la <b>couleur naturelle des yeux</b>, certaines <b>maladies héréditaires</b>.",
+          "La <b>mucoviscidose</b> est une maladie héréditaire : un mucus trop épais encombre les poumons et le tube digestif. Elle peut toucher l'enfant de deux parents qui ne sont pas malades.",
+          "Un caractère <b>acquis</b>, ou non héréditaire, apparaît au cours de la vie sous l'effet de l'environnement ou du mode de vie : le <b>bronzage</b>, une <b>cicatrice</b>, des <b>muscles</b> développés par le sport, la <b>langue parlée</b>.",
+          "Un caractère acquis <b>ne se transmet pas</b> aux enfants, car il ne modifie pas l'information génétique des gamètes. L'enfant d'un champion de musculation ne naît pas musclé ; l'enfant de parents qui parlent chinois apprend la langue qu'il entend autour de lui.",
+          "Pour savoir si un caractère est héréditaire, on suit sa transmission dans une famille, sur plusieurs générations, grâce à un <b>arbre généalogique</b>."
+        ]
+      },
+      {
+        titre: "L'environnement agit sur le phénotype",
+        points: [
+          "Le <b>phénotype</b> est l'ensemble des caractères observables d'un individu. Il dépend de son information génétique, mais aussi de son <b>environnement</b> : climat, alimentation, mode de vie.",
+          "Le soleil fait bronzer, l'alimentation influe sur la taille, le sport développe les muscles. Ces changements ne modifient pas l'information génétique et <b>ne se transmettent pas</b> aux enfants.",
+          "Les <b>vrais jumeaux</b>, issus de la même cellule-œuf, ont exactement la même information génétique. Pourtant, ils peuvent devenir différents selon leur mode de vie : l'un plus musclé, l'autre plus bronzé ou avec une cicatrice.",
+          "Le <b>lapin russe</b> (ou himalayen) a un pelage blanc, sauf aux extrémités du corps, plus froides (oreilles, museau, pattes, queue), où il est noir. Si l'on rase une zone du dos et qu'on y fixe une poche de glace, le poil repousse <b>noir</b> : la couleur du pelage dépend de la <b>température</b>.",
+          "L'<b>hortensia</b> donne des fleurs <b>bleues</b> dans un sol <b>acide</b> et des fleurs <b>roses</b> dans un sol calcaire. Replanté dans un autre sol, le même pied peut changer de couleur.",
+          "Bilan : <b>phénotype = information génétique + influence de l'environnement</b>."
+        ]
+      },
+      {
+        titre: "Les trois niveaux de la biodiversité",
+        points: [
+          "La <b>biodiversité</b> est la diversité du monde vivant. On la décrit à <b>trois niveaux</b>.",
+          "La diversité des <b>écosystèmes</b> : forêts, prairies, mares, océans, récifs coralliens… Un écosystème est formé d'un milieu de vie et des êtres vivants qui l'habitent.",
+          "La diversité des <b>espèces</b> : près de 2 millions d'espèces ont été décrites, et il en reste sans doute beaucoup à découvrir.",
+          "La <b>diversité génétique</b> au sein de chaque espèce : les individus d'une même espèce n'ont pas exactement la même information génétique, ce qui explique leurs variations individuelles héréditaires.",
+          "Cette diversité génétique est précieuse : dans une population variée, certains individus résistent mieux à une maladie ou à un changement du milieu, et l'espèce a plus de chances de survivre."
+        ]
+      }
+    ],
+
+    mots: [
+      ["Espèce", "Ensemble d'individus qui se ressemblent et qui peuvent se reproduire entre eux en donnant des descendants fertiles."],
+      ["Interfécondité", "Capacité de deux individus à se reproduire ensemble et à avoir des descendants eux-mêmes fertiles."],
+      ["Fertile", "Capable de se reproduire. Le contraire est stérile."],
+      ["Caractère", "Trait observable ou mesurable d'un être vivant : couleur des yeux, groupe sanguin, taille…"],
+      ["Variation individuelle", "Forme différente que prend un même caractère d'un individu à l'autre, au sein d'une espèce."],
+      ["Caractère héréditaire", "Caractère transmis des parents aux enfants par l'intermédiaire des gamètes."],
+      ["Caractère acquis", "Caractère qui apparaît au cours de la vie sous l'effet de l'environnement ; il ne se transmet pas aux enfants."],
+      ["Gamète", "Cellule reproductrice (spermatozoïde ou ovule) qui transmet l'information génétique d'un parent."],
+      ["Mucoviscidose", "Maladie héréditaire dans laquelle un mucus trop épais encombre les poumons et le tube digestif."],
+      ["Phénotype", "Ensemble des caractères observables d'un individu. Il dépend de son information génétique et de l'environnement."],
+      ["Environnement", "Ensemble des conditions dans lesquelles vit un être vivant : température, soleil, sol, alimentation, mode de vie…"],
+      ["Vrais jumeaux", "Jumeaux issus d'une même cellule-œuf : ils ont la même information génétique."],
+      ["Biodiversité", "Diversité du monde vivant, à trois niveaux : écosystèmes, espèces et diversité génétique au sein de chaque espèce."]
+    ],
+
+    quiz: [
+      { q: "Deux individus appartiennent à la même espèce s'ils :",
+        choix: ["se ressemblent beaucoup", "vivent dans le même milieu", "peuvent se reproduire ensemble et avoir des descendants fertiles", "ont la même couleur de pelage"],
+        bonne: 2,
+        why: "C'est le critère d'interfécondité : la ressemblance seule ne suffit pas." },
+
+      { q: "Le cheval et l'âne donnent naissance au mulet, qui est stérile. On en déduit que :",
+        choix: ["le cheval et l'âne sont deux espèces différentes", "le cheval et l'âne sont de la même espèce", "le mulet est une nouvelle espèce", "le mulet a hérité de caractères acquis"],
+        bonne: 0,
+        why: "Pour être de la même espèce, il faut des descendants fertiles ; le mulet ne l'est presque jamais." },
+
+      { q: "Lequel de ces caractères est commun à toute l'espèce humaine ?",
+        choix: ["La couleur des yeux", "Le groupe sanguin", "La forme du nez", "Marcher debout sur deux jambes"],
+        bonne: 3,
+        why: "Les trois autres caractères changent d'une personne à l'autre : ce sont des variations individuelles." },
+
+      { q: "Une variation individuelle, c'est :",
+        choix: ["un caractère partagé par tous les individus de l'espèce", "une forme différente d'un même caractère d'un individu à l'autre", "le passage d'une espèce à une autre", "une maladie héréditaire"],
+        bonne: 1,
+        why: "Exemple : tous les humains ont des yeux, mais leur couleur varie d'une personne à l'autre." },
+
+      { q: "Lequel de ces caractères est héréditaire ?",
+        choix: ["Le groupe sanguin", "Le bronzage", "Une cicatrice", "La langue parlée"],
+        bonne: 0,
+        why: "Il est déterminé par l'information génétique transmise par les parents ; les trois autres sont acquis." },
+
+      { q: "Comment les caractères héréditaires passent-ils des parents aux enfants ?",
+        choix: ["Par l'alimentation de la mère", "Par l'éducation", "Par les gamètes, lors de la fécondation", "Par l'exemple des parents"],
+        bonne: 2,
+        why: "Le spermatozoïde et l'ovule apportent chacun l'information génétique d'un parent." },
+
+      { q: "Un champion de musculation aura-t-il des enfants musclés dès la naissance ?",
+        choix: ["Oui, car les muscles sont héréditaires", "Non, car un caractère acquis ne se transmet pas", "Oui, mais seulement ses fils", "Oui, si la mère fait aussi du sport"],
+        bonne: 1,
+        why: "Les muscles développés par le sport ne modifient pas l'information génétique des gamètes." },
+
+      { q: "Laquelle de ces maladies est héréditaire ?",
+        choix: ["La grippe", "La mucoviscidose", "Une fracture", "Un coup de soleil"],
+        bonne: 1,
+        why: "La mucoviscidose est due à l'information génétique reçue des parents ; les autres sont dues à l'environnement." },
+
+      { q: "Le phénotype d'un individu, c'est :",
+        choix: ["l'ensemble de ses caractères observables", "le nombre de ses enfants", "l'espèce à laquelle il appartient", "la liste de ses ancêtres"],
+        bonne: 0,
+        why: "Il dépend de l'information génétique et de l'environnement." },
+
+      { q: "Deux vrais jumeaux n'ont pas la même masse musculaire. Que montre cet exemple ?",
+        choix: ["Leur information génétique est différente", "Ils n'appartiennent pas à la même espèce", "Le sport modifie l'information génétique", "Le phénotype dépend aussi de l'environnement"],
+        bonne: 3,
+        why: "Ils ont la même information génétique, mais leur mode de vie (sport, alimentation) modifie leur phénotype." },
+
+      { q: "On rase le dos d'un lapin russe et on y fixe une poche de glace : le poil repousse noir. Que montre cette expérience ?",
+        choix: ["La couleur du pelage dépend de la température", "Le lapin a changé d'information génétique", "Le froid fait tomber les poils blancs", "Ses petits auront une tache noire sur le dos"],
+        bonne: 0,
+        why: "Le lapin a la même information génétique sur tout le corps : seul le froid a modifié son phénotype, et ce changement ne se transmet pas." },
+
+      { q: "Un hortensia à fleurs roses est replanté dans un sol acide. Ses nouvelles fleurs seront plutôt :",
+        choix: ["blanches", "jaunes", "bleues", "roses"],
+        bonne: 2,
+        why: "La couleur de l'hortensia dépend du sol : bleue en sol acide, rose en sol calcaire." },
+
+      { q: "Quels sont les trois niveaux de la biodiversité ?",
+        choix: ["Les cellules, les organes et les organismes", "Les écosystèmes, les espèces et la diversité génétique au sein des espèces", "Les animaux, les végétaux et les champignons", "Les océans, les forêts et les déserts"],
+        bonne: 1,
+        why: "La biodiversité va du plus grand (les écosystèmes) au plus fin (les différences génétiques entre individus d'une même espèce)." },
+
+      { q: "Un chihuahua et un saint-bernard sont très différents. Pourtant, ils sont de la même espèce car :",
+        choix: ["ils ont tous les deux quatre pattes", "ils vivent avec l'être humain", "ils mangent la même nourriture", "ils peuvent avoir ensemble des descendants fertiles"],
+        bonne: 3,
+        why: "C'est l'interfécondité, et non la ressemblance, qui définit l'espèce." },
+
+      { q: "Parmi ces caractères, lequel est acquis ?",
+        choix: ["La couleur naturelle des yeux", "Le groupe sanguin", "Parler anglais", "La mucoviscidose"],
+        bonne: 2,
+        why: "Une langue s'apprend au cours de la vie : elle ne se transmet pas par les gamètes." }
+    ]
+  },
+
+  /* ------------------------------------------------------------
+     CHAPITRE 2 — L'information génétique de la cellule
+  ------------------------------------------------------------ */
+  {
+    id: 'svt-ch2',
+    matiere: 'svt',
+    ajout: true,
+    zone: 'Le vivant et son évolution',
+    numero: 'Chapitre 2',
+    titre: "L'information génétique de la cellule",
+    periode: "Noyau, chromosomes, ADN, gènes et allèles",
+    theme: "Le vivant et son évolution — le support de l'information génétique",
+
+    essentiel: [
+      "L'<b>information génétique</b> se trouve dans le <b>noyau</b> des cellules. Les expériences de transfert de noyau le montrent : la brebis <b>Dolly</b> (1996) ressemble à la brebis qui a donné le noyau.",
+      "Le noyau contient les <b>chromosomes</b>. Chaque cellule humaine en possède <b>46, soit 23 paires</b> ; la 23<sup>e</sup> paire est <b>XX</b> chez la fille, <b>XY</b> chez le garçon. Le <b>caryotype</b> permet de les observer.",
+      "Chaque chromosome est formé d'une très longue molécule d'<b>ADN</b> en <b>double hélice</b>. L'ADN est le support de l'information génétique chez tous les êtres vivants : il est <b>universel</b>.",
+      "À retenir : <b>cellule → noyau → chromosomes → ADN → gène → allèles</b>. Un <b>gène</b> est une portion d'ADN qui détermine un caractère ; ses différentes versions sont les <b>allèles</b>.",
+      "Un chromosome en plus ou en moins provoque une <b>anomalie chromosomique</b> : <b>trisomie 21</b> (47 chromosomes, trois chromosomes 21), <b>syndrome de Turner</b> (45 chromosomes, un seul X)."
+    ],
+
+    sections: [
+      {
+        titre: "Le noyau contient l'information génétique",
+        points: [
+          "Le corps humain est formé de milliers de milliards de <b>cellules</b>. La plupart possèdent un <b>noyau</b>, qui contient l'<b>information génétique</b> : les instructions nécessaires au développement et au fonctionnement de l'organisme.",
+          "<b>La brebis Dolly (Écosse, 1996)</b> : on prélève le noyau d'une cellule de mamelle d'une brebis <b>à tête blanche</b>. On le place dans un ovule, dont on a retiré le noyau, d'une brebis <b>à tête noire</b>. L'embryon obtenu se développe dans l'utérus d'une troisième brebis, à tête noire.",
+          "Résultat : Dolly naît avec une <b>tête blanche</b>. Elle ressemble à la brebis qui a donné le <b>noyau</b>, et non à celle qui a donné l'ovule ni à la mère porteuse. Dolly est un <b>clone</b> de la brebis à tête blanche.",
+          "Chez la grenouille, dans les années 1960, John Gurdon avait déjà transféré le noyau d'une cellule d'intestin de têtard dans un ovule dont le noyau avait été détruit : il a obtenu des têtards, puis des grenouilles adultes.",
+          "Conclusion : le <b>noyau</b> contient l'information génétique qui détermine les caractères de l'individu. Même le noyau d'une cellule spécialisée (mamelle, intestin) contient toute l'information nécessaire pour former un organisme entier."
+        ]
+      },
+      {
+        titre: "Les chromosomes et le caryotype",
+        points: [
+          "Le noyau contient des <b>chromosomes</b>. On les voit bien quand la cellule se divise : ils sont alors très condensés, en forme de petits bâtonnets.",
           "Le <b>caryotype</b> est la photographie des chromosomes d'une cellule, <b>classés par paires</b>, du plus grand au plus petit. On l'obtient à partir de cellules en division, quand les chromosomes sont bien visibles.",
           "Chaque cellule du corps humain contient <b>46 chromosomes, soit 23 paires</b>. Les deux chromosomes d'une paire portent les mêmes gènes, aux mêmes endroits, mais pas forcément les mêmes allèles.",
-          "Dans chaque paire, un chromosome vient du <b>père</b> et l'autre de la <b>mère</b>.",
+          "Dans chaque paire, un chromosome vient du <b>père</b> et l'autre de la <b>mère</b>. Seuls les gamètes font exception : ils ne contiennent que 23 chromosomes (voir chapitre 3).",
           "Les paires 1 à 22 sont les mêmes chez les filles et chez les garçons. La <b>23<sup>e</sup> paire</b> est celle des <b>chromosomes sexuels</b> : <b>XX</b> chez la fille, <b>XY</b> chez le garçon. Le chromosome Y est beaucoup plus petit que le X.",
           "Le nombre de chromosomes est le même pour tous les individus d'une espèce, mais il change d'une espèce à l'autre : 48 chez le chimpanzé, 78 chez le chien."
+        ]
+      },
+      {
+        titre: "L'ADN, une molécule universelle",
+        points: [
+          "Chaque chromosome est formé d'une très longue molécule d'<b>ADN</b> enroulée sur elle-même. Déroulé, l'ADN d'une seule cellule humaine mesure environ 2 mètres.",
+          "L'<b>ADN</b> est une molécule en forme de <b>double hélice</b> : deux brins enroulés l'un autour de l'autre, comme une échelle tordue.",
+          "L'information génétique est écrite dans l'ADN par l'<b>ordre</b> dans lequel s'enchaînent quatre petites molécules, notées A, T, C et G, comme un texte écrit avec un alphabet de quatre lettres.",
+          "L'ADN est le support de l'information génétique chez <b>tous les êtres vivants</b> (animaux, végétaux, champignons, bactéries), et il a la même structure chez tous : on dit qu'il est <b>universel</b>.",
+          "Conséquence : un gène d'une espèce peut fonctionner dans une autre. Des bactéries qui ont reçu le gène humain de l'<b>insuline</b> fabriquent de l'insuline humaine, utilisée pour soigner les personnes diabétiques."
+        ]
+      },
+      {
+        titre: "Gènes et allèles",
+        points: [
+          "Un <b>gène</b> est une portion d'ADN située à un endroit précis d'un chromosome. Il contient l'information pour fabriquer une protéine, qui participe à un <b>caractère héréditaire</b> (le groupe sanguin, par exemple).",
+          "Chaque chromosome porte de nombreux gènes. L'être humain possède environ <b>20 000 gènes</b>.",
+          "Les deux chromosomes d'une paire portent les mêmes gènes : chaque cellule possède donc <b>deux exemplaires</b> de chaque gène, l'un venu du père, l'autre de la mère.",
+          "Un même gène peut exister en plusieurs versions : ce sont les <b>allèles</b>. Exemple : le gène du groupe sanguin existe sous les allèles A, B et O.",
+          "Tous les êtres humains ont les mêmes gènes, mais pas les mêmes allèles : c'est ce qui explique les <b>variations individuelles</b> héréditaires.",
+          "À retenir dans l'ordre : <b>cellule → noyau → chromosomes → ADN → gène → allèles</b>."
         ]
       },
       {
@@ -57,67 +248,22 @@ DATA.chapitres.push(
           "Le risque augmente avec l'âge de la mère. Un caryotype du fœtus peut être réalisé pendant la grossesse pour détecter l'anomalie.",
           "Autre exemple : le <b>syndrome de Turner</b> touche des filles qui n'ont qu'un seul chromosome X (45 chromosomes)."
         ]
-      },
-      {
-        titre: "La mitose : conserver l'information génétique",
-        points: [
-          "Chaque être humain se développe à partir d'une seule cellule, la <b>cellule-œuf</b>, qui se divise un très grand nombre de fois. Toutes nos cellules ont donc la même information génétique.",
-          "<b>Avant</b> la division, l'ADN est <b>copié</b> : chaque chromosome se duplique et se retrouve formé de <b>deux chromatides identiques</b>.",
-          "<b>Pendant la mitose</b>, les chromosomes se condensent et deviennent visibles. Les deux copies de chaque chromosome se séparent et partent chacune dans une cellule-fille.",
-          "Bilan : <b>1 cellule-mère à 46 chromosomes → 2 cellules-filles à 46 chromosomes</b>, identiques entre elles et à la cellule-mère. L'information génétique est <b>conservée</b>.",
-          "La mitose permet la <b>croissance</b>, le <b>renouvellement</b> des cellules (peau, sang) et la <b>réparation</b> des tissus (cicatrisation)."
-        ]
-      },
-      {
-        titre: "Méiose et fécondation : chaque individu est unique",
-        points: [
-          "Les <b>gamètes</b> sont les cellules reproductrices : les <b>spermatozoïdes</b>, fabriqués dans les testicules, et les <b>ovules</b>, fabriqués dans les ovaires. Ils sont produits par une division particulière : la <b>méiose</b>.",
-          "Pendant la méiose, les chromosomes de chaque paire se séparent : un gamète ne reçoit qu'<b>un chromosome de chaque paire</b>, soit <b>23 chromosomes</b>.",
-          "Pour chaque paire, le chromosome qui part dans le gamète est choisi <b>au hasard</b>. Il existe ainsi plus de 8 millions de combinaisons possibles : chaque gamète est différent. C'est un premier <b>brassage</b> des allèles.",
-          "La <b>fécondation</b> est l'union d'un spermatozoïde et d'un ovule : <b>23 + 23 = 46 chromosomes</b>. La cellule-œuf retrouve 23 paires. Quels gamètes se rencontrent, c'est aussi le hasard : c'est un second brassage.",
-          "Conséquence : chaque individu possède une combinaison d'allèles <b>unique</b>. Seuls les <b>vrais jumeaux</b>, issus de la même cellule-œuf, ont la même information génétique.",
-          "Le <b>sexe</b> est décidé à la fécondation : l'ovule porte toujours un X ; le spermatozoïde porte un X (→ fille XX) ou un Y (→ garçon XY). Il y a donc une chance sur deux d'avoir une fille."
-        ]
-      },
-      {
-        titre: "Allèles dominants et récessifs : l'exemple des groupes sanguins",
-        points: [
-          "Pour chaque gène, une cellule possède <b>deux allèles</b>, un sur chaque chromosome de la paire : l'un vient du père, l'autre de la mère. On les note entre parenthèses, par exemple (A//O).",
-          "Si les deux allèles sont différents, l'allèle <b>dominant</b> s'exprime et masque l'autre. L'allèle <b>récessif</b> ne s'exprime que s'il est présent <b>en deux exemplaires</b>.",
-          "Le gène du groupe sanguin (sur la paire n° 9) existe sous trois allèles : <b>A</b>, <b>B</b> et <b>O</b>. A et B sont <b>dominants sur O</b>. Quand A et B sont ensemble, ils s'expriment tous les deux : on dit qu'ils sont <b>codominants</b>.",
-          "Groupe <b>A</b> : (A//A) ou (A//O). Groupe <b>B</b> : (B//B) ou (B//O). Groupe <b>AB</b> : (A//B). Groupe <b>O</b> : seulement (O//O).",
-          "Deux parents du groupe A peuvent avoir un enfant du groupe O : s'ils sont tous les deux (A//O), chacun peut lui transmettre son allèle O.",
-          "Dans un arbre généalogique, si deux parents non malades ont un enfant malade, l'allèle de la maladie est <b>récessif</b> : chaque parent le porte sans être malade. C'est le cas de la <b>mucoviscidose</b>."
-        ]
-      },
-      {
-        titre: "Génotype, phénotype, mutations et environnement",
-        points: [
-          "Le <b>génotype</b> est l'ensemble des allèles d'un individu. Le <b>phénotype</b> est l'ensemble de ses caractères observables (groupe sanguin, couleur de la peau, taille…).",
-          "Une <b>mutation</b> est une modification accidentelle de l'ADN. Elle est rare et se produit au hasard, mais elle peut être favorisée par des agents <b>mutagènes</b> : rayons UV du soleil, rayons X, certaines substances chimiques comme celles de la fumée de tabac.",
-          "Une mutation peut créer un <b>nouvel allèle</b>. Les mutations sont à l'origine de la diversité des allèles, donc de la <b>diversité génétique</b> des êtres vivants. Une mutation peut être sans effet, favorable ou défavorable (maladie génétique).",
-          "Une mutation n'est transmise aux enfants que si elle touche une cellule à l'origine des <b>gamètes</b>. Dans une autre cellule du corps (la peau, par exemple), elle n'est pas transmise, mais elle peut provoquer un cancer.",
-          "Le phénotype dépend des gènes <b>et de l'environnement</b> : le soleil fait bronzer, l'alimentation influe sur la taille, le sport développe les muscles. Ces changements ne modifient pas les allèles et ne se transmettent pas aux enfants.",
-          "Ainsi, de vrais jumeaux, qui ont exactement les mêmes allèles, peuvent devenir différents selon leur mode de vie."
-        ]
       }
     ],
 
     mots: [
+      ["Noyau", "Partie de la cellule qui contient les chromosomes, donc l'information génétique."],
+      ["Information génétique", "Ensemble des instructions, portées par l'ADN, qui déterminent les caractères héréditaires d'un individu."],
+      ["Transfert de noyau", "Expérience qui consiste à placer le noyau d'une cellule dans un ovule dont on a retiré le noyau."],
+      ["Clone", "Individu qui possède la même information génétique qu'un autre, comme la brebis Dolly."],
       ["Chromosome", "Élément du noyau formé d'une très longue molécule d'ADN enroulée. L'être humain en possède 46, soit 23 paires."],
+      ["Caryotype", "Photographie des chromosomes d'une cellule, classés par paires et par taille."],
+      ["Chromosomes sexuels", "La 23e paire de chromosomes : XX chez la fille, XY chez le garçon."],
       ["ADN", "Molécule en forme de double hélice qui porte l'information génétique, chez tous les êtres vivants."],
       ["Gène", "Portion d'ADN située à un endroit précis d'un chromosome, qui détermine un caractère héréditaire."],
       ["Allèle", "Version d'un gène. Chaque individu possède deux allèles de chaque gène : un venant du père, un de la mère."],
-      ["Caryotype", "Photographie des chromosomes d'une cellule, classés par paires et par taille."],
-      ["Trisomie 21", "Anomalie chromosomique : la personne possède trois chromosomes 21 au lieu de deux, soit 47 chromosomes."],
-      ["Mitose", "Division d'une cellule en deux cellules-filles identiques, qui gardent les 46 chromosomes."],
-      ["Méiose", "Division particulière qui produit les gamètes : chacun ne reçoit qu'un chromosome de chaque paire."],
-      ["Gamète", "Cellule reproductrice (spermatozoïde ou ovule) qui contient 23 chromosomes."],
-      ["Fécondation", "Union d'un spermatozoïde et d'un ovule, qui donne une cellule-œuf à 46 chromosomes."],
-      ["Dominant / récessif", "Un allèle dominant s'exprime même en un seul exemplaire ; un allèle récessif seulement s'il est présent deux fois."],
-      ["Mutation", "Modification accidentelle de l'ADN, qui peut donner naissance à un nouvel allèle."],
-      ["Génotype", "Ensemble des allèles que possède un individu."],
-      ["Phénotype", "Ensemble des caractères observables d'un individu. Il dépend de ses allèles et de l'environnement."]
+      ["Anomalie chromosomique", "Chromosome en plus, en moins ou abîmé, qui modifie l'information génétique."],
+      ["Trisomie 21", "Anomalie chromosomique : la personne possède trois chromosomes 21 au lieu de deux, soit 47 chromosomes."]
     ],
 
     quiz: [
@@ -126,15 +272,25 @@ DATA.chapitres.push(
         bonne: 1,
         why: "La cellule contient un noyau, qui contient les chromosomes, formés d'ADN dont certaines portions sont des gènes." },
 
-      { q: "Une mutation sera transmise aux enfants si elle touche :",
-        choix: ["une cellule à l'origine des gamètes", "une cellule de la peau", "une cellule du foie", "une cellule d'un muscle"],
+      { q: "Dolly est née d'un ovule de brebis à tête noire, dans lequel on a placé le noyau d'une cellule de brebis à tête blanche. Dolly a :",
+        choix: ["une tête noire, comme la donneuse d'ovule", "une tête noire, comme la mère porteuse", "une tête blanche, comme la donneuse du noyau", "une tête grise, mélange des deux"],
+        bonne: 2,
+        why: "Les caractères de Dolly sont ceux de la brebis qui a donné le noyau." },
+
+      { q: "Que montre l'expérience de la brebis Dolly ?",
+        choix: ["Que l'information génétique se trouve dans le noyau", "Que l'ovule décide de tous les caractères", "Que la mère porteuse transmet ses caractères", "Que les caractères acquis se transmettent"],
         bonne: 0,
-        why: "Seules les mutations présentes dans les cellules qui fabriquent les gamètes passent à la génération suivante." },
+        why: "Dolly ressemble à la brebis qui a fourni le noyau, et à aucune des deux autres." },
 
       { q: "Qu'est-ce que l'ADN ?",
         choix: ["Une cellule sexuelle", "Une protéine du sang", "Une paire de chromosomes", "La molécule qui porte l'information génétique"],
         bonne: 3,
         why: "L'ADN est une molécule en double hélice, présente chez tous les êtres vivants." },
+
+      { q: "On dit que l'ADN est universel car :",
+        choix: ["il est identique chez tous les êtres humains", "il ne subit jamais de modification", "il est le support de l'information génétique chez tous les êtres vivants", "il se trouve en dehors du noyau"],
+        bonne: 2,
+        why: "Animaux, végétaux, champignons et bactéries : tous ont de l'ADN, avec la même structure." },
 
       { q: "Un gène, c'est :",
         choix: ["un chromosome entier", "une cellule du noyau", "une portion d'ADN qui détermine un caractère héréditaire", "une version d'un allèle"],
@@ -147,8 +303,8 @@ DATA.chapitres.push(
         why: "Par exemple, A, B et O sont trois allèles du gène du groupe sanguin." },
 
       { q: "Combien de chromosomes contient une cellule du corps humain ?",
-        choix: ["23", "44", "46", "48"],
-        bonne: 2,
+        choix: ["23", "44", "48", "46"],
+        bonne: 3,
         why: "46 chromosomes, soit 23 paires. 48, c'est le nombre du chimpanzé." },
 
       { q: "Qu'est-ce qu'un caryotype ?",
@@ -171,6 +327,120 @@ DATA.chapitres.push(
         bonne: 1,
         why: "Un gamète a reçu deux chromosomes 21 au lieu d'un ; avec l'autre gamète, cela fait trois." },
 
+      { q: "Une fille atteinte du syndrome de Turner possède :",
+        choix: ["47 chromosomes", "un seul chromosome X, soit 45 chromosomes", "trois chromosomes X", "un chromosome Y en plus"],
+        bonne: 1,
+        why: "Il lui manque un chromosome X : sa 23e paire est réduite à un seul X." },
+
+      { q: "Des bactéries qui ont reçu le gène humain de l'insuline fabriquent de l'insuline humaine. Pourquoi ?",
+        choix: ["Parce que les bactéries sont devenues humaines", "Parce que l'ADN est universel : un gène humain peut fonctionner dans une bactérie", "Parce que les bactéries ont un noyau humain", "Parce que l'insuline est un chromosome"],
+        bonne: 1,
+        why: "Toutes les espèces utilisent l'ADN comme support de l'information génétique." },
+
+      { q: "Le chimpanzé possède 48 chromosomes et l'être humain 46. On peut en déduire que :",
+        choix: ["le nombre de chromosomes est caractéristique de chaque espèce", "le chimpanzé est atteint d'une anomalie", "le chimpanzé a plus de caractères que l'humain", "le nombre de chromosomes varie d'un individu à l'autre"],
+        bonne: 0,
+        why: "Tous les individus d'une espèce ont le même nombre de chromosomes, qui change d'une espèce à l'autre." },
+
+      { q: "Les deux chromosomes d'une même paire :",
+        choix: ["sont toujours identiques", "viennent tous les deux de la mère", "portent des gènes différents", "portent les mêmes gènes, mais pas forcément les mêmes allèles"],
+        bonne: 3,
+        why: "L'un vient du père, l'autre de la mère : mêmes gènes aux mêmes endroits, allèles parfois différents." }
+    ]
+  },
+
+  /* ------------------------------------------------------------
+     CHAPITRE 3 — Stabilité et diversité génétique des individus
+  ------------------------------------------------------------ */
+  {
+    id: 'svt-ch3',
+    matiere: 'svt',
+    ajout: true,
+    zone: 'Le vivant et son évolution',
+    numero: 'Chapitre 3',
+    titre: "Stabilité et diversité génétique des individus",
+    periode: "Mitose, méiose, fécondation, allèles et mutations",
+    theme: "Le vivant et son évolution — stabilité et diversité génétique des individus",
+
+    essentiel: [
+      "<b>Stabilité</b> : par <b>mitose</b>, une cellule donne deux cellules-filles <b>identiques</b> à 46 chromosomes. L'ADN est copié avant la division : de la cellule-œuf à tout le corps, toutes les cellules gardent le même caryotype.",
+      "<b>Diversité</b> : la <b>méiose</b> produit des <b>gamètes à 23 chromosomes</b>, un de chaque paire, répartis <b>au hasard</b>. Chaque parent peut ainsi fabriquer plus de <b>8 millions</b> de gamètes différents.",
+      "La <b>fécondation</b> réunit 23 + 23 = 46 chromosomes, et la rencontre des gamètes se fait au hasard. Ce double <b>brassage</b> rend chaque individu génétiquement <b>unique</b>, sauf les vrais jumeaux.",
+      "Un allèle <b>dominant</b> s'exprime même en un seul exemplaire, un allèle <b>récessif</b> seulement en deux. Groupes sanguins : A et B sont dominants sur O, et <b>codominants</b> entre eux (groupe AB).",
+      "Le <b>génotype</b> est l'ensemble des allèles, le <b>phénotype</b> l'ensemble des caractères observables. Les <b>mutations</b> créent de nouveaux allèles ; elles ne sont transmises que si elles touchent les cellules à l'origine des gamètes."
+    ],
+
+    sections: [
+      {
+        titre: "La mitose : conserver l'information génétique",
+        points: [
+          "Chaque être humain se développe à partir d'une seule cellule, la <b>cellule-œuf</b>, qui se divise un très grand nombre de fois par <b>mitose</b>. Toutes nos cellules ont donc la même information génétique et le <b>même caryotype</b>.",
+          "<b>Avant</b> la division, l'ADN est <b>copié</b> : chaque chromosome se duplique et se retrouve formé de <b>deux chromatides identiques</b>, reliées en leur centre (forme de X).",
+          "<b>Pendant la mitose</b>, les chromosomes se condensent et deviennent visibles. Les deux chromatides de chaque chromosome se séparent et partent chacune dans une cellule-fille.",
+          "Bilan : <b>1 cellule-mère à 46 chromosomes → 2 cellules-filles à 46 chromosomes</b>, identiques entre elles et à la cellule-mère. L'information génétique est <b>conservée</b>.",
+          "La mitose permet la <b>croissance</b>, le <b>renouvellement</b> des cellules (peau, sang) et la <b>réparation</b> des tissus (cicatrisation)."
+        ]
+      },
+      {
+        titre: "La méiose : des gamètes tous différents",
+        points: [
+          "Les <b>gamètes</b> sont les cellules reproductrices : les <b>spermatozoïdes</b>, fabriqués dans les testicules, et les <b>ovules</b>, fabriqués dans les ovaires. Ils sont produits par une division particulière : la <b>méiose</b>.",
+          "Pendant la méiose, les chromosomes de chaque paire se séparent : un gamète ne reçoit qu'<b>un chromosome de chaque paire</b>, soit <b>23 chromosomes</b>.",
+          "Pour chaque paire, le chromosome qui part dans le gamète est choisi <b>au hasard</b>. Avec 23 paires, cela fait 2<sup>23</sup>, soit <b>plus de 8 millions</b> de combinaisons possibles pour chaque parent.",
+          "Comme les deux chromosomes d'une paire ne portent pas forcément les mêmes allèles, deux gamètes d'un même parent sont presque toujours différents : c'est un premier <b>brassage</b> des allèles.",
+          "Un ovule contient toujours 22 chromosomes + un <b>X</b>. Un spermatozoïde contient 22 chromosomes + un <b>X</b> ou un <b>Y</b>."
+        ]
+      },
+      {
+        titre: "La fécondation : chaque individu est unique",
+        points: [
+          "La <b>fécondation</b> est l'union d'un spermatozoïde et d'un ovule : <b>23 + 23 = 46 chromosomes</b>. La cellule-œuf retrouve 23 paires.",
+          "Quels gamètes se rencontrent, c'est aussi le <b>hasard</b> : c'est un second brassage. Pour un couple, le nombre de combinaisons dépasse 70 000 milliards (8 millions × 8 millions).",
+          "Conséquence : chaque individu possède une combinaison d'allèles <b>unique</b>. Seuls les <b>vrais jumeaux</b>, issus de la même cellule-œuf, ont la même information génétique. Les faux jumeaux, issus de deux cellules-œufs, sont aussi différents que des frères et sœurs.",
+          "Le <b>sexe</b> est décidé à la fécondation : l'ovule porte toujours un X ; le spermatozoïde porte un X (→ fille XX) ou un Y (→ garçon XY). Il y a donc une chance sur deux d'avoir une fille.",
+          "Bilan : méiose et fécondation assurent la <b>stabilité du caryotype</b> d'une génération à l'autre (46 → 23 → 46) et la <b>diversité génétique</b> des individus."
+        ]
+      },
+      {
+        titre: "Allèles dominants et récessifs : l'exemple des groupes sanguins",
+        points: [
+          "Pour chaque gène, une cellule possède <b>deux allèles</b>, un sur chaque chromosome de la paire : l'un vient du père, l'autre de la mère. On les note entre parenthèses, par exemple (A//O).",
+          "Si les deux allèles sont différents, l'allèle <b>dominant</b> s'exprime et masque l'autre. L'allèle <b>récessif</b> ne s'exprime que s'il est présent <b>en deux exemplaires</b>.",
+          "Le gène du groupe sanguin (sur la paire n° 9) existe sous trois allèles : <b>A</b>, <b>B</b> et <b>O</b>. A et B sont <b>dominants sur O</b>. Quand A et B sont ensemble, ils s'expriment tous les deux : on dit qu'ils sont <b>codominants</b>.",
+          "Groupe <b>A</b> : (A//A) ou (A//O). Groupe <b>B</b> : (B//B) ou (B//O). Groupe <b>AB</b> : (A//B). Groupe <b>O</b> : seulement (O//O).",
+          "Deux parents du groupe A peuvent avoir un enfant du groupe O : s'ils sont tous les deux (A//O), chacun peut lui transmettre son allèle O.",
+          "Dans un arbre généalogique, si deux parents non malades ont un enfant malade, l'allèle de la maladie est <b>récessif</b> : chaque parent le porte sans être malade. C'est le cas de la <b>mucoviscidose</b>."
+        ]
+      },
+      {
+        titre: "Génotype, phénotype et mutations",
+        points: [
+          "Le <b>génotype</b> est l'ensemble des allèles d'un individu. Le <b>phénotype</b> est l'ensemble de ses caractères observables (groupe sanguin, couleur des yeux, taille…). Le phénotype dépend du génotype, mais aussi de l'environnement (voir chapitre 1).",
+          "Une <b>mutation</b> est une modification accidentelle de l'ADN. Elle est rare et se produit au hasard, mais elle peut être favorisée par des agents <b>mutagènes</b> : rayons UV du soleil, rayons X, certaines substances chimiques comme celles de la fumée de tabac.",
+          "Une mutation peut créer un <b>nouvel allèle</b>. Les mutations sont à l'origine de la diversité des allèles, donc de la <b>diversité génétique</b> des êtres vivants. Une mutation peut être sans effet, favorable ou défavorable (maladie génétique).",
+          "Une mutation n'est transmise aux enfants que si elle touche une cellule à l'origine des <b>gamètes</b>. Dans une autre cellule du corps (la peau, par exemple), elle n'est pas transmise, mais elle peut provoquer un cancer.",
+          "Bilan : les mutations créent de nouveaux allèles, puis la méiose et la fécondation les mélangent à chaque génération. C'est l'origine de la diversité génétique au sein de chaque espèce."
+        ]
+      }
+    ],
+
+    mots: [
+      ["Cellule-œuf", "Première cellule d'un nouvel individu, issue de la fécondation. Elle possède 46 chromosomes."],
+      ["Mitose", "Division d'une cellule en deux cellules-filles identiques, qui gardent les 46 chromosomes."],
+      ["Chromatide", "Chacune des deux copies identiques d'un chromosome, formées quand l'ADN est copié avant la division."],
+      ["Méiose", "Division particulière qui produit les gamètes : chacun ne reçoit qu'un chromosome de chaque paire."],
+      ["Gamète", "Cellule reproductrice (spermatozoïde ou ovule) qui contient 23 chromosomes."],
+      ["Fécondation", "Union d'un spermatozoïde et d'un ovule, qui donne une cellule-œuf à 46 chromosomes."],
+      ["Brassage génétique", "Mélange des allèles dû au hasard, lors de la formation des gamètes puis lors de la fécondation."],
+      ["Dominant / récessif", "Un allèle dominant s'exprime même en un seul exemplaire ; un allèle récessif seulement s'il est présent deux fois."],
+      ["Codominants", "Se dit de deux allèles qui s'expriment tous les deux quand ils sont ensemble, comme A et B dans le groupe AB."],
+      ["Génotype", "Ensemble des allèles que possède un individu."],
+      ["Phénotype", "Ensemble des caractères observables d'un individu. Il dépend de ses allèles et de l'environnement."],
+      ["Mutation", "Modification accidentelle de l'ADN, qui peut donner naissance à un nouvel allèle."],
+      ["Agent mutagène", "Facteur qui augmente le risque de mutation : rayons UV, rayons X, certaines substances chimiques."]
+    ],
+
+    quiz: [
       { q: "À la fin d'une mitose, on obtient :",
         choix: ["deux cellules à 23 chromosomes", "quatre gamètes différents", "une cellule-œuf", "deux cellules identiques à 46 chromosomes"],
         bonne: 3,
@@ -181,10 +451,20 @@ DATA.chapitres.push(
         bonne: 1,
         why: "Grâce à cette copie, chaque cellule-fille reçoit les 46 chromosomes complets." },
 
-      { q: "Le génotype d'un individu, c'est :",
-        choix: ["l'ensemble de ses allèles", "l'ensemble de ses caractères visibles", "le nombre de ses chromosomes", "la photographie de ses chromosomes"],
+      { q: "Pourquoi toutes les cellules de notre corps ont-elles la même information génétique ?",
+        choix: ["Parce qu'elles viennent toutes de la cellule-œuf, par mitoses successives", "Parce qu'elles se forment par méiose", "Parce qu'elles reçoivent leur ADN par le sang", "Parce qu'elles ont chacune 23 chromosomes"],
         bonne: 0,
-        why: "Les caractères observables forment le phénotype ; les allèles forment le génotype." },
+        why: "À chaque mitose, l'ADN est copié puis partagé à l'identique : le caryotype est conservé." },
+
+      { q: "Un gamète humain contient :",
+        choix: ["46 chromosomes", "23 paires de chromosomes", "23 chromosomes, un de chaque paire", "92 chromosomes"],
+        bonne: 2,
+        why: "La méiose sépare les chromosomes de chaque paire : le gamète n'en reçoit qu'un sur deux." },
+
+      { q: "Pendant la méiose, le chromosome de chaque paire qui part dans un gamète est choisi :",
+        choix: ["toujours parmi ceux venus du père", "toujours le plus grand des deux", "au hasard", "toujours parmi ceux venus de la mère"],
+        bonne: 2,
+        why: "Ce hasard donne plus de 8 millions de combinaisons possibles pour chaque parent." },
 
       { q: "La fécondation permet :",
         choix: ["de copier l'ADN", "de fabriquer des gamètes", "de réunir 23 + 23 chromosomes dans une cellule-œuf", "de séparer les chromosomes X et Y"],
@@ -201,6 +481,11 @@ DATA.chapitres.push(
         bonne: 3,
         why: "Chaque gamète reçoit une combinaison de chromosomes due au hasard, et la rencontre des gamètes est aussi due au hasard." },
 
+      { q: "Qui possède exactement la même information génétique ?",
+        choix: ["Deux vrais jumeaux", "Deux faux jumeaux", "Un enfant et sa mère", "Un frère et une sœur"],
+        bonne: 0,
+        why: "Les vrais jumeaux sont issus de la même cellule-œuf ; les faux jumeaux, de deux cellules-œufs différentes." },
+
       { q: "Léna possède les allèles (A//O). Quel est son groupe sanguin ?",
         choix: ["Groupe O", "Groupe AB", "Groupe B", "Groupe A"],
         bonne: 3,
@@ -211,27 +496,42 @@ DATA.chapitres.push(
         bonne: 1,
         why: "Avec un allèle dominant à côté, il est masqué. Exemple : le groupe O correspond à (O//O)." },
 
-      { q: "Qu'est-ce qu'une mutation ?",
-        choix: ["Une modification de l'ADN qui peut créer un nouvel allèle", "Une division de la cellule", "Un chromosome en trop", "Le changement de groupe sanguin au cours de la vie"],
+      { q: "Une personne du groupe AB possède les allèles :",
+        choix: ["(A//O)", "(B//O)", "(O//O)", "(A//B)"],
+        bonne: 3,
+        why: "A et B sont codominants : quand ils sont ensemble, ils s'expriment tous les deux." },
+
+      { q: "Deux parents du groupe A ont un enfant du groupe O. C'est possible si :",
+        choix: ["l'enfant a subi une mutation", "les deux parents sont (A//O)", "un des parents est (A//A)", "l'allèle O est dominant"],
+        bonne: 1,
+        why: "Chaque parent porte un allèle O masqué par A, et chacun l'a transmis : l'enfant est (O//O)." },
+
+      { q: "Le génotype d'un individu, c'est :",
+        choix: ["l'ensemble de ses allèles", "l'ensemble de ses caractères visibles", "le nombre de ses chromosomes", "la photographie de ses chromosomes"],
         bonne: 0,
+        why: "Les caractères observables forment le phénotype ; les allèles forment le génotype." },
+
+      { q: "Qu'est-ce qu'une mutation ?",
+        choix: ["Une division de la cellule", "Un chromosome en trop", "Une modification de l'ADN qui peut créer un nouvel allèle", "Le changement de groupe sanguin au cours de la vie"],
+        bonne: 2,
         why: "Rares et dues au hasard, les mutations sont à l'origine de la diversité des allèles." },
 
-      { q: "Deux vrais jumeaux n'ont pas la même masse musculaire. Que montre cet exemple ?",
-        choix: ["Leurs allèles sont différents", "Leur génotype a changé", "Le phénotype dépend aussi de l'environnement", "Le sport modifie les chromosomes"],
-        bonne: 2,
-        why: "Ils ont les mêmes allèles, mais leur mode de vie (sport, alimentation) modifie leur phénotype." }
+      { q: "Une mutation sera transmise aux enfants si elle touche :",
+        choix: ["une cellule à l'origine des gamètes", "une cellule de la peau", "une cellule du foie", "une cellule d'un muscle"],
+        bonne: 0,
+        why: "Seules les mutations présentes dans les cellules qui fabriquent les gamètes passent à la génération suivante." }
     ]
   },
 
   /* ------------------------------------------------------------
-     CHAPITRE 2 — Planète Terre
+     CHAPITRE 4 — Planète Terre
   ------------------------------------------------------------ */
   {
-    id: 'svt-ch2',
+    id: 'svt-ch4',
     matiere: 'svt',
     ajout: true,
     zone: "La planète Terre, l'environnement et l'action humaine",
-    numero: 'Chapitre 2',
+    numero: 'Chapitre 4',
     titre: "Planète Terre : séismes, volcans et climat",
     periode: "Géologie, risques naturels et changement climatique",
     theme: "La planète Terre, l'environnement et l'action humaine — phénomènes géologiques et climat",
