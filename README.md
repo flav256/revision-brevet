@@ -25,6 +25,11 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
 - **Impression / PDF** : chaque chapitre et chaque session s'imprime sur une feuille A4 recto verso
   (rappel de cours au recto, QCM et exercices au verso ; le corrigé reste à l'écran). La taille du texte
   s'ajuste pour que chaque face tienne sur une page.
+  Les sujets d'examen blanc s'impriment comme un sujet officiel : une page de couverture, puis
+  « Brevet blanc 2027 · matière · sujet N » et « Page 3/7 » en bas de chaque page (marges @page, Chrome et Edge).
+  Juste avant l'impression (bouton ou Ctrl+P), `preparerImpressionSujet()` met la copie à la largeur
+  de la feuille pour la mesurer : un long document peut se couper, un court reste entier ; chaque ligne
+  d'un texte numéroté tient sur une ligne ; l'annexe à rendre tient sur une page (réduite si besoin).
 
 Site en ligne : https://flav256.github.io/revision-brevet/
 

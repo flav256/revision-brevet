@@ -33,6 +33,9 @@
 .g-lignes { list-style: none; padding: 8px 0 0; margin: 0; border-top: 1px solid #DDE2EA; text-align: left; font-size: calc(14.5px * var(--fs, 1)); }
 .g-lignes li { margin: 3px 0; padding-left: 14px; position: relative; }
 .g-lignes li::before { content: "–"; position: absolute; left: 0; color: #8A93A3; }
+.g-lignes li.attention { font-weight: 700; }
+.g-cadre { display: contents; }   /* le cadre n'existe qu'à l'impression (couverture) */
+.g-complet { display: none; }
 
 .ex-partie { margin: 26px 0 0; }
 .ex-partie > h2 { font-size: calc(18px * var(--fs, 1)); line-height: 1.3; margin: 0 0 12px; padding-bottom: 5px; border-bottom: 2px solid var(--mc); }
@@ -92,6 +95,10 @@ svg.fig-ex text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sy
 
 /* l'annexe */
 .annexe { border-top: 2px dashed #B9C2D0; padding-top: 14px; }
+/* schéma à compléter et sa légende : côte à côte quand la place le permet */
+.croquis { display: grid; gap: 14px; align-items: start; margin: 12px 0; }
+.croquis svg.fig-ex, .croquis table.tab { margin: 0 auto; }
+@media (min-width: 760px) { .croquis { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); } }
 
 /* la dictée */
 .dictee-outil { background: #F4F8FF; border: 1px solid #D5E3FA; border-radius: 12px; padding: 10px 14px; margin: 8px 0 12px; }
@@ -142,19 +149,63 @@ svg.fig-ex text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sy
   .chrono { box-shadow: none; border-color: #E4E8EF; background: #fff; }
 }
 
-/* --- impression du sujet et du corrigé --- */
+/* --- impression du sujet ---
+   body.imp-ex est posé par app.js juste avant l'impression : la copie prend
+   la largeur de la feuille (A4 moins 2 × 15 mm) et sa typographie d'imprimé,
+   ce qui permet de la mesurer (documents longs, lignes du texte, annexe). */
+body.imp-ex .copie-sujet { --fs: .92; width: 180mm; max-width: none; margin: 0; padding: 0; border: 0; border-radius: 0; box-shadow: none;
+  font-size: 11pt; line-height: 1.4; color: #000; background: #fff; }
+body.imp-ex .ex-partie { margin-top: 7mm; }
+body.imp-ex .ex-partie > h2 { color: #000; }
+body.imp-ex .q.sous { margin-left: 22px !important; }
+body.imp-ex ol.lignes { padding-left: 38px; font-size: calc(16.5px * var(--fs, 1)); line-height: 1.5; }
+body.imp-ex ol.lignes li:nth-child(5n)::before { left: -38px; width: 28px; }
+body.imp-ex figure.img-ex img { max-height: 100mm; box-shadow: none; border-radius: 0; }
+body.imp-ex svg.fig-ex { max-width: 125mm; max-height: 105mm; }
+body.imp-ex .annexe { margin-top: 0; padding-top: 0; border-top: 0; }
+body.imp-ex .annexe svg.fig-ex { max-width: 150mm; max-height: 165mm; }
+body.imp-ex .croquis { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+body.imp-ex .croquis svg.fig-ex { max-width: 100%; }   /* on écrit dedans : plus grand, l'annexe est réduite si besoin */
+body.imp-ex table.tab { display: table; overflow: visible; }
+body.imp-ex .doc { border-radius: 3px; }
+body.imp-ex .consigne { border-radius: 3px; }
+
+/* la couverture : une page à elle seule, comme les sujets du ministère */
+body.imp-ex .garde { border: 0; border-radius: 0; margin: 0; padding: 10mm 0 0; display: flex; flex-direction: column; align-items: center;
+  text-align: center; color: #000; break-after: page; }
+body.imp-ex .g-dnb { font-size: 15pt; letter-spacing: .05em; }
+body.imp-ex .g-sess { font-size: 12.5pt; font-weight: 700; font-style: italic; color: #000; margin-top: 7mm !important; }
+body.imp-ex .g-cadre { display: block; width: 150mm; margin-top: 20mm; padding: 13mm 10mm 10mm; border: 3px double #000; }
+body.imp-ex .garde h1 { font-size: 17pt; line-height: 1.25; margin: 0; text-wrap: balance; }
+body.imp-ex .g-serie { font-size: 13pt; font-weight: 700; color: #000; margin-top: 8mm !important; }
+body.imp-ex .g-titre { font-size: 12pt; margin-top: 4mm !important; text-wrap: balance; }
+body.imp-ex .g-duree { font-size: 11pt; margin: 11mm 0 0 !important; }
+body.imp-ex .g-complet { display: block; margin-top: 18mm !important; font-size: 11pt; }
+body.imp-ex .g-lignes { width: 150mm; margin-top: 9mm; padding: 0; border: 0; text-align: center; font-size: 10.5pt; }
+body.imp-ex .g-lignes li { padding: 0; margin: 2.5mm 0; text-wrap: balance; }
+body.imp-ex .g-lignes li::before { content: none; }
+body.imp-ex .g-lignes li.attention { margin-top: 9mm; text-decoration: underline; }
+
 @media print {
   body.vue-examen .ex-outils, body.vue-examen .ex-bas, body.vue-examen .dictee-outil .actions,
   body.vue-examen .dictee-outil .aide, body.vue-examen h2.section, body.vue-examen .view > .glass.list,
   body.vue-corrige .note-ex, body.vue-corrige .chap-side { display: none !important; }
-  body.vue-examen .copie-sujet { box-shadow: none !important; border: 0 !important; padding: 0 !important; max-width: none; font-size: 11pt; }
-  body.vue-examen .ex-partie > h2 { break-after: avoid; }
-  body.vue-examen .ex-partie h3, body.vue-examen .ex-partie h4, body.vue-examen .doc-titre,
-  body.vue-examen .ex-partie p:has(+ figure), body.vue-examen .ex-partie p:has(+ .doc),
-  body.vue-examen .ex-partie p:has(> b:only-child) { break-after: avoid; }
-  body.vue-examen .q, body.vue-examen .doc, body.vue-examen figure, body.vue-examen svg, body.vue-examen table, body.vue-examen .scratch { break-inside: avoid; }
-  body.vue-examen .annexe { break-before: page; border-top: 0; }
-  body.vue-examen .garde { break-after: avoid; }
+  body.vue-examen .view { animation: none !important; transform: none !important; }
+  body.vue-examen .copie-sujet { box-shadow: none !important; border: 0 !important; padding: 0 !important; max-width: none; }
+  /* couleurs gardées même si « graphiques d'arrière-plan » est décoché : blocs Scratch, légendes de croquis */
+  .copie-sujet, .copie-sujet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* ce qui reste entier */
+  body.vue-examen .garde { break-after: page; }
+  body.vue-examen .q, body.vue-examen .doc:not(.long), body.vue-examen blockquote.extrait:not(.long), body.vue-examen figure,
+  body.vue-examen svg, body.vue-examen table, body.vue-examen .scratch, body.vue-examen .croquis, body.vue-examen .consigne, body.vue-examen .dictee-outil { break-inside: avoid; }
+  /* ce qui ne reste pas seul en bas de page */
+  body.vue-examen .ex-partie > h2, body.vue-examen .ex-partie h3, body.vue-examen .ex-partie h4, body.vue-examen .doc-titre,
+  body.vue-examen .ex-partie p:has(+ figure), body.vue-examen .ex-partie p:has(+ .doc), body.vue-examen .ex-partie p:has(+ table),
+  body.vue-examen .ex-partie p:has(+ svg), body.vue-examen .ex-partie p:has(+ .scratch),
+  body.vue-examen .ex-partie p:has(> b:only-child), body.vue-examen .ex-partie p:has(> i:only-child) { break-after: avoid; }
+  body.vue-examen .copie-sujet p, body.vue-examen .copie-sujet li { orphans: 3; widows: 3; }
+  body.vue-examen .annexe { break-before: page; border-top: 0; padding-top: 0; }
+  body.vue-examen .ex-fin { margin: 5mm 0 0; break-before: avoid; }   /* jamais seul sur une page */
   .fiche-c, .dictee-texte { break-inside: auto; }
   .rep { break-inside: avoid; }
 }

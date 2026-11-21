@@ -122,7 +122,7 @@ DATA.examens.push(
 <p class="q"><b>3.</b> Représentez sur le schéma, par des flèches, les mobilités pendulaires et l'étalement urbain. Dessinez ces deux figurés dans la légende. <span class="pts">(2 points)</span></p>
 <p class="q"><b>4.</b> Donnez un titre au schéma. <span class="pts">(1 point)</span></p>
 <p><b>Titre :</b> ……………………………………………………………………</p>
-<svg class="fig-ex" viewBox="0 0 360 320" role="img" aria-label="Schéma à compléter : une ville-centre (A) entourée d'une banlieue (B), d'une couronne périurbaine (C) et d'un espace rural (D), avec une rocade et trois autoroutes"><rect x="2" y="2" width="356" height="316" rx="8" fill="#6aa84f" fill-opacity=".22" stroke="currentColor" stroke-width="1.5"/><circle cx="180" cy="160" r="140" fill="#f1c232" fill-opacity=".45" stroke="currentColor"/><circle cx="180" cy="160" r="85" fill="#e69138" fill-opacity=".6" stroke="currentColor"/><circle cx="180" cy="160" r="38" fill="#cc0000" fill-opacity=".6" stroke="currentColor"/><g stroke="currentColor" fill="none"><circle cx="180" cy="160" r="52" stroke-width="3"/><line x1="180" y1="108" x2="180" y2="4" stroke-width="3.5"/><line x1="232" y1="160" x2="356" y2="160" stroke-width="3.5"/><line x1="143.2" y1="196.8" x2="40" y2="300" stroke-width="3.5"/></g><g font-size="16" font-weight="700" fill="currentColor" text-anchor="middle"><text x="170" y="174">A</text><text x="238" y="206">B</text><text x="272" y="244">C</text><text x="330" y="36">D</text></g></svg>
+<div class="croquis"><svg class="fig-ex" viewBox="0 0 360 320" role="img" aria-label="Schéma à compléter : une ville-centre (A) entourée d'une banlieue (B), d'une couronne périurbaine (C) et d'un espace rural (D), avec une rocade et trois autoroutes"><rect x="2" y="2" width="356" height="316" rx="8" fill="#6aa84f" fill-opacity=".22" stroke="currentColor" stroke-width="1.5"/><circle cx="180" cy="160" r="140" fill="#f1c232" fill-opacity=".45" stroke="currentColor"/><circle cx="180" cy="160" r="85" fill="#e69138" fill-opacity=".6" stroke="currentColor"/><circle cx="180" cy="160" r="38" fill="#cc0000" fill-opacity=".6" stroke="currentColor"/><g stroke="currentColor" fill="none"><circle cx="180" cy="160" r="52" stroke-width="3"/><line x1="180" y1="108" x2="180" y2="4" stroke-width="3.5"/><line x1="232" y1="160" x2="356" y2="160" stroke-width="3.5"/><line x1="143.2" y1="196.8" x2="40" y2="300" stroke-width="3.5"/></g><g font-size="16" font-weight="700" fill="currentColor" text-anchor="middle"><text x="170" y="174">A</text><text x="238" y="206">B</text><text x="272" y="244">C</text><text x="330" y="36">D</text></g></svg>
 <table class="tab">
 <tr><th>Figuré</th><th>Légende</th></tr>
 <tr><td colspan="2"><b>I. Un espace organisé en auréoles</b></td></tr>
@@ -137,7 +137,7 @@ DATA.examens.push(
 <tr><td><svg width="40" height="20" viewBox="0 0 40 20" aria-hidden="true"><line x1="2" y1="10" x2="38" y2="10" stroke="currentColor" stroke-width="3.5"/></svg></td><td>Autoroute et rocade</td></tr>
 <tr><td class="vide"></td><td>Mobilités pendulaires</td></tr>
 <tr><td class="vide"></td><td>Étalement urbain (périurbanisation)</td></tr>
-</table>`,
+</table></div>`,
     corrige: [
       {
         titre: "Exercice 1 — Analyser et comprendre des documents en histoire",

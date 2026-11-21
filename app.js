@@ -1245,10 +1245,14 @@ window.addEventListener('resize', () => {
   dessinPrevu = requestAnimationFrame(() => dessinerCarte());
 });
 /* Ctrl+P ou menu du navigateur : même mise en page que le bouton PDF */
-window.addEventListener('beforeprint', () => { if (document.getElementById('mm') && !carteImprimee) preparerImpressionCarte(); });
+window.addEventListener('beforeprint', () => {
+  if (document.getElementById('mm') && !carteImprimee) preparerImpressionCarte();
+  else if (document.querySelector('.copie-sujet') && !sujetImprime) preparerImpressionSujet();
+});
 window.addEventListener('afterprint', () => {
   if (titreAvantImpression !== null) { document.title = titreAvantImpression; titreAvantImpression = null; }
   finImpressionCarte();
+  finImpressionSujet();
 });
 
 /* =========================================================
@@ -1370,7 +1374,7 @@ function vueExamen(id) {
         <div class="chrono" id="chrono" data-min="${minutesDuree(x.duree)}"><span id="chronotxt">0:00:00 / ${esc(x.duree)}</span>
           <button onclick="chrono('go')" id="chronobtn">Démarrer</button><button onclick="chrono('raz')">Remettre à zéro</button></div>
         <div class="actions">
-          <button class="btn quiet imp" onclick="window.print()">${ICONE_IMP}Imprimer / PDF</button>
+          <button class="btn quiet imp" onclick="imprimerSujet()">${ICONE_IMP}Imprimer / PDF</button>
           <button class="btn ghost" onclick="go('#/corrige/${x.id}')">Corrigé et méthode</button>
         </div>
       </div>
@@ -1378,17 +1382,20 @@ function vueExamen(id) {
         <header class="garde">
           <p class="g-dnb">DIPLÔME NATIONAL DU BREVET</p>
           <p class="g-sess">Sujet d'entraînement · format de la session 2027</p>
-          <h1>${esc(x.epreuve)}</h1>
-          <p class="g-serie">Série générale</p>
-          <p class="g-titre">Sujet ${x.numero} : ${esc(x.titre)}</p>
-          <p class="g-duree">Durée : ${esc(x.duree)} · ${esc(total)}</p>
-          <ul class="g-lignes">${(x.garde || []).map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+          <div class="g-cadre">
+            <h1>${esc(x.epreuve)}</h1>
+            <p class="g-serie">Série générale</p>
+            <p class="g-titre">Sujet ${x.numero} : ${esc(x.titre)}</p>
+            <p class="g-duree">Durée : ${insecable(esc(x.duree))} · ${insecable(esc(total))}</p>
+          </div>
+          <p class="g-complet">Dès que le sujet vous est remis, assurez-vous qu'il est complet.</p>
+          <ul class="g-lignes">${(x.garde || []).map(l => `<li${/^ATTENTION/.test(l) ? ' class="attention"' : ''}>${insecable(esc(l))}</li>`).join('')}</ul>
         </header>
         ${x.parties.map((p, i) => `<section class="ex-partie${p.type === 'dictee' ? ' dictee' : ''}" id="p${i + 1}">
           <h2>${esc(p.titre)}${p.points && !/\bpoints?\b/.test(p.titre) ? ` <span class="pts">(${ptsPartie(x, i)})</span>` : ''}</h2>
           ${p.type === 'dictee' ? outilDictee(x) : ''}${p.html}</section>`).join('')}
-        ${x.annexe ? `<section class="ex-partie annexe" id="annexe"><h2>ANNEXE <span class="pts">(à rendre avec la copie)</span></h2>${x.annexe}</section>` : ''}
         <p class="ex-fin">Fin du sujet</p>
+        ${x.annexe ? `<section class="ex-partie annexe" id="annexe"><h2>ANNEXE <span class="pts">(à rendre avec la copie)</span></h2>${x.annexe}</section>` : ''}
       </article>
       <div class="actions ex-bas"><button class="btn" onclick="go('#/corrige/${x.id}')">Voir le corrigé et la méthode</button></div>`;
   if (chs.length || meths.length) {
@@ -1396,6 +1403,52 @@ function vueExamen(id) {
   }
   return html;
 }
+
+const insecable = t => t.replace(/(\d) (h|min|minutes|points?|pages?)(?=[\s.,;)]|$)/g, '$1\u00a0$2').replace(/(\d\u00a0h) (\d\d)/g, '$1\u00a0$2');
+
+/* ---------- impression du sujet ----------
+   Comme un sujet officiel : une page de couverture, puis « Page 3/7 » en bas
+   de chaque page (règle @page posée par rendre()). Juste avant l'impression,
+   la copie est mise en page à la largeur de la feuille (classe imp-ex) pour
+   mesurer : un long document peut se couper, un court reste entier ; chaque
+   ligne d'un texte numéroté tient sur une ligne ; l'annexe tient sur une page. */
+const MARGES_EX = { haut: 14, cote: 15, bas: 17 };   // en mm
+const mmPx = v => v * 96 / 25.4;
+let sujetImprime = false;
+function pageExamen(x, vue) {
+  const chaine = t => '"' + t.replace(/["\\]/g, '\\$&') + '"';
+  const pied = `Brevet blanc 2027 · ${NOM_EX[x.matiere] || matiere(x.matiere).nom} · sujet ${x.numero}${vue === 'corrige' ? ' · corrigé' : ''}`;
+  const boite = 'font: 8pt -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; color: #5B6375;';
+  return `@page { size: A4; margin: ${MARGES_EX.haut}mm ${MARGES_EX.cote}mm ${MARGES_EX.bas}mm;
+    @bottom-left { content: ${chaine(pied)}; ${boite} }
+    @bottom-right { content: "Page " counter(page) "/" counter(pages); ${boite} } }`;
+}
+function preparerImpressionSujet() {
+  const copie = document.querySelector('.copie-sujet');
+  if (!copie || sujetImprime) return;
+  sujetImprime = true;
+  document.body.classList.add('imp-ex');
+  const H = mmPx(297 - MARGES_EX.haut - MARGES_EX.bas) - 8;   // hauteur utile d'une page, en px
+  copie.querySelectorAll('.doc, blockquote.extrait').forEach(d => d.classList.toggle('long', d.offsetHeight > H * 0.4));
+  copie.querySelectorAll('ol.lignes').forEach(ol => {
+    const coupe = () => [...ol.children].some(li => li.offsetHeight > parseFloat(getComputedStyle(li).lineHeight) * 1.5);
+    let t = parseFloat(getComputedStyle(ol).fontSize);
+    for (let k = 0; k < 8 && t > 12.5 && coupe(); k++) { t *= 0.95; ol.style.fontSize = t.toFixed(2) + 'px'; }
+  });
+  const an = copie.querySelector('.annexe');
+  if (an && an.offsetHeight > H * 0.97) {
+    const z = H * 0.97 / an.offsetHeight;
+    if (z >= 0.72) an.style.zoom = z.toFixed(3);   // plus petit, ce serait illisible : l'annexe passe alors sur deux pages
+  }
+}
+function finImpressionSujet() {
+  if (!sujetImprime) return;
+  sujetImprime = false;
+  document.body.classList.remove('imp-ex');
+  document.querySelectorAll('.copie-sujet .long').forEach(d => d.classList.remove('long'));
+  document.querySelectorAll('.copie-sujet ol.lignes, .copie-sujet .annexe').forEach(e => { e.style.fontSize = ''; e.style.zoom = ''; });
+}
+function imprimerSujet() { preparerImpressionSujet(); window.print(); }
 
 /* ---------- le chronomètre ---------- */
 const Chrono = { debut: 0, cumul: 0, marche: false, tic: null };
@@ -1865,7 +1918,7 @@ function rendre() {
     const x = examen(parts[1]);
     html = vueExamen(parts[1]); onglet = 'examens'; retour = '#/examens';
     if (x) titre = `${matiere(x.matiere).nom} - sujet ${x.numero} - ${x.titre}`;
-    if (parts[2] === 'imprimer') apres = () => setTimeout(() => window.print(), 400);
+    if (parts[2] === 'imprimer') apres = () => setTimeout(imprimerSujet, 400);
     else if (Chrono.marche || Chrono.cumul) apres = () => { chrono('affiche'); };
   } else if (vue === 'corrige') {
     const x = examen(parts[1]);
@@ -1917,10 +1970,12 @@ function rendre() {
   /* marges de la page imprimée : aucune pour les fiches A4 (déjà mises en page), normales sinon */
   let stylePage = document.getElementById('stylepage');
   if (!stylePage) { stylePage = document.createElement('style'); stylePage.id = 'stylepage'; document.head.appendChild(stylePage); }
+  const xPage = (vue === 'examen' || vue === 'corrige') && examen(parts[1]);
   stylePage.textContent = vue === 'imprimer' ? '@page { size: A4; margin: 0; }'
-    : vue === 'carte' ? '@page { size: A4 landscape; margin: 10mm; }' : '@page { size: A4; margin: 14mm 13mm; }';
+    : vue === 'carte' ? '@page { size: A4 landscape; margin: 10mm; }'
+    : xPage ? pageExamen(xPage, vue) : '@page { size: A4; margin: 14mm 13mm; }';
   if (vue !== 'examen') arreterDictee();
-  carteImprimee = false;   // la classe « impression » du body est effacée juste en dessous
+  carteImprimee = sujetImprime = false;   // les classes d'impression du body sont effacées juste en dessous
   flottant(vue === 'carte' && CARTES[parts[1]] ? fabCarte() : '');
   const btn = document.getElementById('back');
   btn.style.display = retour ? 'inline-flex' : 'none';
