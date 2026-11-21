@@ -13,7 +13,8 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
   des exercices et le corrigé (caché jusqu'à ce qu'on l'ouvre), avec des liens vers le cours et la méthode à relire.
 - **Cartes mentales** (SVT) : un bouton « Carte mentale » sur chaque chapitre ouvre une carte des idées clés.
   Sur grand écran les branches rayonnent autour du chapitre ; sur téléphone et tablette en hauteur, c'est un
-  arbre vertical. Mode révision : cacher les mots-clés et les retrouver. Impression en A4 paysage.
+  arbre vertical. Deux boutons flottants : « Cacher les mots-clés » (mode révision) et « PDF ». La carte
+  est mise à l'échelle pour remplir une page A4 paysage ; mots-clés cachés, on obtient une carte à compléter.
 - **Examens blancs** : trois sujets par matière (français, maths, histoire-géographie-EMC, SVT,
   physique-chimie, technologie) au format des épreuves du brevet 2027, sur les chapitres du 1er trimestre.
   Chaque sujet a sa page de garde, son chronomètre, son impression, et une page de corrigé (réponses,

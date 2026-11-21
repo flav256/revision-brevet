@@ -1072,7 +1072,7 @@ function vueCarte(id) {
   const moitie = Math.ceil(br.length / 2);
   const bloc = (b, i) => `<div class="mm-br" style="--c:${COULEURS_CARTE[i % COULEURS_CARTE.length]}">
       <div class="mm-noeud">${esc(b.titre)}</div>
-      <ul class="mm-feuilles">${(b.feuilles || []).map(f => `<li>${f}</li>`).join('')}</ul></div>`;
+      <ul class="mm-feuilles">${(b.feuilles || []).map(f => `<li><span class="f">${f}</span></li>`).join('')}</ul></div>`;
   const liste = cartesMatiere(c.matiere);
   const i = liste.indexOf(c);
   const large = (app.clientWidth || window.innerWidth) >= LARGEUR_CARTE;
@@ -1082,15 +1082,20 @@ function vueCarte(id) {
     <p class="subtitle">Les idées clés du chapitre en un coup d'œil. Pour réviser : cacher les mots-clés et les retrouver à partir des branches.</p>
     <div class="actions mm-actions">
       <button class="btn quiet" onclick="go('#/chapitre/${c.id}')">Lire le cours</button>
-      <button class="btn quiet" id="mmcache" onclick="cacherFeuilles()">Cacher les mots-clés</button>
-      <button class="btn quiet imp" onclick="window.print()">${ICONE_IMP}Imprimer / PDF</button>
     </div>
-    <div class="mm${large ? ' large' : ''}" id="mm" style="--mc:${m.couleur}">
-      <svg class="mm-liens" id="mmliens" aria-hidden="true"></svg>
-      <div class="mm-cote gauche">${br.slice(0, moitie).map(bloc).join('')}</div>
-      <div class="mm-centre" id="mmcentre"><small>${esc(m.nom)} · ${esc(c.numero)}</small><b>${esc(carte.centre || c.titre)}</b></div>
-      <div class="mm-cote droite">${br.slice(moitie).map((b, j) => bloc(b, j + moitie)).join('')}</div>
+    <div class="mm-page" id="mmpage">
+      <header class="mm-ptete"><span><b>${esc(m.nom)} · ${esc(c.numero)}</b> · carte mentale<span class="mm-acompleter"> à compléter</span></span><span>${esc(c.titre)}</span></header>
+      <div class="mm-zone" id="mmzone">
+        <div class="mm${large ? ' large' : ''}" id="mm" style="--mc:${m.couleur}">
+          <svg class="mm-liens" id="mmliens" aria-hidden="true"></svg>
+          <div class="mm-cote gauche">${br.slice(0, moitie).map(bloc).join('')}</div>
+          <div class="mm-centre" id="mmcentre"><small>${esc(m.nom)} · ${esc(c.numero)}</small><b>${esc(carte.centre || c.titre)}</b></div>
+          <div class="mm-cote droite">${br.slice(moitie).map((b, j) => bloc(b, j + moitie)).join('')}</div>
+        </div>
+      </div>
+      <footer class="mm-ppied"><span>révision brevet · ${SITE}/#/carte/${c.id}</span><span>Le cours complet : ${SITE}/#/chapitre/${c.id}</span></footer>
     </div>
+
     ${liste.length > 1 ? `<nav class="sommaire-s mm-autres" aria-label="Les autres cartes">${
       liste.map(x => x === c ? `<span class="on">${esc(x.numero)}</span>` : `<a href="#/carte/${x.id}">${esc(x.numero)} · ${esc(x.titre)}</a>`).join('')}</nav>` : ''}
     <div class="actions mm-nav">
@@ -1099,12 +1104,87 @@ function vueCarte(id) {
     </div>`;
 }
 
+const ICONE_OEIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const ICONE_OEIL_BARRE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/></svg>';
+
+/* les boutons flottants vivent hors de la vue animée (#app .view a une transformation :
+   un position: fixed à l'intérieur suivrait la page au lieu de rester à l'écran) */
+const fabCarte = () => `<div class="mm-fab" role="group" aria-label="Actions de la carte">
+  <button class="fab" id="mmcache" onclick="cacherFeuilles()" aria-pressed="false">${ICONE_OEIL}<span>Cacher les mots-clés</span></button>
+  <button class="fab principal" onclick="imprimerCarte()">${ICONE_IMP}<span>PDF</span></button>
+</div>`;
+function flottant(html) {
+  let f = document.getElementById('flottant');
+  if (!f) { f = document.createElement('div'); f.id = 'flottant'; document.body.appendChild(f); }
+  f.innerHTML = html || '';
+}
+
 function cacherFeuilles() {
   const mm = document.getElementById('mm');
   if (!mm) return;
   const cache = mm.classList.toggle('cache');
+  if (!cache) mm.querySelectorAll('.mm-feuilles li.vu').forEach(li => li.classList.remove('vu'));
+  const page = document.getElementById('mmpage');
+  if (page) page.classList.toggle('vierge', cache);
   const b = document.getElementById('mmcache');
-  if (b) b.textContent = cache ? 'Montrer les mots-clés' : 'Cacher les mots-clés';
+  if (b) {
+    b.innerHTML = cache ? `${ICONE_OEIL_BARRE}<span>Montrer les mots-clés</span>` : `${ICONE_OEIL}<span>Cacher les mots-clés</span>`;
+    b.classList.toggle('on', cache);
+    b.setAttribute('aria-pressed', String(cache));
+  }
+}
+
+/* ---------- impression de la carte : une page A4 paysage ----------
+   La carte est posée dans une boîte aux dimensions de la page
+   (277 × 186 mm), puis agrandie ou réduite pour la remplir :
+   on cherche l'échelle s telle que, mise en page sur une largeur
+   W / s, sa hauteur × s tienne dans la zone. Les liaisons sont
+   dessinées avant la mise à l'échelle. Si les mots-clés sont
+   cachés, on imprime une carte à compléter (cases vides). */
+let carteImprimee = false;
+function preparerImpressionCarte() {
+  const zone = document.getElementById('mmzone');
+  const mm = document.getElementById('mm');
+  if (!zone || !mm) return false;
+  document.body.classList.add('impression');
+  carteImprimee = true;
+  mm.style.transform = '';
+  mm.classList.add('large');
+  const W = zone.clientWidth, H = zone.clientHeight;
+  /* hauteur occupée à l'échelle s : la carte est mise en page sur W / s, puis réduite ou agrandie de s.
+     Elle croît avec s (une carte plus étroite est plus haute) : on cherche s par dichotomie. */
+  const hauteur = s => { mm.style.width = (W / s) + 'px'; return mm.offsetHeight * s; };
+  let s, bas = 0.45, haut = 1.3;
+  if (hauteur(haut) <= H) s = haut;
+  else {
+    for (let k = 0; k < 14; k++) { const mil = (bas + haut) / 2; if (hauteur(mil) <= H) bas = mil; else haut = mil; }
+    s = bas;
+  }
+  mm.style.width = (W / s) + 'px';
+  dessinerCarte(true);
+  mm.style.transformOrigin = '0 0';
+  mm.style.transform = `scale(${s.toFixed(4)})`;
+  mm.style.top = Math.max(0, (H - mm.offsetHeight * s) / 2) + 'px';
+  return true;
+}
+function finImpressionCarte() {
+  if (!carteImprimee) return;
+  carteImprimee = false;
+  document.body.classList.remove('impression');
+  const mm = document.getElementById('mm');
+  if (mm) { mm.style.width = mm.style.transform = mm.style.top = mm.style.transformOrigin = ''; dessinerCarte(); }
+}
+let titreAvantImpression = null;
+function imprimerCarte() {
+  const id = (location.hash.split('/')[2] || '');
+  const c = chapitre(id);
+  const mm = document.getElementById('mm');
+  if (c) {
+    titreAvantImpression = document.title;
+    document.title = `${matiere(c.matiere).nom} - ${c.numero} - carte mentale${mm && mm.classList.contains('cache') ? ' à compléter' : ''}`;
+  }
+  preparerImpressionCarte();
+  window.print();
 }
 /* en mode « caché », toucher une feuille la révèle */
 document.addEventListener('click', e => {
@@ -1159,18 +1239,16 @@ function dessinerCarte(forcerLarge) {
 }
 let dessinPrevu = 0;
 window.addEventListener('resize', () => {
-  if (!document.getElementById('mm')) return;
+  if (!document.getElementById('mm') || carteImprimee) return;
   cancelAnimationFrame(dessinPrevu);
   dessinPrevu = requestAnimationFrame(() => dessinerCarte());
 });
-/* à l'impression (A4 paysage) : disposition large, puis retour à l'écran */
-if (window.matchMedia) {
-  const mq = window.matchMedia('print');
-  const surImpression = e => { if (document.getElementById('mm')) dessinerCarte(e.matches); };
-  if (mq.addEventListener) mq.addEventListener('change', surImpression); else if (mq.addListener) mq.addListener(surImpression);
-}
-window.addEventListener('beforeprint', () => { if (document.getElementById('mm')) dessinerCarte(true); });
-window.addEventListener('afterprint', () => { if (document.getElementById('mm')) dessinerCarte(); });
+/* Ctrl+P ou menu du navigateur : même mise en page que le bouton PDF */
+window.addEventListener('beforeprint', () => { if (document.getElementById('mm') && !carteImprimee) preparerImpressionCarte(); });
+window.addEventListener('afterprint', () => {
+  if (titreAvantImpression !== null) { document.title = titreAvantImpression; titreAvantImpression = null; }
+  finImpressionCarte();
+});
 
 /* =========================================================
    EXAMENS BLANCS — trois sujets par matière, au format des
@@ -1687,6 +1765,8 @@ function rendre() {
   stylePage.textContent = vue === 'imprimer' ? '@page { size: A4; margin: 0; }'
     : vue === 'carte' ? '@page { size: A4 landscape; margin: 10mm; }' : '@page { size: A4; margin: 14mm 13mm; }';
   if (vue !== 'examen') arreterDictee();
+  carteImprimee = false;   // la classe « impression » du body est effacée juste en dessous
+  flottant(vue === 'carte' && CARTES[parts[1]] ? fabCarte() : '');
   const btn = document.getElementById('back');
   btn.style.display = retour ? 'inline-flex' : 'none';
   btn.onclick = () => { if (retour) location.hash = retour; };

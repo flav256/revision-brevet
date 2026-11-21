@@ -38,10 +38,10 @@
 .mm-feuilles li b { color: color-mix(in srgb, var(--c) 78%, #000); font-weight: 700; }
 
 /* mode révision : mots-clés cachés, un toucher les révèle */
-.mm.cache .mm-feuilles li { color: transparent; cursor: pointer; background: color-mix(in srgb, var(--c) 16%, #fff); }
-.mm.cache .mm-feuilles li b, .mm.cache .mm-feuilles li sup { color: transparent; }
-.mm.cache .mm-feuilles li.vu { color: #1B2232; background: color-mix(in srgb, var(--c) 9%, #fff); }
-.mm.cache .mm-feuilles li.vu b { color: color-mix(in srgb, var(--c) 78%, #000); }
+/* visibility (et non color) : le texte caché n'est ni lisible, ni sélectionnable, ni présent dans le PDF */
+.mm.cache .mm-feuilles li { cursor: pointer; background: color-mix(in srgb, var(--c) 16%, #fff); }
+.mm.cache .mm-feuilles li:not(.vu) .f { visibility: hidden; }
+.mm.cache .mm-feuilles li.vu { background: color-mix(in srgb, var(--c) 9%, #fff); }
 
 /* grand écran : le chapitre au centre, les branches de part et d'autre */
 .mm.large { grid-template-columns: minmax(0, 1fr) minmax(170px, 220px) minmax(0, 1fr); column-gap: 44px; align-items: center; padding: 30px 24px; }
@@ -59,6 +59,26 @@
 .mm.large .mm-feuilles li { font-size: 14px; max-width: 100%; }
 .mm.large .gauche .mm-feuilles li { text-align: right; }
 
+/* la « page » de la carte : en-tête et pied visibles seulement à l'impression */
+.mm-ptete, .mm-ppied { display: none; }
+.mm-acompleter { display: none; }
+.mm-page.vierge .mm-acompleter { display: inline; }
+
+/* boutons flottants : cacher les mots-clés, PDF */
+.mm-fab { position: fixed; right: 16px; bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 14px); z-index: 60;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.fab { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 15px; font-weight: 650; cursor: pointer;
+  padding: 12px 17px 12px 14px; border: 0; border-radius: 999px; color: var(--ink);
+  background: rgba(255,255,255,.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: 0 8px 22px rgba(16,24,48,.18), 0 1px 3px rgba(16,24,48,.14); transition: transform .2s var(--ios), background .2s; }
+.fab:active { transform: scale(.95); }
+.fab svg { width: 21px; height: 21px; flex: none; }
+.fab.principal { color: #fff; background: var(--blue); box-shadow: 0 8px 22px rgba(10,132,255,.35), 0 1px 3px rgba(16,24,48,.14); }
+.fab.on { color: #fff; background: #1B2232; }
+body.vue-carte .mm-nav { margin-bottom: 120px; }
+@media (max-width: 420px) { .fab { font-size: 14px; padding: 11px 15px 11px 12px; } }
+@media (min-width: 1000px) { .mm-fab { bottom: 28px; right: 28px; } }
+
 /* les autres cartes, et le lien depuis la page matière */
 .mm-actions { margin-top: 4px; }
 .mm-autres { margin: 4px 0 8px; }
@@ -70,11 +90,25 @@
 @media (min-width: 1000px) {
   .mm { box-shadow: none; border: 1px solid #E4E8EF; border-radius: var(--r-md); }
 }
+/* préparation de l'impression (classe posée par app.js juste avant window.print) :
+   la carte est mise dans une boîte A4 paysage (277 × 186 mm) et mise à l'échelle */
+body.impression .mm-page { width: 277mm; height: 186mm; display: flex; flex-direction: column; background: #fff; color: #1B2232; }
+body.impression .mm-ptete { display: flex; justify-content: space-between; align-items: baseline; gap: 8mm; flex: none;
+  font-size: 9.5pt; color: #3B4354; padding-bottom: 2mm; margin-bottom: 2mm; border-bottom: .6mm solid var(--mc, #30D158); }
+body.impression .mm-ptete b { color: #1B2232; }
+body.impression .mm-ppied { display: flex; justify-content: space-between; gap: 8mm; flex: none; font-size: 7.5pt; color: #6A7284;
+  padding-top: 1.5mm; margin-top: 1.5mm; border-top: 1px solid #DDE2EA; }
+body.impression .mm-zone { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+body.impression .mm { position: absolute; left: 0; margin: 0; padding: 10px 8px; box-shadow: none; border: 0; border-radius: 0; background: transparent; }
+body.impression .mm-centre { box-shadow: none; }
+/* carte à compléter : cases vides, bordure pointillée */
+body.impression .mm.cache .mm-feuilles li:not(.vu) { background: #fff; border: 1px dashed color-mix(in srgb, var(--c) 55%, #fff);
+  min-width: 210px; min-height: 46px; }
+
 @media print {
-  body.vue-carte .mm-actions, body.vue-carte .mm-autres, body.vue-carte .mm-nav, body.vue-carte .subtitle,
-  body.vue-carte .chapflag { display: none !important; }
-  body.vue-carte .title { font-size: 18pt; margin: 0 0 4mm; }
-  body.vue-carte .mm { box-shadow: none !important; border: 0 !important; padding: 0 !important; margin: 0; break-inside: avoid; }
+  body.vue-carte .fil, body.vue-carte .chapflag, body.vue-carte .title, body.vue-carte .subtitle, body.vue-carte .mm-actions,
+  body.vue-carte .mm-autres, body.vue-carte .mm-nav, body.vue-carte .mm-fab, body.vue-carte .avis-bas { display: none !important; }
+  body.vue-carte .view { animation: none !important; transform: none !important; }
+  body.vue-carte .mm-page { break-inside: avoid; }
   .mm, .mm * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .mm.cache .mm-feuilles li { color: #1B2232 !important; }
 }
