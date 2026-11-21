@@ -5,6 +5,8 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
 
 - **Zones thématiques** : dans chaque matière, les chapitres sont rangés par grand thème du programme
   (par exemple, en maths : nombres et calculs, géométrie, fonctions, algorithmique).
+  En SVT, une zone « Rappels de 5ᵉ et 4ᵉ » reprend la reproduction (animaux, végétaux, populations,
+  appareils reproducteurs, formation d'un nouvel être humain).
 - **Méthodes** : des fiches de savoir-faire par matière (analyser un texte, rédiger, analyser un document,
   écrire un développement construit, faire un croquis, rédiger une démonstration, exploiter un document en sciences…).
 - **Brevet blanc** : le programme de révision du 16 au 22 novembre, en 27 sessions. Chaque session contient

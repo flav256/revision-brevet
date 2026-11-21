@@ -648,7 +648,8 @@ DATA.brevet = {
    ],
    "corrige": "<p><b>Ex. 1</b> — 1) Garçon : sa 23e paire est XY. 2) Trisomie 21 (47 chromosomes au lieu de 46). Un des gamètes portait deux chromosomes 21 au lieu d'un.</p>\n<p><b>Ex. 2</b> — 1) Groupe A : A est dominant sur O. 2) Tom a O et O (O est récessif). Sa mère a A et O : elle est du groupe A mais lui a transmis son allèle O ; son père lui a aussi transmis un O.</p>",
    "cours": [
-    "svt-ch1"
+    "svt-ch1",
+    "svt-r6"
    ],
    "methodes": [
     "svt-m1"

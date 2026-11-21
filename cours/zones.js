@@ -10,7 +10,7 @@ DATA.zones = {
   francais: ['Étude de la langue', 'Lecture et analyse de textes'],
   maths: ['Nombres et calculs', 'Géométrie', 'Fonctions', 'Algorithmique et programmation'],
   histoire: ['Histoire', 'Géographie'],
-  svt: ['Le vivant et son évolution', "La planète Terre, l'environnement et l'action humaine"],
+  svt: ['Le vivant et son évolution', "La planète Terre, l'environnement et l'action humaine", 'Rappels de 5ᵉ et 4ᵉ'],
   physique: ['Organisation et transformations de la matière', "L'énergie et ses conversions"],
   techno: ['Informatique et réseaux', 'Design, innovation et conception'],
   espagnol: ['Unités']
