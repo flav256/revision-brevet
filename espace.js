@@ -331,7 +331,7 @@ const Espace = (() => {
     } else if (!pushPossible()) {
       etat = `<p class="esp-vide petit">Ce navigateur ne permet pas les notifications.</p>`;
     } else if (Notification.permission === 'denied') {
-      etat = `<p class="esp-alerte-txt">Les notifications sont bloquées pour ce site. Sur iPhone : Réglages → Notifications → révision brevet → Autoriser.</p>`;
+      etat = `<p class="esp-alerte-txt">Les notifications sont bloquées pour ce site. Sur iPhone : Réglages → Notifications → QG 3ᵉ → Autoriser.</p>`;
     }
     const on = notifOn(), r = reglages();
     const possible = pushPossible() && Notification.permission !== 'denied';

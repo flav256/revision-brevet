@@ -15,7 +15,7 @@
    ========================================================= */
 
 const app = document.getElementById('app');
-const NOM = 'révision brevet';
+const NOM = 'QG 3ᵉ';
 const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août',
               'septembre','octobre','novembre','décembre'];
 const JOURS = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
@@ -93,7 +93,7 @@ function fil(etapes) {
 }
 
 /* ---------- avertissement ---------- */
-const AVIS = "Version révision brevet du site llm révision. Pour les élèves, par les élèves. Non affilié au LLM.";
+const AVIS = "D'après le site llm révision. Pour les élèves, par les élèves. Non affilié au LLM.";
 const avisBas = () => `<p class="avis avis-bas">${esc(AVIS)}<br>
   Site d'origine : <a href="https://llmrevision.com/" rel="noopener">llmrevision.com</a></p>`;
 
@@ -1094,7 +1094,7 @@ function vueCarte(id) {
           <div class="mm-cote droite">${br.slice(moitie).map((b, j) => bloc(b, j + moitie)).join('')}</div>
         </div>
       </div>
-      <footer class="mm-ppied"><span>révision brevet · ${SITE}/#/carte/${c.id}</span><span>Le cours complet : ${SITE}/#/chapitre/${c.id}</span></footer>
+      <footer class="mm-ppied"><span>${NOM} · ${SITE}/#/carte/${c.id}</span><span>Le cours complet : ${SITE}/#/chapitre/${c.id}</span></footer>
     </div>
 
     ${liste.length > 1 ? `<nav class="sommaire-s mm-autres" aria-label="Les autres cartes">${
@@ -1605,7 +1605,7 @@ function teteFeuille(m, sur, titre, face) {
 function feuille(m, tete, corps, pied, opts = {}) {
   return `<section class="feuille" style="--mc:${m.couleur}" data-max="${opts.max || 11}" data-min="${opts.min || 7.5}">
     ${tete}<div class="f-corps">${corps}</div>
-    <footer class="f-pied"><span>${pied}</span><span>révision brevet · ${SITE}</span></footer></section>`;
+    <footer class="f-pied"><span>${pied}</span><span>${NOM} · ${SITE}</span></footer></section>`;
 }
 /* brut : le texte des QCM de session contient du HTML ; celui des quiz de chapitre est du texte simple */
 function qcmImprime(questions, brut, coupe) {
@@ -1887,6 +1887,27 @@ const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examen
 let profPrec = null;
 let hashPrecedent = '';
 
+/* Historique : « Retour » ramène à la page d'où l'on vient, comme une appli iPhone.
+   Chaque étape de l'historique du navigateur reçoit un numéro croissant (history.state.n) ;
+   la pile garde les pages vues depuis l'ouverture du site, dans l'ordre. Une page déjà
+   numérotée qui revient (Retour, geste, bouton du navigateur) fait dépiler ce qui la suit.
+   Sans page précédente (lien direct, appli rouverte), Retour remonte au parent logique. */
+const pile = [];
+let dernierNumero = 0;
+const ONGLET_RACINE = { '': 'accueil', revision: 'revision', brevet: 'revision', examens: 'examens', methodes: 'methodes', calendrier: 'calendrier', espace: 'espace' };
+function noterEtape(hash) {
+  let n = history.state && history.state.n;
+  if (n == null) {
+    n = dernierNumero = Math.max(Date.now(), dernierNumero + 1);
+    try { history.replaceState({ ...(history.state || {}), n }, ''); } catch { /* ignoré */ }
+  }
+  let arriere = false;
+  while (pile.length && pile[pile.length - 1].n >= n) { arriere = arriere || pile[pile.length - 1].n > n; pile.pop(); }
+  pile.push({ n, hash });
+  if (pile.length > 80) pile.shift();
+  return arriere;
+}
+
 function go(hash) {
   if (location.hash === hash) rendre();   // même adresse : on relance à la main
   else location.hash = hash;
@@ -1897,6 +1918,7 @@ function rendre() {
   const parts = hashActuel.replace(/^#\/?/, '').split('/');
   const vue = parts[0] || '';
   let html, titre = NOM, retour = null, onglet = 'accueil', apres = null;
+  const arriere = noterEtape(hashActuel);
 
   if (vue === 'calendrier') {
     html = vueCalendrier(); onglet = 'calendrier';
@@ -1918,7 +1940,13 @@ function rendre() {
     const x = examen(parts[1]);
     html = vueExamen(parts[1]); onglet = 'examens'; retour = '#/examens';
     if (x) titre = `${matiere(x.matiere).nom} - sujet ${x.numero} - ${x.titre}`;
-    if (parts[2] === 'imprimer') apres = () => setTimeout(imprimerSujet, 400);
+    /* l'adresse « …/imprimer » devient celle du sujet : y revenir plus tard ne relance pas l'impression */
+    if (parts[2] === 'imprimer') apres = () => {
+      const propre = '#/examen/' + parts[1];
+      try { history.replaceState(history.state, '', propre); } catch { /* ignoré */ }
+      pile[pile.length - 1].hash = hashPrecedent = propre;
+      setTimeout(imprimerSujet, 400);
+    };
     else if (Chrono.marche || Chrono.cumul) apres = () => { chrono('affiche'); };
   } else if (vue === 'corrige') {
     const x = examen(parts[1]);
@@ -1965,7 +1993,7 @@ function rendre() {
   }
 
   const prof = PROFONDEUR[vue] ?? 0;
-  const dir = profPrec === null ? 0 : Math.sign(prof - profPrec);
+  const dir = profPrec === null ? 0 : arriere ? -1 : Math.sign(prof - profPrec);
   profPrec = prof;
   /* on garde l'adresse sans la partie « ancre » pour le bouton Retour */
   hashPrecedent = hashActuel;
@@ -1983,7 +2011,14 @@ function rendre() {
   flottant(vue === 'carte' && CARTES[parts[1]] ? fabCarte() : '');
   const btn = document.getElementById('back');
   btn.style.display = retour ? 'inline-flex' : 'none';
-  btn.onclick = () => { if (retour) location.hash = retour; };
+  btn.onclick = () => { if (pile.length > 1) history.back(); else if (retour) location.hash = retour; };
+  /* page intérieure : l'onglet allumé reste celui d'où l'on est parti (Espace → matière : Espace) */
+  if (!(vue in ONGLET_RACINE)) {
+    for (let k = pile.length - 2; k >= 0; k--) {
+      const v = pile[k].hash.replace(/^#\/?/, '').split('/')[0];
+      if (v in ONGLET_RACINE) { onglet = ONGLET_RACINE[v]; break; }
+    }
+  }
   document.querySelectorAll('.tabbar a, .topnav a').forEach(a => a.classList.toggle('on', a.dataset.tab === onglet));
   if (document.body) document.body.className = 'vue-' + (vue || 'accueil') + (vue === '' ? ' accueil' : '');
 

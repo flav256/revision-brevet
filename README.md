@@ -1,6 +1,6 @@
-# révision brevet
+# QG 3ᵉ
 
-Site de révision de 3ᵉ, version « révision brevet » du site [llm révision](https://llmrevision.com/).
+Le QG de la 3ᵉ (anciennement « révision brevet ») : révisions, examens blancs et devoirs, d'après le site [llm révision](https://llmrevision.com/).
 Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
 
 - **Zones thématiques** : dans chaque matière, les chapitres sont rangés par grand thème du programme
