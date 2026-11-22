@@ -221,7 +221,158 @@ DATA.chapitres.push(
       { q: "Combien vaut une vitesse de 36 km/h en m/s ?",
         choix: ["36 m/s", "10 m/s", "3,6 m/s", "129,6 m/s"],
         bonne: 1,
-        why: "36 km/h = 36 000 m en 3 600 s, soit 10 m/s. On divise par 3,6." }
+        why: "36 km/h = 36 000 m en 3 600 s, soit 10 m/s. On divise par 3,6." },
+
+      /* ajout : 30 questions de plus (le quiz en tire 20 au hasard) */
+      { q: "5 stylos coûtent 3,50 €. Combien coûte 1 stylo ?",
+        choix: ["0,70 €", "0,75 €", "1,75 €", "0,50 €"],
+        bonne: 0,
+        why: "Passage à l'unité : 3,50 ÷ 5 = 0,70 €." },
+
+      { q: "Dans un tableau de proportionnalité, 4 correspond à 10. À quoi correspond 14 ?",
+        choix: ["20", "35", "24", "40"],
+        bonne: 1,
+        why: "Le coefficient est 10 ÷ 4 = 2,5, donc 14 × 2,5 = 35. Attention : ajouter 10 de chaque côté ne marche pas." },
+
+      { q: "Lequel de ces tableaux est un tableau de proportionnalité ?",
+        choix: ["1 → 3 ; 2 → 5 ; 3 → 7", "2 → 5 ; 4 → 10 ; 6 → 15", "3 → 6 ; 4 → 7 ; 5 → 8", "1 → 1 ; 2 → 4 ; 3 → 9"],
+        bonne: 1,
+        why: "5 ÷ 2 = 10 ÷ 4 = 15 ÷ 6 = 2,5 : tous les quotients sont égaux." },
+
+      { q: "Un taxi coûte 4 € de prise en charge plus 1,50 € par km. Le prix est-il proportionnel à la distance ?",
+        choix: ["Oui, de coefficient 1,5", "Oui, de coefficient 5,5", "Non, car pour 0 km on paie déjà 4 €", "On ne peut pas savoir"],
+        bonne: 2,
+        why: "Pour 0 km on paie 4 € : le graphique est une droite qui ne passe pas par l'origine. C'est une fonction affine, pas linéaire." },
+
+      { q: "La fonction f(x) = 3,5x traduit une situation de proportionnalité de coefficient :",
+        choix: ["x", "3,5", "1 ÷ 3,5", "0"],
+        bonne: 1,
+        why: "Une fonction linéaire f(x) = a × x traduit la proportionnalité ; le nombre a est le coefficient." },
+
+      { q: "Le point (4 ; 6) est sur la droite d'une situation de proportionnalité. Quel autre point est sur cette droite ?",
+        choix: ["(8 ; 10)", "(6 ; 8)", "(10 ; 15)", "(2 ; 4)"],
+        bonne: 2,
+        why: "Le coefficient est 6 ÷ 4 = 1,5, et 10 × 1,5 = 15." },
+
+      { q: "Dans un tableau de proportionnalité, 7 (1re ligne) correspond à 21 (2e ligne). Quel nombre x de la 1re ligne correspond à 33 ?",
+        choix: ["11", "99", "47", "9"],
+        bonne: 0,
+        why: "On passe de la 1re ligne à la 2e en multipliant par 3 : x = 33 ÷ 3 = 11 (ou produit en croix : 7 × 33 ÷ 21 = 11)." },
+
+      { q: "10 % de 340 =",
+        choix: ["3,4", "34", "340", "0,34"],
+        bonne: 1,
+        why: "Prendre 10 %, c'est diviser par 10." },
+
+      { q: "25 % de 48 =",
+        choix: ["12", "24", "4,8", "25"],
+        bonne: 0,
+        why: "25 %, c'est un quart : 48 ÷ 4 = 12." },
+
+      { q: "75 % d'une classe de 28 élèves, cela fait :",
+        choix: ["19 élèves", "20 élèves", "21 élèves", "24 élèves"],
+        bonne: 2,
+        why: "75 %, ce sont les trois quarts : 28 ÷ 4 × 3 = 21." },
+
+      { q: "Un prix passe de 40 € à 50 €. Il a augmenté de :",
+        choix: ["10 %", "20 %", "25 %", "50 %"],
+        bonne: 2,
+        why: "(50 − 40) ÷ 40 = 0,25, soit +25 %. On divise toujours par la valeur de départ." },
+
+      { q: "Un prix passe de 50 € à 40 €. Il a baissé de :",
+        choix: ["10 %", "20 %", "25 %", "40 %"],
+        bonne: 1,
+        why: "(50 − 40) ÷ 50 = 0,2, soit −20 %. Ce n'est pas le même pourcentage que la hausse de 40 € à 50 € : la valeur de départ a changé." },
+
+      { q: "Multiplier un prix par 0,85, c'est :",
+        choix: ["l'augmenter de 85 %", "le baisser de 85 %", "le baisser de 15 %", "l'augmenter de 15 %"],
+        bonne: 2,
+        why: "0,85 = 1 − 0,15 : c'est une baisse de 15 %." },
+
+      { q: "Multiplier par 1,3, c'est augmenter de :",
+        choix: ["3 %", "1,3 %", "13 %", "30 %"],
+        bonne: 3,
+        why: "1,3 = 1 + 0,30 : c'est une hausse de 30 %." },
+
+      { q: "Deux hausses successives de 10 % donnent une hausse totale de :",
+        choix: ["20 %", "21 %", "11 %", "100 %"],
+        bonne: 1,
+        why: "1,1 × 1,1 = 1,21, soit +21 %. Les pourcentages successifs ne s'additionnent pas : on multiplie les coefficients." },
+
+      { q: "Après une baisse de 25 %, un jeu coûte 30 €. Avant la baisse, il coûtait :",
+        choix: ["37,50 €", "40 €", "22,50 €", "55 €"],
+        bonne: 1,
+        why: "Prix de départ × 0,75 = 30, donc prix de départ = 30 ÷ 0,75 = 40 €. Le piège : 30 × 1,25 = 37,50 € est faux." },
+
+      { q: "Une ville de 2 000 habitants gagne 5 % d'habitants par an pendant 2 ans. Elle en compte alors :",
+        choix: ["2 200", "2 205", "2 100", "2 010"],
+        bonne: 1,
+        why: "2 000 × 1,05 × 1,05 = 2 205." },
+
+      { q: "Le ratio garçons : filles d'une classe de 28 élèves est 3 : 4. Combien y a-t-il de filles ?",
+        choix: ["12", "14", "16", "21"],
+        bonne: 2,
+        why: "3 + 4 = 7 parts ; 28 ÷ 7 = 4 élèves par part ; filles : 4 × 4 = 16." },
+
+      { q: "Un vert mélange du bleu et du jaune dans le ratio 2 : 3. Avec 6 L de bleu, il faut :",
+        choix: ["4 L de jaune", "9 L de jaune", "3 L de jaune", "15 L de jaune"],
+        bonne: 1,
+        why: "Il y a 3 parts de jaune pour 2 de bleu : 6 ÷ 2 × 3 = 9 L." },
+
+      { q: "Un cycliste roule à 18 km/h pendant 40 min. Il parcourt :",
+        choix: ["7,2 km", "12 km", "720 m", "45 km"],
+        bonne: 1,
+        why: "40 min = 40/60 h = 2/3 h ; d = 18 × 2/3 = 12 km." },
+
+      { q: "Un coureur fait 100 m en 12,5 s. Sa vitesse moyenne est :",
+        choix: ["8 m/s", "12,5 m/s", "80 m/s", "0,125 m/s"],
+        bonne: 0,
+        why: "v = d ÷ t = 100 ÷ 12,5 = 8 m/s (soit 28,8 km/h)." },
+
+      { q: "À 90 km/h, combien de temps faut-il pour parcourir 60 km ?",
+        choix: ["1 h 30 min", "40 min", "1 h 06 min", "50 min"],
+        bonne: 1,
+        why: "t = d ÷ v = 60 ÷ 90 = 2/3 h = 40 min." },
+
+      { q: "0,4 h, c'est :",
+        choix: ["40 min", "4 min", "24 min", "20 min"],
+        bonne: 2,
+        why: "0,4 × 60 = 24 min. Le piège : 0,4 h ne fait pas 40 min." },
+
+      { q: "Sur un plan à l'échelle 1/200, une pièce mesure 2,5 cm de large. En réalité, elle mesure :",
+        choix: ["5 m", "50 cm", "500 m", "12,5 m"],
+        bonne: 0,
+        why: "2,5 × 200 = 500 cm, soit 5 m." },
+
+      { q: "Deux villes distantes de 12 km sont à 3 cm l'une de l'autre sur une carte. L'échelle est :",
+        choix: ["1/4", "1/400 000", "1/40 000", "1/4 000"],
+        bonne: 1,
+        why: "12 km = 1 200 000 cm ; 1 200 000 ÷ 3 = 400 000. Échelle 1/400 000." },
+
+      { q: "On agrandit une figure en multipliant ses longueurs par 3. Son aire est multipliée par :",
+        choix: ["3", "6", "9", "27"],
+        bonne: 2,
+        why: "Dans un agrandissement de rapport k, les aires sont multipliées par k² = 9 (et les volumes par k³ = 27)." },
+
+      { q: "La maquette au 1/10 d'une boîte a un volume de 2 L. La vraie boîte a un volume de :",
+        choix: ["20 L", "200 L", "2 000 L", "1 000 L"],
+        bonne: 2,
+        why: "Les longueurs sont multipliées par 10, donc les volumes par 10³ = 1 000 : 2 × 1 000 = 2 000 L." },
+
+      { q: "Un robinet a un débit de 12 L/min. Pour remplir 180 L, il faut :",
+        choix: ["15 min", "2 160 min", "168 min", "1 h 30 min"],
+        bonne: 0,
+        why: "180 ÷ 12 = 15 min." },
+
+      { q: "Combien de m³ y a-t-il dans 2 500 L ?",
+        choix: ["25 m³", "2,5 m³", "0,25 m³", "250 m³"],
+        bonne: 1,
+        why: "1 m³ = 1 000 L, donc 2 500 L = 2,5 m³." },
+
+      { q: "Une imprimante imprime 24 pages en 1 min 30 s. En 5 min, elle en imprime :",
+        choix: ["80", "120", "72", "96"],
+        bonne: 0,
+        why: "1 min 30 s = 1,5 min ; 24 ÷ 1,5 = 16 pages par minute ; 16 × 5 = 80 pages." }
     ]
   },
 

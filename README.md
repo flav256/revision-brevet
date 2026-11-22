@@ -9,7 +9,7 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
   appareils reproducteurs, formation d'un nouvel être humain).
 - **Méthodes** : des fiches de savoir-faire par matière (analyser un texte, rédiger, analyser un document,
   écrire un développement construit, faire un croquis, rédiger une démonstration, exploiter un document en sciences…).
-- **Révision** : 28 sessions, rangées par matière. Chaque session contient l'essentiel, un QCM interactif,
+- **Révision** : 31 sessions, rangées par matière (dont trois d'entraînement à la proportionnalité : automatismes et problèmes type brevet, dans `brevet/proportionnalite.js`). Chaque session contient l'essentiel, un QCM interactif,
   des exercices et le corrigé (caché jusqu'à ce qu'on l'ouvre), avec des liens vers le cours et la méthode à relire.
 - **Cartes mentales** (SVT) : un bouton « Carte mentale » sur chaque chapitre ouvre une carte des idées clés.
   Sur grand écran les branches rayonnent autour du chapitre ; sur téléphone et tablette en hauteur, c'est un

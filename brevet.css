@@ -207,6 +207,8 @@ h2.section.auj { color: var(--blue); }
 .feuille .fiche-b .flash { columns: 2; }
 .feuille .f-exo .ex { margin-top: .6em; padding-top: .5em; }
 .feuille .f-exo .ex:first-child { margin-top: 0; padding-top: 0; }
+.feuille .f-exo svg.fig-ex { max-width: 62mm; margin: 1.5mm auto 0; }
+.feuille .f-exo table.tab { margin: 1mm 0; }
 
 /* le QCM imprimé : cases à cocher, deux colonnes */
 .f-qcm { columns: 2; column-gap: 7mm; list-style: none; padding: 0 !important; margin: 0 0 .4em !important; counter-reset: q; }
