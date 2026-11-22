@@ -2027,7 +2027,9 @@ if ('serviceWorker' in navigator) {
   });
   /* si une nouvelle version prend la main, on recharge une seule fois
      pour que l'élève voie tout de suite le contenu à jour */
-  let recharge = false;
+  /* pas à la première visite : la page vient déjà du réseau (et un rechargement
+     effacerait, par exemple, le mot de passe de l'Espace en cours de saisie) */
+  let recharge = !navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (recharge) return;
     recharge = true;
