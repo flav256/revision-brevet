@@ -7,7 +7,7 @@
    Le cache ne sert que de filet de sécurité : plus de connexion, ou réseau
    trop lent (au-delà de 3 secondes). */
 
-const CACHE = 'revision-brevet-v10';
+const CACHE = 'revision-brevet-v11';
 const DELAI = 3000;
 
 const FICHIERS = [
@@ -18,6 +18,7 @@ const FICHIERS = [
   'brevet/brevet.js',
   'examens.css', 'cartes.css', 'examens/francais.js', 'examens/maths.js', 'examens/histoire.js',
   'examens/svt.js', 'examens/physique.js', 'examens/techno.js',
+  'espace.js', 'espace.css',
   'manifest.webmanifest', 'favicon.svg', 'favicon.ico',
   'icon-192.png', 'icon-512.png'
 ];
@@ -59,4 +60,24 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   if (new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(reseauDabord(e.request));
+});
+
+/* Notifications de l'Espace (envoyées deux fois par jour par la collecte Pronote).
+   Le message arrive chiffré pour cet appareil ; le navigateur le déchiffre avant de nous le donner. */
+self.addEventListener('push', e => {
+  let m = {};
+  try { m = e.data ? e.data.json() : {}; } catch { m = { texte: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(m.titre || 'Espace', {
+    body: m.texte || '', icon: 'icon-192.png', badge: 'icon-192.png', data: { url: m.url || '#/espace' }
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const cible = new URL('./' + ((e.notification.data && e.notification.data.url) || '#/espace'), self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(fenetres => {
+    for (const f of fenetres) {
+      if ('focus' in f) { if ('navigate' in f) f.navigate(cible).catch(() => {}); return f.focus(); }
+    }
+    return self.clients.openWindow(cible);
+  }));
 });

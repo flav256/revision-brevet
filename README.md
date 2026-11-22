@@ -31,6 +31,15 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
   de la feuille pour la mesurer : un long document peut se couper, un court reste entier ; chaque ligne
   d'un texte numéroté tient sur une ligne ; l'annexe à rendre tient sur une page (réduite si besoin).
 
+- **Espace** (onglet protégé par mot de passe) : travail à faire, contrôles à venir, emploi du temps de la
+  semaine, notes et informations, lus dans Pronote deux fois par jour par un dépôt privé (`espace-3c`).
+  Les données arrivent chiffrées (AES-256-GCM) d'un relais Cloudflare et ne se déchiffrent que sur
+  l'appareil, avec le mot de passe de l'espace (PBKDF2, 600 000 tours). Rien sur la page publique ne
+  nomme l'élève avant déverrouillage. Réglages : notifications on/off par type (résumé du soir, rappel
+  la veille d'un contrôle, contrôle annoncé, nouveaux devoirs, cours modifié, notes), reçues sur iPhone
+  quand le site est ajouté à l'écran d'accueil (iOS 16.4 ou plus). Code : `espace.js`, `espace.css`,
+  réception des notifications dans `sw.js`.
+
 Site en ligne : https://flav256.github.io/revision-brevet/
 
 ## Organisation

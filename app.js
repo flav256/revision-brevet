@@ -1883,7 +1883,7 @@ function basculerRelief() {
 /* =========================================================
    ROUTEUR
    ========================================================= */
-const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examens': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'examen': 1, 'corrige': 2, 'chapitre': 2, 'quiz': 3, 'imprimer': 3, 'carte': 3 };
+const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examens': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'examen': 1, 'corrige': 2, 'chapitre': 2, 'quiz': 3, 'imprimer': 3, 'carte': 3, 'espace': 0 };
 let profPrec = null;
 let hashPrecedent = '';
 
@@ -1930,6 +1930,10 @@ function rendre() {
     html = r.html; titre = r.titre; retour = r.retour;
     onglet = parts[1] === 'session' ? 'revision' : 'accueil';
     apres = () => { ajusterFeuilles(); if (parts[3] === 'corrige') { montrerCorrImp(); allerA('corrige'); } };
+  } else if (vue === 'espace') {
+    html = Espace.vue(parts); onglet = 'espace';
+    titre = 'Espace · ' + NOM;
+    apres = () => Espace.apres(parts);
   } else if (vue === 'methodes') {
     html = vueMethodes(); onglet = 'methodes';
     titre = 'Méthodes · ' + NOM;
