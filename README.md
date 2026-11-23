@@ -11,6 +11,14 @@ Il reprend son moteur, son style et ses chapitres, et ajoute trois choses :
   écrire un développement construit, faire un croquis, rédiger une démonstration, exploiter un document en sciences…).
 - **Révision** : 31 sessions, rangées par matière (dont trois d'entraînement à la proportionnalité : automatismes et problèmes type brevet, dans `brevet/proportionnalite.js`). Chaque session contient l'essentiel, un QCM interactif,
   des exercices et le corrigé (caché jusqu'à ce qu'on l'ouvre), avec des liens vers le cours et la méthode à relire.
+- **À relire** (`brevet/relire.js`) : des exemples corrigés courts, chacun avec un petit schéma, à relire avant
+  une épreuve. Deux fiches pour l'instant :
+  « Maths : exemples corrigés de tous les chapitres », 21 exemples sur une feuille A4 recto verso (chapitres 1 à 4 au recto,
+  5 à 7 au verso) ;
+  « Proportionnalité : exemples corrigés », 12 exemples sur une page A4.
+  Elles sont en tête de la matière dans Révision, sur la page Maths et dans Examens (pour « tous les chapitres »).
+  Depuis un chapitre, le lien ouvre directement ses exemples. À l'écran : `#/relire/<id>` ; impression : `#/imprimer/relire/<id>`
+  (la taille du texte s'ajuste pour que chaque face tienne sur une page).
 - **Cartes mentales** (SVT) : un bouton « Carte mentale » sur chaque chapitre ouvre une carte des idées clés.
   Sur grand écran les branches rayonnent autour du chapitre ; sur téléphone et tablette en hauteur, c'est un
   arbre vertical. Deux boutons flottants : « Cacher les mots-clés » (mode révision) et « PDF ». La carte
@@ -50,6 +58,8 @@ Site en ligne : https://flav256.github.io/revision-brevet/
 | `cours/zones.js` | L'ordre des zones thématiques et la zone de chaque chapitre d'origine |
 | `cours/*.js` | Les chapitres et fiches méthode ajoutés (`ajout: true`), une matière par fichier |
 | `brevet/brevet.js` | La zone révision : sessions, QCM, corrigés et liens vers le cours |
+| `brevet/proportionnalite.js` | Trois sessions d'entraînement à la proportionnalité |
+| `brevet/relire.js` | Les fiches « À relire » : exemples corrigés et leurs schémas (SVG) |
 | `examens/*.js`, `examens/img/` | Les examens blancs (un fichier par matière) et leurs images, du domaine public |
 | `examens.css` | Les styles des sujets et des corrigés |
 | `cours/cartes-svt.js`, `cartes.css` | Le contenu et le style des cartes mentales (une carte par chapitre, `DATA.cartes`) |

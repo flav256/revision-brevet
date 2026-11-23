@@ -131,6 +131,15 @@ const sessionsDe = cid => BREVET.sessions.filter(s =>
   (s.cours || []).includes(cid) || (s.methodes || []).includes(cid));
 /* les sessions d'une matière, dans l'ordre du fichier */
 const sessionsMatiere = id => BREVET.sessions.filter(s => s.matiere === id);
+/* les fiches « À relire » (exemples corrigés ; une page A4, ou une feuille recto verso
+   pour « tous les chapitres ») : brevet/relire.js */
+const RELIRE = DATA.relire || [];
+const ficheRelire = id => RELIRE.find(r => r.id === id);
+const facesRelire = r => r.faces || [{ conseil: r.conseil, exemples: r.exemples }];
+const exemplesRelire = r => facesRelire(r).flatMap(f => f.exemples);
+const formatRelire = r => facesRelire(r).length > 1 ? 'A4 recto verso' : '1 page A4';
+const relireDe = cids => RELIRE.filter(r => (r.cours || []).some(c => cids.includes(c)));
+const ICONE_LIVRE = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5v13"/></svg>';
 const LETTRES = 'abcd';
 const ICONE_IMP = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 9V3.5h10V9"/><rect x="3.5" y="9" width="17" height="8" rx="2"/><path d="M7 14h10v6.5H7z"/></svg>';
 
@@ -247,6 +256,20 @@ function ligneSessionCourte(s, etiquette) {
     ${chevron}</button>`;
 }
 
+/* une fiche « À relire » dans une liste. cid : depuis un chapitre, la fiche
+   « tous les chapitres » s'ouvre directement sur les exemples de ce chapitre */
+function ligneRelire(r, cid) {
+  const m = matiere(r.matiere);
+  const tous = (r.cours || []).length > 1;
+  const n = tous && cid ? exemplesRelire(r).filter(e => e.cours === cid).length : 0;
+  const cible = '#/relire/' + r.id + (n ? '/' + cid : '');
+  return `<button class="row" onclick="go('${cible}')">
+    <span class="pill" style="${pastille(m)}">${ICONE_LIVRE}</span>
+    <span class="txt"><b>${esc(r.titre)}</b><small>${[esc(r.sous || 'À relire'),
+      n ? `${n} exemple${n > 1 ? 's' : ''} de ce chapitre` : exemplesRelire(r).length + ' exemples', formatRelire(r)].join(' · ')}</small></span>
+    ${chevron}</button>`;
+}
+
 /* =========================================================
    MATIÈRE — les chapitres rangés par zone thématique
    ========================================================= */
@@ -275,6 +298,9 @@ function vueMatiere(id) {
     html += `<nav class="sommaire-s mm-autres" aria-label="Cartes mentales"><span class="lbl">${ICONE_CARTE}Cartes mentales</span>${
       cartes.map(c => `<a href="#/carte/${c.id}">${esc(c.numero)}</a>`).join('')}</nav>`;
   }
+  const rl = RELIRE.filter(r => r.matiere === id);
+  if (rl.length) html += `<h2 class="section">À relire avant l'épreuve <small>· exemples corrigés</small></h2>
+    <div class="glass list">${rl.map(r => ligneRelire(r)).join('')}</div>`;
   if (chs.length) {
     html += zonesDe(id).map(([z, l]) =>
       `<h2 class="section">${esc(z)}</h2><div class="glass list">${l.map(ligneChapitre).join('')}</div>`).join('');
@@ -335,6 +361,7 @@ function vueChapitre(id) {
   html += `<div class="actions">
              ${aQuiz ? `<button class="btn" onclick="go('#/quiz/${c.id}')">${c.fiche ? "S'entraîner" : 'Faire les exercices'}</button>` : ''}
              <button class="btn quiet" onclick="versLeCours()">${c.fiche ? 'Lire la méthode en entier' : 'Lire le cours en entier'}</button>
+             ${relireDe([c.id]).filter(r => r.cours.length === 1).map(r => `<button class="btn quiet" onclick="go('#/relire/${r.id}')">Exemples corrigés</button>`).join('')}
              ${CARTES[c.id] ? `<button class="btn quiet imp carte" onclick="go('#/carte/${c.id}')">${ICONE_CARTE}Carte mentale</button>` : ''}
              <button class="btn quiet imp" onclick="go('#/imprimer/chapitre/${c.id}')">${ICONE_IMP}Imprimer / PDF</button>
            </div>`;
@@ -345,6 +372,9 @@ function vueChapitre(id) {
   html += (c.sections || []).map(sectionCours).join('');
 
   html += `</div><aside class="chap-side">`;
+
+  const rl = relireDe([c.id]);
+  if (rl.length) html += `<h2 class="section">À relire avant le contrôle</h2><div class="glass list sidelist">${rl.map(r => ligneRelire(r, c.id)).join('')}</div>`;
 
   const sess = sessionsDe(c.id);
   if (sess.length) {
@@ -755,7 +785,9 @@ function vueRevision() {
   for (const id of mats) {
     if (filtreBrevet && filtreBrevet !== id) continue;
     const l = sessionsMatiere(id);
+    const rl = RELIRE.filter(r => r.matiere === id);
     html += `<h2 class="section" id="m-${id}">${esc(matiere(id).nom)} <small>· ${l.length} session${l.length > 1 ? 's' : ''}</small></h2>
+      ${rl.length ? `<div class="glass list rl-liste">${rl.map(r => ligneRelire(r)).join('')}</div>` : ''}
       <div class="glass sesslist">${l.map(lienSession).join('')}</div>`;
   }
 
@@ -914,12 +946,70 @@ function vueSession(id) {
 
   html += `</div><aside class="chap-side">`;
   if (cours.length) html += `<h2 class="section">Revoir le cours</h2><div class="glass list sidelist">${cours.map(ligneChapitre).join('')}</div>`;
+  const rl = relireDe(s.cours || []);
+  if (rl.length) html += `<h2 class="section">À relire avant le contrôle</h2><div class="glass list sidelist">${rl.map(r => ligneRelire(r, (s.cours || []).find(c => r.cours.includes(c)))).join('')}</div>`;
   if (meths.length) html += `<h2 class="section">La méthode</h2><div class="glass list sidelist">${meths.map(ligneChapitre).join('')}</div>`;
   html += `<h2 class="section">Les autres sessions de ${esc(m.nom)}</h2><div class="glass list sidelist">`
     + (prec ? ligneSessionCourte(prec, 'Précédente') : '')
     + (suiv ? ligneSessionCourte(suiv, 'Suivante') : '')
     + `<button class="row" onclick="go('#/revision')"><span class="pill" style="background:linear-gradient(160deg,var(--indigo),#7d7bf0)">≡</span><span class="txt"><b>Toute la révision</b><small>${BREVET.sessions.length} sessions</small></span>${chevron}</button>`
     + `</div>`;
+  html += `</aside></div>`;
+  return html;
+}
+
+/* =========================================================
+   À RELIRE — des exemples corrigés avec un petit schéma,
+   à relire avant un contrôle. Une page A4 à l'impression.
+   ========================================================= */
+const tagChapitre = e => { const c = e.cours && chapitre(e.cours); return c ? c.numero.replace(/^Chapitre/, 'Ch.') : ''; };
+
+function exempleRelire(e, n, classe = '', tag = '') {
+  return `<article class="rl-ex${classe}">
+    <h3><span class="rl-n">${n}</span><span class="rl-t">${esc(e.titre)}</span>${tag ? `<span class="rl-tag">${esc(tag)}</span>` : ''}</h3>
+    <figure class="rl-fig">${e.fig}</figure>
+    <p class="rl-q">${e.enonce}</p>
+    <div class="rl-sol">${e.sol.map(l => `<p>${l}</p>`).join('')}</div>
+    ${e.piege ? `<p class="rl-piege"><b>Piège</b> : ${e.piege}</p>` : ''}
+  </article>`;
+}
+
+function vueRelire(id) {
+  const r = ficheRelire(id);
+  if (!r) return `<div class="glass"><p class="empty">Cette fiche n'existe pas.<br>
+    <a href="#/revision" style="color:var(--blue)">Retour à la révision</a></p></div>`;
+  const m = matiere(r.matiere);
+  const cours = (r.cours || []).map(chapitre).filter(Boolean);
+  const multi = cours.length > 1;
+  const tous = exemplesRelire(r);
+  const carte = (e) => exempleRelire(e, tous.indexOf(e) + 1, ' glass card');
+  let html = fil([['Accueil', '#/'], ['Révision', '#/revision'], [m.nom, null]])
+    + `<span class="flag chapflag" style="margin:12px 0 0"><i class="dot" style="background:${m.couleur}"></i>${esc(m.nom)} · À relire${multi ? ' · tous les chapitres' : cours.length ? ' · ' + esc(cours[0].numero) : ''}</span>
+    <h1 class="title">${esc(r.titre)}</h1>
+    <p class="subtitle">${esc(r.sous || 'À relire')} : ${tous.length} exercices corrigés${multi ? ` des ${cours.length} chapitres` : ''}, chacun avec un petit schéma. Imprimé : ${multi ? 'une feuille A4 recto verso' : 'une page A4'}.</p>
+    <div class="actions">
+      <button class="btn imp" onclick="go('#/imprimer/relire/${r.id}')">${ICONE_IMP}Imprimer (${formatRelire(r)})</button>
+      ${multi ? '' : cours.map(c => `<button class="btn quiet" onclick="go('#/chapitre/${c.id}')">Le cours</button>`).join('')}
+    </div>`;
+  if (multi) html += `<nav class="sommaire-s rl-chaps" aria-label="Les chapitres">${cours.map(c =>
+    `<button onclick="allerA('rl-${c.id}')">${esc(c.numero)}</button>`).join('')}</nav>`;
+  html += `<div class="chap"><div class="chap-main" style="--mc:${m.couleur}">`;
+  const conseils = facesRelire(r).map(f => f.conseil).filter(Boolean);
+  if (conseils.length) html += `<div class="glass card keycard rl-conseil">${conseils.map(t => `<p>${t}</p>`).join('')}</div>`;
+  if (multi) {
+    for (const c of cours) {
+      const l = tous.filter(e => e.cours === c.id);
+      if (!l.length) continue;
+      html += `<h2 class="section rl-chap" id="rl-${c.id}">${esc(c.numero)} · ${esc(c.titre)} <small><a href="#/chapitre/${c.id}">le cours</a></small></h2>
+        <div class="rl-grille">${l.map(carte).join('')}</div>`;
+    }
+  } else html += `<div class="rl-grille">${tous.map(carte).join('')}</div>`;
+  html += `</div><aside class="chap-side">`;
+  if (cours.length) html += `<h2 class="section">Revoir le cours</h2><div class="glass list sidelist">${cours.map(ligneChapitre).join('')}</div>`;
+  const sess = multi ? [] : [...new Set(cours.flatMap(c => sessionsDe(c.id)))];
+  if (sess.length) html += `<h2 class="section">S'entraîner</h2><div class="glass list sidelist">${sess.map(x => ligneSessionCourte(x)).join('')}</div>`;
+  const autres = RELIRE.filter(x => x !== r);
+  if (autres.length) html += `<h2 class="section">Les autres fiches à relire</h2><div class="glass list sidelist">${autres.map(x => ligneRelire(x)).join('')}</div>`;
   html += `</aside></div>`;
   return html;
 }
@@ -1335,7 +1425,9 @@ function vueExamens() {
     if (filtreEx && filtreEx !== id) continue;
     const l = examensDe(id);
     const x0 = l[0];
+    const rl = RELIRE.filter(r => r.matiere === id && (r.cours || []).length > 1);
     html += `<h2 class="section" id="ex-${id}">${esc(NOM_EX[id])} <small>· ${esc(x0.duree)} · ${fmtPts(x0.points)}</small></h2>
+      ${rl.length ? `<div class="glass list rl-liste">${rl.map(r => ligneRelire(r)).join('')}</div>` : ''}
       <div class="glass sesslist">${l.map(ligneExamen).join('')}</div>`;
   }
   html += `</div><aside class="chap-side">
@@ -1568,6 +1660,8 @@ function vueCorrige(id) {
       <p class="progtxt" id="notemsg">${n !== null ? `Soit ${String(noteSur20(x, n)).replace('.', ',')} sur 20.` : ''}</p></div>`;
   html += `</div><aside class="chap-side">`;
   if (chs.length) html += `<h2 class="section">Le cours à revoir</h2><div class="glass list sidelist">${chs.map(ligneChapitre).join('')}</div>`;
+  const rlx = relireDe(chs.map(c => c.id)).filter(r => r.cours.length > 1);
+  if (rlx.length) html += `<h2 class="section">À relire avant l'épreuve</h2><div class="glass list sidelist">${rlx.map(r => ligneRelire(r)).join('')}</div>`;
   if (meths.length) html += `<h2 class="section">Les fiches méthode</h2><div class="glass list sidelist">${meths.map(ligneChapitre).join('')}</div>`;
   const autres = examensDe(x.matiere).filter(y => y.id !== x.id);
   if (autres.length) html += `<h2 class="section">Les autres sujets</h2><div class="glass list sidelist">${autres.map(ligneExamenCourte).join('')}</div>`;
@@ -1656,7 +1750,41 @@ function feuillesChapitre(c) {
   return recto + verso;
 }
 
+/* une fiche « À relire » : une face par page (une ou deux), les exemples sur deux colonnes */
+function feuillesRelire(r) {
+  const m = matiere(r.matiere);
+  const cours = (r.cours || []).map(chapitre).filter(Boolean);
+  const multi = cours.length > 1;
+  const sur = 'À relire' + (multi ? ' · tous les chapitres' : cours.length ? ' · ' + cours[0].numero : '');
+  const faces = facesRelire(r);
+  const pied = multi ? `Les cours et les exercices : ${SITE}/#/matiere/${r.matiere}`
+    : cours.length ? `Le cours et les exercices : ${SITE}/#/chapitre/${cours[0].id}` : `${SITE}/#/relire/${r.id}`;
+  let n = 0;
+  return faces.map((f, i) => feuille(m,
+    teteFeuille(m, sur, r.titre, f.titre || (faces.length > 1 ? (i ? 'Verso' : 'Recto') : r.sous || 'À relire')),
+    (f.conseil ? `<div class="f-cle f-rl-conseil">${f.conseil}</div>` : '')
+    + `<div class="f-rl">${f.exemples.map(e => exempleRelire(e, ++n, '', multi ? tagChapitre(e) : '')).join('')}</div>`,
+    pied, { max: 10.5, min: 7.5 })).join('');
+}
+
 function vueImprimer(type, id) {
+  const r = type === 'relire' ? ficheRelire(id) : null;
+  if (r) {
+    const m = matiere(r.matiere);
+    const retour = '#/relire/' + r.id;
+    const html = fil([['Accueil', '#/'], ['Révision', '#/revision'], [r.titre, retour], ['Imprimer', null]])
+      + `<div class="glass card imp-outils">
+        <h1 class="title">Imprimer ou enregistrer en PDF</h1>
+        <p>${facesRelire(r).length > 1 ? 'Une feuille A4 recto verso' : 'Une seule page A4'} : les ${exemplesRelire(r).length} exemples corrigés, à relire avant ${r.cours.length > 1 ? "l'épreuve" : 'le contrôle'}.</p>
+        <div class="actions">
+          <button class="btn" onclick="window.print()">${ICONE_IMP}Imprimer / Enregistrer en PDF</button>
+          <button class="btn quiet" onclick="go('${retour}')">Retour à la fiche</button>
+        </div>
+        <p class="aide">Dans la fenêtre d'impression : choisir « Enregistrer au format PDF » pour obtenir le fichier, format A4, échelle 100 %${facesRelire(r).length > 1 ? ", et « recto verso » si l'imprimante le permet" : ''}.</p>
+      </div>
+      <div class="apercu"><div class="feuilles">${feuillesRelire(r)}</div></div>`;
+    return { html, retour, titre: `${m.nom} - ${r.titre} - fiche à relire` };
+  }
   const s = type === 'session' ? session(id) : null;
   const c = type === 'chapitre' ? chapitre(id) : null;
   if (!s && !c) return { html: `<div class="glass"><p class="empty">Cette fiche n'existe pas.<br>
@@ -1883,7 +2011,7 @@ function basculerRelief() {
 /* =========================================================
    ROUTEUR
    ========================================================= */
-const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examens': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'examen': 1, 'corrige': 2, 'chapitre': 2, 'quiz': 3, 'imprimer': 3, 'carte': 3, 'espace': 0 };
+const PROFONDEUR = { '': 0, 'calendrier': 0, 'revision': 0, 'brevet': 0, 'examens': 0, 'methodes': 0, 'matiere': 1, 'session': 1, 'relire': 1, 'examen': 1, 'corrige': 2, 'chapitre': 2, 'quiz': 3, 'imprimer': 3, 'carte': 3, 'espace': 0 };
 let profPrec = null;
 let hashPrecedent = '';
 
@@ -1956,7 +2084,7 @@ function rendre() {
   } else if (vue === 'imprimer') {
     const r = vueImprimer(parts[1], parts[2]);
     html = r.html; titre = r.titre; retour = r.retour;
-    onglet = parts[1] === 'session' ? 'revision' : 'accueil';
+    onglet = parts[1] === 'session' || parts[1] === 'relire' ? 'revision' : 'accueil';
     apres = () => { ajusterFeuilles(); if (parts[3] === 'corrige') { montrerCorrImp(); allerA('corrige'); } };
   } else if (vue === 'espace') {
     html = Espace.vue(parts); onglet = 'espace';
@@ -1970,6 +2098,11 @@ function rendre() {
     html = vueSession(parts[1]); onglet = 'revision'; retour = '#/revision';
     if (s) titre = s.titre + ' · ' + NOM;
     if (parts[2]) apres = () => allerA(parts[2]);
+  } else if (vue === 'relire') {
+    const r = ficheRelire(parts[1]);
+    html = vueRelire(parts[1]); onglet = 'revision'; retour = '#/revision';
+    if (r) titre = r.titre + ' · ' + NOM;
+    if (parts[2]) apres = () => allerA('rl-' + parts[2]);
   } else if (vue === 'matiere') {
     html = vueMatiere(parts[1]); retour = '#/';
     titre = matiere(parts[1]).nom + ' · ' + NOM;

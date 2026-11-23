@@ -73,6 +73,30 @@ if (B) {
   for (const r of B.methodes || []) if (!ids.has(r)) err('brevet', 'méthode inconnue : ' + r);
 }
 
+/* ---------- fiches « À relire » ---------- */
+const RL = DATA.relire || [];
+const rids = new Set();
+for (const r of RL) {
+  const id = r.id || '(fiche sans id)';
+  if (!str(r.id) || rids.has(r.id)) err(id, 'id manquant ou en double');
+  rids.add(r.id);
+  if (!matieres.has(r.matiere)) err(id, 'matiere inconnue : ' + r.matiere);
+  if (!str(r.titre)) err(id, 'titre manquant');
+  for (const c of r.cours || []) if (!ids.has(c)) err(id, 'chapitre inconnu : ' + c);
+  const faces = r.faces || [{ exemples: r.exemples }];
+  if (faces.length > 2) err(id, 'deux faces au plus (une feuille recto verso)');
+  const tous = faces.flatMap(f => Array.isArray(f.exemples) ? f.exemples : []);
+  if (!tous.length || faces.some(f => !Array.isArray(f.exemples) || !f.exemples.length)) { err(id, 'exemples manquants'); continue; }
+  if ((r.cours || []).length > 1) for (const c of r.cours) if (!tous.some(e => e.cours === c)) err(id, 'aucun exemple du chapitre ' + c);
+  tous.forEach((e, i) => {
+    if ((r.cours || []).length > 1 && !(r.cours || []).includes(e.cours)) err(id, `exemple ${i + 1} : cours absent ou hors de la fiche`);
+    if (!str(e.titre) || !str(e.enonce) || !str(e.piege)) err(id, `exemple ${i + 1} : titre, enonce ou piege manquant`);
+    if (!Array.isArray(e.sol) || !e.sol.length || !e.sol.every(str)) err(id, `exemple ${i + 1} : sol (lignes) invalide`);
+    if (!/^<svg [^>]*viewBox="0 0 120 /.test(e.fig || '')) err(id, `exemple ${i + 1} : schéma SVG de 120 de large attendu`);
+    for (const t of ['svg', 'g', 'text']) if (((e.fig || '').match(new RegExp('<' + t + '[\\s>]', 'g')) || []).length !== ((e.fig || '').match(new RegExp('</' + t + '>', 'g')) || []).length) err(id, `exemple ${i + 1} : balises <${t}> non fermées`);
+  });
+}
+
 /* ---------- examens blancs ---------- */
 const avert = [];
 const E = DATA.examens || [];
