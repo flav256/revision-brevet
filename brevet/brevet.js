@@ -1042,7 +1042,7 @@ DATA.brevet = {
      "type": "html",
      "titre": "L'essentiel",
      "sous": "lire, puis cacher",
-     "html": "<ul>\n<li>Dans un triangle rectangle, l'<b>hypoténuse</b> est le côté opposé à l'angle droit : c'est le plus long côté.</li>\n<li><b>Théorème de Pythagore</b> : si ABC est rectangle en A, alors <b>BC² = AB² + AC²</b>.</li>\n<li><b>Réciproque</b> : si BC² = AB² + AC² ([BC] étant le plus long côté), alors ABC est rectangle en A. Si l'égalité est fausse, le triangle n'est pas rectangle.</li>\n</ul>\n<p class=\"redac\">Le triangle ABC est rectangle en A. D'après le théorème de Pythagore : BC² = AB² + AC². Puis on remplace, on calcule et on prend la racine carrée.</p>\n<h4>Cosinus</h4>\n<ul>\n<li>Dans un triangle rectangle : <b>cos (angle aigu) = côté adjacent ÷ hypoténuse</b>. Si ABC est rectangle en A : cos B = AB ÷ BC.</li>\n<li>Calculer une longueur : AB = BC × cos B.</li>\n<li>Calculer un angle : on calcule le cosinus, puis la touche <b>cos⁻¹</b> (ou Arccos) de la calculatrice, réglée en degrés.</li>\n</ul>"
+     "html": "<ul>\n<li>Dans un triangle rectangle, l'<b>hypoténuse</b> est le côté opposé à l'angle droit : c'est le plus long côté.</li>\n<li><b>Théorème de Pythagore</b> : si ABC est rectangle en A, alors <b>BC² = AB² + AC²</b>.</li>\n<li><b>Réciproque</b> : si BC² = AB² + AC² ([BC] étant le plus long côté), alors ABC est rectangle en A. Si l'égalité est fausse, le triangle n'est pas rectangle.</li>\n</ul>\n<p class=\"redac\">Le triangle ABC est rectangle en A. D'après le théorème de Pythagore : BC² = AB² + AC². Puis on remplace, on calcule et on prend la racine carrée.</p>\n<h4>Cosinus</h4>\n<ul>\n<li>Dans un triangle rectangle : <b>cos (angle aigu) = côté adjacent ÷ hypoténuse</b>. Si ABC est rectangle en A : cos B = AB ÷ BC.</li>\n<li>Calculer une longueur : AB = BC × cos B.</li>\n<li>Calculer un angle : on calcule le cosinus, puis l'angle avec <b>arccos</b> à la calculatrice, réglée en degrés.</li>\n</ul>"
     },
     {
      "type": "qcm",
@@ -1093,7 +1093,7 @@ DATA.brevet = {
        "q": "Pour trouver un angle à partir de son cosinus, on utilise :",
        "choix": [
         "la touche cos",
-        "la touche cos⁻¹ (Arccos)",
+        "la fonction arccos",
         "la touche √",
         "la touche x²"
        ],

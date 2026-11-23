@@ -239,6 +239,15 @@
     <text class="at" x="96" y="14" font-size="9" font-weight="700" text-anchor="middle">4 rangs</text>
     <text x="60" y="49" font-size="10.5" text-anchor="middle">= <tspan font-weight="700">5,2 × 10⁻⁴</tspan></text>`);
 
+  /* exposant en petit, au-dessus de la ligne (dy cumulés : on redescend juste après) */
+  const ex = (b, e) => `${b}<tspan dy="-4" font-size="8">${e}</tspan><tspan dy="4">​</tspan>`;
+  const exA = (b, e) => `${b}<tspan class="at" dy="-4" font-size="8.5" font-weight="700">${e}</tspan><tspan dy="4">​</tspan>`;
+  const figPuissances = svg(48, "Les règles : aⁿ × aᵖ = aⁿ⁺ᵖ (on ajoute les exposants) ; aⁿ ÷ aᵖ = aⁿ⁻ᵖ (on les soustrait) ; (aⁿ)ᵖ = aⁿˣᵖ (on les multiplie).", `
+    <g font-size="11.5" text-anchor="middle">
+      <text x="60" y="13">${ex('a', 'n')} × ${ex('a', 'p')} = ${exA('a', 'n + p')}</text>
+      <text x="60" y="29">${ex('a', 'n')} ÷ ${ex('a', 'p')} = ${exA('a', 'n − p')}</text>
+      <text x="60" y="45">(${ex('a', 'n')})${ex('', 'p')} = ${exA('a', 'n × p')}</text></g>`);
+
   /* ch. 2 : A à gauche, B et C à droite, (MN) // (BC) */
   const thales = (lab, question) => svg(64, question
     ? "Triangle ABC, M sur [AB], N sur [AC]. AM = 4, AB = 10, AN = 6, AC = 15. Les droites (MN) et (BC) sont-elles parallèles ?"
@@ -302,9 +311,14 @@
     <text class="at" x="46" y="28" font-size="9" font-weight="700" text-anchor="middle">10</text>
     <text class="aot" x="97" y="37" font-size="9" font-weight="700">?</text>`);
 
-  const figSohcahtoa = svg(42, "Les trois formules : SOH, sinus = opposé sur hypoténuse ; CAH, cosinus = adjacent sur hypoténuse ; TOA, tangente = opposé sur adjacent.", `
-    <g fill="none" stroke="currentColor" stroke-width=".9" font-size="11" font-weight="700">${boite(2, 2, 36, 18, 'SOH')}${boite(42, 2, 36, 18, 'CAH', 'al ac')}${boite(82, 2, 36, 18, 'TOA')}</g>
-    <g font-size="8.5" text-anchor="middle"><text x="20" y="33">sin = O/H</text><text class="at" x="60" y="33" font-weight="700">cos = A/H</text><text x="100" y="33">tan = O/A</text></g>`);
+  const formule = (x, nom, haut, cls) => `
+    <rect class="${cls}" x="${x}" y="1" width="57" height="44" rx="3" fill="none" stroke="currentColor" stroke-width=".9"/>
+    <text class="at" x="${x + 28.5}" y="14" font-size="11.5" font-weight="700" text-anchor="middle">${nom} =</text>
+    <text x="${x + 28.5}" y="27" font-size="9" text-anchor="middle">${haut}</text>
+    <line x1="${x + 5}" y1="30.5" x2="${x + 52}" y2="30.5" stroke="currentColor" stroke-width=".9"/>
+    <text x="${x + 28.5}" y="40.5" font-size="9" text-anchor="middle">hypoténuse</text>`;
+  const figCosSin = svg(46, "cos = côté adjacent sur hypoténuse ; sin = côté opposé sur hypoténuse.",
+    formule(1, 'cos', 'adjacent', 'al ac') + formule(62, 'sin', 'opposé', ''));
 
   /* ch. 5 */
   const figDistrib = svg(56, "Tableau de la double distributivité : 2x fois x = 2x² ; 2x fois −4 = −8x ; 3 fois x = 3x ; 3 fois −4 = −12.", `
@@ -318,6 +332,23 @@
     <g stroke="currentColor" stroke-width="1">${fleche(51, 10, 69, 10)}</g><g class="ac" stroke-width="1.4">${fleche(69, 18, 51, 18)}</g>
     <g font-size="8.5" text-anchor="middle"><text x="25" y="34">produit</text><text x="95" y="34">somme</text></g>
     <text x="60" y="47" font-size="9" text-anchor="middle">développer → · <tspan class="at" font-weight="700">← factoriser</tspan></text>`);
+
+  /* (a + b)² : le grand carré se découpe en a², ab, ab et b² */
+  const figCarre = svg(68, "Un carré de côté a + b découpé en quatre : un carré a², deux rectangles ab et un carré b². Donc (a + b)² = a² + 2ab + b².", `
+    <rect class="am" x="26" y="10" width="36" height="36"/><rect class="al" x="62" y="10" width="20" height="36"/><rect class="al" x="26" y="46" width="36" height="20"/><rect class="aol" x="62" y="46" width="20" height="20"/>
+    <g fill="none" stroke="currentColor" stroke-width=".9"><rect x="26" y="10" width="56" height="56"/><line x1="62" y1="10" x2="62" y2="66"/><line x1="26" y1="46" x2="82" y2="46"/></g>
+    <g font-size="10" text-anchor="middle"><text x="44" y="7">a</text><text x="72" y="7">b</text><text x="19" y="31">a</text><text x="19" y="59">b</text></g>
+    <g font-size="11" font-weight="700" text-anchor="middle"><text x="44" y="32">${ex('a', '2')}</text><text x="72" y="32">ab</text><text x="44" y="60">ab</text><text x="72" y="60">${ex('b', '2')}</text></g>
+    <g class="at" font-size="10" font-weight="700"><text x="88" y="26">= ${ex('a', '2')}</text><text x="88" y="40">+ 2ab</text><text x="88" y="54">+ ${ex('b', '2')}</text></g>`);
+
+  /* un quotient est nul si son numérateur est nul (et son dénominateur ne l'est pas) */
+  const figQuotient = svg(40, "N sur D égale 0 : donc N = 0, avec D différent de 0.", `
+    <g font-size="10.5" font-weight="700" text-anchor="middle"><text x="12" y="15">N</text><text x="12" y="31">D</text></g>
+    <line x1="4" y1="20" x2="20" y2="20" stroke="currentColor" stroke-width="1.1"/>
+    <text x="32" y="24" font-size="10.5" text-anchor="middle">= 0</text>
+    <g stroke="currentColor" stroke-width="1">${fleche(44, 20, 60, 20)}</g>
+    <text class="at" x="64" y="15" font-size="10" font-weight="700">N = 0</text>
+    <text class="aot" x="64" y="31" font-size="10" font-weight="700">et D ≠ 0</text>`);
 
   const figBalance = svg(50, "Une balance en équilibre : 5x − 3 d'un côté, 2x + 9 de l'autre. On fait la même opération des deux côtés.", `
     <path class="al" d="M60 15 L51 31 H69 Z" stroke="currentColor" stroke-width=".9"/>
@@ -355,6 +386,8 @@
     <text x="62" y="51" font-size="7.5" text-anchor="middle">60°</text>
     <circle class="af" cx="12" cy="54" r="2.4"/>`);
 
+  const nw = t => `<span class="nw">${t}</span>`;
+  const fr = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
   const P = DATA.relire.find(r => r.id === 'relire-prop').exemples;
   const reprise = k => ({ ...P[k], cours: 'ma-ch6' });
 
@@ -368,23 +401,25 @@
       { titre: 'Recto · Chapitres 1 à 4',
         conseil: "Sur la copie : <b>calcul posé, résultat, unité, phrase réponse</b>. En géométrie : on sait que… <b>or</b> (le théorème, par son nom)… <b>donc</b>…",
         exemples: [
-          { cours: 'ma-ch1', titre: 'Additionner des fractions',
-            enonce: 'Calculer A = 2/3 + 5/6.',
+          { cours: 'ma-ch1', titre: 'Calculer avec des fractions',
+            enonce: 'Calculer A = 2/3 + 5/6, B = 4/9 × 3/8 et C = 2/5 ÷ 4/15.',
             fig: figFractions,
-            sol: ['Même dénominateur : 2/3 = 4/6, donc A = 4/6 + 5/6 = 9/6 = <b>3/2</b>.'],
+            sol: ['A = 4/6 + 5/6 = 9/6 = <b>3/2</b> (même dénominateur).',
+                  'B = (4 × 3)/(9 × 8) = 12/72 = <b>1/6</b>.',
+                  'C = 2/5 × 15/4 = 30/20 = <b>3/2</b> (× l\'inverse).'],
             piege: 'on n\'additionne jamais les dénominateurs.' },
-          { cours: 'ma-ch1', titre: 'Multiplier, diviser des fractions',
-            enonce: 'Calculer B = 4/9 × 3/8 et C = 2/5 ÷ 4/15.',
-            fig: figInverse,
-            sol: ['B = (4 × 3)/(9 × 8) = 12/72 = <b>1/6</b>.',
-                  'C = 2/5 × 15/4 = 30/20 = <b>3/2</b>.'],
-            piege: 'diviser, c\'est multiplier par l\'<b>inverse</b>.' },
-          { cours: 'ma-ch1', titre: 'Puissances, écriture scientifique',
-            enonce: 'Écrire 0,000 52 et 34 000 000 en écriture scientifique. Calculer 10⁵ × 10⁻².',
+          { cours: 'ma-ch1', titre: 'Écriture scientifique',
+            enonce: 'Écrire 0,000 52 et 34 000 000 en écriture scientifique.',
             fig: figVirgule,
-            sol: ['0,000 52 = <b>5,2 × 10⁻⁴</b> et 34 000 000 = <b>3,4 × 10⁷</b>.',
-                  '10⁵ × 10⁻² = 10⁵⁻² = <b>10³</b> : on additionne les exposants.'],
+            sol: ['0,000 52 = <b>5,2 × 10⁻⁴</b> : la virgule avance de 4 rangs.',
+                  '34 000 000 = <b>3,4 × 10⁷</b> : elle recule de 7 rangs.'],
             piege: 'un seul chiffre non nul avant la virgule.' },
+          { cours: 'ma-ch1', titre: 'Plusieurs puissances dans une fraction',
+            enonce: 'Calculer A = ' + fr('4 × 10⁵ × 3 × 10⁻²', '6 × 10⁻⁴') + ' et ' + nw('B = (2³)² × 2⁻⁴ ÷ 8') + '.',
+            fig: figPuissances,
+            sol: ['A = (4 × 3)/6 × 10⁵⁻²⁺⁴ = <b>2 × 10⁷</b> (on regroupe nombres et puissances de 10).',
+                  'B = 2⁶ × 2⁻⁴ ÷ 2³ = 2⁶⁻⁴⁻³ = <b>2⁻¹ = 1/2</b>, car (2³)² = 2⁶ et 8 = 2³.'],
+            piege: 'diviser par 10⁻⁴ : l\'exposant augmente de 4.' },
           { cours: 'ma-ch2', titre: 'Thalès : calculer une longueur',
             enonce: '(MN) // (BC) ; AM = 3, AB = 7,5, AN = 2 et MN = 2,4 (en cm). Calculer AC et BC.',
             fig: figThales,
@@ -429,9 +464,9 @@
             piege: 'calculatrice en mode <b>degrés</b>.' },
           { cours: 'ma-ch4', titre: 'Trigonométrie : un angle',
             enonce: 'EFG rectangle en E, EF = 5 cm, FG = 8 cm. Calculer l\'angle EFG au degré.',
-            fig: figSohcahtoa,
-            sol: ['Pour l\'angle F : [EF] est adjacent, [FG] est l\'hypoténuse, donc cos F = 5/8.',
-                  'F = cos⁻¹(5/8) ≈ <b>51°</b>.'],
+            fig: figCosSin,
+            sol: ['Pour l\'angle F : [EF] est adjacent, [FG] est l\'hypoténuse, donc cos F = EF/FG = 5/8.',
+                  'F = arccos(5/8) ≈ <b>51°</b> (calculatrice en degrés).'],
             piege: 'choisir la formule qui utilise les deux longueurs connues.' }
         ] },
       { titre: 'Verso · Chapitres 5 à 7',
@@ -443,11 +478,18 @@
             sol: ['(2x + 3)(x − 4) = 2x × x + 2x × (−4) + 3 × x + 3 × (−4)',
                   '= 2x² − 8x + 3x − 12 = <b>2x² − 5x − 12</b>.'],
             piege: 'les signes : 3 × (−4) = −12.' },
+          { cours: 'ma-ch5', titre: 'Les identités remarquables',
+            enonce: 'Développer (x + 5)² et (3x − 2)². Factoriser 4x² − 9.',
+            fig: figCarre,
+            sol: ['(a + b)² = a² + 2ab + b² : (x + 5)² = x² + 2 × x × 5 + 5² = <b>x² + 10x + 25</b>.',
+                  '(a − b)² = a² − 2ab + b² : (3x − 2)² = 9x² − 2 × 3x × 2 + 4 = <b>9x² − 12x + 4</b>.',
+                  'a² − b² = (a − b)(a + b) : 4x² − 9 = (2x)² − 3² = <b>(2x − 3)(2x + 3)</b>.'],
+            piege: '(x + 5)² n\'est pas x² + 25 : il manque le double produit 2ab.' },
           { cours: 'ma-ch5', titre: 'Factoriser',
-            enonce: 'Factoriser 6x + 15, puis x² − 49.',
+            enonce: 'Factoriser 6x + 15, puis (x + 1)(2x + 3) + (x + 1)(x − 5).',
             fig: figFactoriser,
             sol: ['6x + 15 = 3 × 2x + 3 × 5 = <b>3(2x + 5)</b>.',
-                  'x² − 49 = x² − 7² = <b>(x − 7)(x + 7)</b>, car a² − b² = (a − b)(a + b).'],
+                  'Le facteur commun est la parenthèse (x + 1) : (x + 1)[(2x + 3) + (x − 5)] = <b>(x + 1)(3x − 2)</b>.'],
             piege: 'vérifier en redéveloppant.' },
           { cours: 'ma-ch5', titre: 'Résoudre une équation',
             enonce: 'Résoudre 5x − 3 = 2x + 9.',
@@ -461,13 +503,15 @@
             sol: ['Un produit est nul si l\'un de ses facteurs est nul : x − 2 = 0 ou 3x + 6 = 0.',
                   'x = 2 ou x = −6 ÷ 3 = −2. <b>Deux solutions : 2 et −2.</b>'],
             piege: 'ne pas développer : on garde le produit.' },
-          { cours: 'ma-ch5', titre: 'Mettre un problème en équation',
-            enonce: 'Un rectangle mesure x + 3 cm sur x cm. Son périmètre est 30 cm. Trouver x.',
-            fig: figPerimetre,
-            sol: ['2 × (x + 3 + x) = 30, donc 4x + 6 = 30, donc 4x = 24 et x = 6.',
-                  '<b>x = 6 : le rectangle mesure 9 cm sur 6 cm.</b> Vérification : 2 × (9 + 6) = 30.'],
-            piege: 'dire ce que représente x avant d\'écrire l\'équation.' },
-          reprise(1),
+          { cours: 'ma-ch5', titre: 'Une équation avec x au dénominateur',
+            enonce: 'Résoudre ' + fr('x + 3', '2x + 3') + ' = ' + fr('x + 3', '5') + '.',
+            fig: figQuotient,
+            sol: ['Valeur interdite : 2x + 3 ≠ 0, donc x ≠ −1,5.',
+                  'On met tout à gauche : ' + nw(fr('x + 3', '2x + 3') + ' − ' + fr('x + 3', '5') + ' = 0') + '.',
+                  'Même dénominateur : ' + nw(fr('5(x + 3) − (x + 3)(2x + 3)', '5(2x + 3)') + ' = 0') + ', donc le numérateur est nul.',
+                  'On factorise par (x + 3) : (x + 3)[5 − (2x + 3)] = (x + 3)(2 − 2x) = 0.',
+                  'Produit nul : x + 3 = 0 ou 2 − 2x = 0. <b>Solutions : −3 et 1</b> (aucune n\'est interdite).'],
+            piege: 'ne pas « simplifier » par (x + 3) : on perdrait la solution −3.' },
           reprise(4),
           reprise(8),
           { cours: 'ma-ch7', titre: 'Scratch : un programme de calcul',
@@ -492,7 +536,10 @@
     .replace(/ ([−+×÷=→]) (?=[\d(a-zA-Z√<−])/g, ' $1\u00a0')
     .replace(/(\d) (?=\d)/g, '$1 ')
     .replace(/(\d) (?=[^\d\s=×÷+−:;<(→,.])/g, '$1 ')
-    .replace(/ ([:;!?»])/g, ' $1').replace(/« /g, '« ');
+    .replace(/ ([:;!?»])/g, ' $1').replace(/« /g, '« ')
+    /* pas de retour à la ligne dans une petite parenthèse, ni entre « )( » */
+    .replace(/\(([^()<>]{1,14})\)/g, (m, c) => '(' + c.replace(/ /g, '\u00a0') + ')')
+    .replace(/\)\(/g, ')\u2060(');
   for (const f of DATA.relire) for (const face of f.faces || [f]) {
     if (face.conseil) face.conseil = insecable(face.conseil);
     for (const e of face.exemples) {

@@ -150,7 +150,7 @@ DATA.examens.push(
 <p class="piege"><b>Piège :</b> écrire d'abord « le triangle ABC est rectangle en B », sans quoi le théorème ne s'applique pas. On additionne les carrés, pas les longueurs.</p></div>
 <div class="rep"><p class="rq"><b>2.</b> Angle ACB et débutants.</p>
 <p>Dans le triangle ABC rectangle en B, pour l'angle ACB, [AB] est le côté opposé et [BC] le côté adjacent.</p>
-<p class="calc">tan ACB = AB / BC = 0,7 / 2,4<br>ACB = tan⁻¹(0,7 ÷ 2,4) ≈ 16°</p>
+<p class="calc">tan ACB = AB / BC = 0,7 / 2,4<br>ACB = arctan(0,7 ÷ 2,4) ≈ 16°</p>
 <p><b>L'angle ACB mesure environ 16°. Comme 16° &lt; 20°, ce lanceur convient aux débutants.</b></p>
 <p class="valorise"><b>On valorise :</b> cos ACB = BC / AC = 2,4 / 2,5 ou sin ACB = AB / AC = 0,7 / 2,5 donnent aussi environ 16°. Utiliser les données de l'énoncé (AB et BC) évite de dépendre d'un résultat calculé.</p>
 <p class="piege"><b>Piège :</b> calculatrice en mode degré (cos 60 doit donner 0,5) ; écrire « ≈ » dès qu'on arrondit.</p></div>
@@ -196,7 +196,7 @@ DATA.examens.push(
 <ol class="etapes">
 <li><b>Partie 1 : 20 minutes, 9 questions.</b> Environ 2 minutes par question, sans calculatrice. Écrire seulement le numéro et la réponse ; une question qui bloque est laissée de côté et reprise à la fin.</li>
 <li><b>Partie 2 : répartir 1 h 40.</b> Trois exercices de 4 points : environ 30 minutes chacun, et 10 minutes pour relire (unités, phrases réponses, questions oubliées). Commencer par l'exercice le plus sûr : ils sont indépendants.</li>
-<li><b>Pythagore et trigonométrie (exercice 1).</b> Toujours commencer par la donnée « Le triangle ABC est rectangle en B », puis citer le théorème : « D'après le théorème de Pythagore, AC² = AB² + BC². » En trigonométrie, nommer le côté opposé et le côté adjacent, écrire la formule avec les lettres, puis tan⁻¹ en mode degré et arrondir au degré avec « ≈ ».</li>
+<li><b>Pythagore et trigonométrie (exercice 1).</b> Toujours commencer par la donnée « Le triangle ABC est rectangle en B », puis citer le théorème : « D'après le théorème de Pythagore, AC² = AB² + BC². » En trigonométrie, nommer le côté opposé et le côté adjacent, écrire la formule avec les lettres, puis arctan en mode degré et arrondir au degré avec « ≈ ».</li>
 <li><b>Question en gras sur le parallélisme.</b> Rédiger en trois temps : « On sait que… », « Or, si deux droites sont perpendiculaires à une même droite, alors elles sont parallèles », « Donc… ». Des phrases complètes et le vocabulaire exact (perpendiculaire, parallèle, droite) : c'est là que la langue est évaluée.</li>
 <li><b>Thalès.</b> Écrire les hypothèses (alignements et droites parallèles, en citant la question 3), les trois rapports dans le même ordre, puis le produit en croix. Réponse avec l'unité demandée (ici en cm).</li>
 <li><b>Programme de calcul.</b> Pour une affirmation « quel que soit le nombre », travailler avec x : développer, réduire, comparer. Pour « obtenir 0 », écrire la phrase de l'équation produit nul et donner les deux solutions.</li>
@@ -503,7 +503,7 @@ DATA.examens.push(
 <p class="piege"><b>Piège :</b> l'hypoténuse est l'échelle [EH] ; on cherche un côté de l'angle droit, donc on soustrait.</p></div>
 <div class="rep"><p class="rq"><b>3.</b> Angle OEH et stabilité.</p>
 <p>Dans le triangle OEH rectangle en O, pour l'angle OEH, [OE] est le côté adjacent et [EH] l'hypoténuse.</p>
-<p class="calc">cos OEH = OE / EH = 1,4 / 5 = 0,28<br>OEH = cos⁻¹(0,28) ≈ 74°</p>
+<p class="calc">cos OEH = OE / EH = 1,4 / 5 = 0,28<br>OEH = arccos(0,28) ≈ 74°</p>
 <p><b>L'angle OEH mesure environ 74°. Comme 74° est compris entre 65° et 75°, l'échelle de Malik est stable.</b></p></div>
 <div class="rep"><p class="rq"><b>4.</b> Atteindre 4,90 m ?</p>
 <p>Plus l'échelle est redressée, plus son sommet monte ; l'angle le plus grand autorisé est 75°. Dans le triangle OEH rectangle en O, sin OEH = OH / EH, donc OH = EH × sin OEH.</p>
@@ -530,7 +530,7 @@ DATA.examens.push(
 <div class="rep"><p class="rq"><b>2.</b> Durée sans les montées.</p><p class="calc">t = d ÷ v = 8,5 ÷ 3,4 = 2,5 h<br>0,5 h = 0,5 × 60 min = 30 min</p><p><b>La randonnée durerait 2 h 30 min.</b></p><p class="piege"><b>Piège :</b> 2,5 h ne vaut pas 2 h 50 min ; on multiplie la partie décimale par 60.</p></div>
 <div class="rep"><p class="rq"><b>3.</b> Le bus de 14 h 30.</p><p>Le temps ajouté est proportionnel au dénivelé : 1 h pour 300 m.</p><p class="calc">450 ÷ 300 = 1,5, donc on ajoute 1,5 h = 1 h 30 min<br>Durée totale : 2 h 30 min + 1 h 30 min + 45 min = 4 h 45 min<br>Arrivée : 9 h 15 + 4 h 45 min = 14 h 00</p><p><b>Ils arriveront vers 14 h, avant le départ du bus de 14 h 30 : ils pourront le prendre, avec 30 minutes d'avance.</b></p></div>
 <div class="rep"><p class="rq"><b>4.</b> Dénivelé du tronçon.</p><p class="calc">15 % de 1 200 m : 1 200 × 15 ÷ 100 = 180</p><p><b>Le tronçon a un dénivelé de 180 m.</b></p></div>
-<div class="rep"><p class="rq"><b>5.</b> Angle KDS.</p><p>Dans le triangle DKS rectangle en K, pour l'angle KDS, [KS] est le côté opposé et [DK] le côté adjacent.</p><p class="calc">tan KDS = KS / DK = 180 / 1 200 = 0,15<br>KDS = tan⁻¹(0,15) ≈ 9°</p><p><b>Le sentier forme avec l'horizontale un angle d'environ 9°.</b></p><p class="piege"><b>Piège :</b> une pente de 15 % ne correspond pas à un angle de 15° !</p></div>
+<div class="rep"><p class="rq"><b>5.</b> Angle KDS.</p><p>Dans le triangle DKS rectangle en K, pour l'angle KDS, [KS] est le côté opposé et [DK] le côté adjacent.</p><p class="calc">tan KDS = KS / DK = 180 / 1 200 = 0,15<br>KDS = arctan(0,15) ≈ 9°</p><p><b>Le sentier forme avec l'horizontale un angle d'environ 9°.</b></p><p class="piege"><b>Piège :</b> une pente de 15 % ne correspond pas à un angle de 15° !</p></div>
 <div class="rep"><p class="rq"><b>6.</b> Conversion de vitesse.</p><p class="calc">2,5 m/s = 2,5 × 3 600 m/h = 9 000 m/h = 9 km/h</p><p><b>Le télésiège avance à 9 km/h.</b> (Raccourci : multiplier par 3,6.)</p></div>
 <p class="bareme">Rédaction (2 points) : calculs posés, propriétés citées, phrases réponses avec unités ; la maîtrise de la langue est plus particulièrement évaluée sur les questions en gras (exercice 1 question 1, exercice 2 question 4).</p>
 `

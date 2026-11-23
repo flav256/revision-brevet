@@ -20,8 +20,8 @@ DATA.chapitres.push(
       "Dans un triangle rectangle, l'<b>hypoténuse</b> est le côté opposé à l'angle droit : c'est toujours le <b>plus long côté</b>.",
       "<b>Pythagore</b> : si ABC est rectangle en A, alors <b>BC² = AB² + AC²</b>. Il sert à calculer une longueur quand on connaît les deux autres.",
       "<b>Réciproque</b> : si BC² = AB² + AC² ([BC] étant le plus long côté), alors ABC est rectangle en A. <b>Contraposée</b> : si BC² ≠ AB² + AC², alors ABC n'est pas rectangle.",
-      "<b>SOH-CAH-TOA</b> : sin = opposé ÷ hypoténuse ; cos = adjacent ÷ hypoténuse ; tan = opposé ÷ adjacent. Uniquement dans un triangle rectangle, pour un angle aigu.",
-      "Pour trouver un angle, on utilise les touches <b>cos⁻¹, sin⁻¹ ou tan⁻¹</b> de la calculatrice, réglée en <b>mode degré</b>."
+      "<b>cos = adjacent ÷ hypoténuse</b> ; <b>sin = opposé ÷ hypoténuse</b> ; tan = opposé ÷ adjacent. Uniquement dans un triangle rectangle, pour un angle aigu.",
+      "Pour trouver un angle, on utilise <b>arccos, arcsin ou arctan</b> à la calculatrice, réglée en <b>mode degré</b>."
     ],
 
     sections: [
@@ -60,7 +60,7 @@ DATA.chapitres.push(
         titre: "Cosinus, sinus et tangente",
         points: [
           "Dans un triangle <b>rectangle</b>, pour un angle <b>aigu</b> : <b>cos = côté adjacent ÷ hypoténuse</b> ; <b>sin = côté opposé ÷ hypoténuse</b> ; <b>tan = côté opposé ÷ côté adjacent</b>.",
-          "Moyen mnémotechnique : <b>SOH-CAH-TOA</b>. <b>S</b>inus = <b>O</b>pposé / <b>H</b>ypoténuse ; <b>C</b>osinus = <b>A</b>djacent / <b>H</b>ypoténuse ; <b>T</b>angente = <b>O</b>pposé / <b>A</b>djacent.",
+          "À savoir par cœur : <b>cos = adjacent / hypoténuse</b> et <b>sin = opposé / hypoténuse</b>. La tangente est la seule qui n'utilise pas l'hypoténuse.",
           "Exemple : ABC est rectangle en A. cos ABC = AB/BC ; sin ABC = AC/BC ; tan ABC = AC/AB.",
           "Le cosinus et le sinus d'un angle aigu sont toujours <b>compris entre 0 et 1</b>, car l'hypoténuse est le plus long côté. La tangente, elle, peut dépasser 1.",
           "Ces formules ne marchent <b>que dans un triangle rectangle</b>. On commence donc toujours par écrire : « Le triangle … est rectangle en … »."
@@ -80,9 +80,9 @@ DATA.chapitres.push(
         titre: "Calculer un angle avec la trigonométrie",
         points: [
           "On calcule d'abord le cosinus, le sinus ou la tangente de l'angle avec les <b>deux longueurs connues</b>, sous forme de quotient.",
-          "Puis on utilise la touche <b>cos⁻¹</b>, <b>sin⁻¹</b> ou <b>tan⁻¹</b> (appelées aussi Arccos, Arcsin, Arctan). On l'obtient souvent avec la touche « 2nde » ou « SHIFT ».",
-          "Exemple : DEF est rectangle en D, DE = 7 cm et DF = 4 cm. Pour l'angle DEF, [DF] est opposé et [DE] adjacent : tan DEF = 4/7, donc DEF = tan⁻¹(4/7) ≈ <b>30°</b>.",
-          "Exemple : ABC est rectangle en A, AC = 3 cm et BC = 7 cm. sin ABC = 3/7, donc ABC = sin⁻¹(3/7) ≈ <b>25°</b>.",
+          "Puis on trouve l'angle avec <b>arccos</b>, <b>arcsin</b> ou <b>arctan</b>. Sur la calculatrice, selon le modèle, la touche s'appelle Arccos (ou acos), souvent avec « 2nde » ou « SHIFT ».",
+          "Exemple : DEF est rectangle en D, DE = 7 cm et DF = 4 cm. Pour l'angle DEF, [DF] est opposé et [DE] adjacent : tan DEF = 4/7, donc DEF = arctan(4/7) ≈ <b>30°</b>.",
+          "Exemple : ABC est rectangle en A, AC = 3 cm et BC = 7 cm. sin ABC = 3/7, donc ABC = arcsin(3/7) ≈ <b>25°</b>.",
           "Dans un triangle rectangle, les deux angles aigus sont <b>complémentaires</b> : leur somme vaut 90°. Dans le dernier exemple, l'angle ACB mesure environ 90° − 25° = 65°."
         ]
       },
@@ -100,7 +100,7 @@ DATA.chapitres.push(
         points: [
           "Triangle rectangle, je connais <b>deux longueurs</b> et je cherche la troisième : <b>théorème de Pythagore</b>.",
           "Triangle rectangle, je connais <b>un angle aigu et une longueur</b> et je cherche une autre longueur : <b>cosinus, sinus ou tangente</b>.",
-          "Triangle rectangle, je connais <b>deux longueurs</b> et je cherche un <b>angle</b> : trigonométrie, puis cos⁻¹, sin⁻¹ ou tan⁻¹.",
+          "Triangle rectangle, je connais <b>deux longueurs</b> et je cherche un <b>angle</b> : trigonométrie, puis arccos, arcsin ou arctan.",
           "Je veux savoir si un triangle <b>est rectangle</b> : <b>réciproque</b> ou <b>contraposée</b> du théorème de Pythagore.",
           "Deux droites <b>parallèles</b> et une longueur à calculer : théorème de <b>Thalès</b> (voir le chapitre 2)."
         ]
@@ -119,7 +119,7 @@ DATA.chapitres.push(
       ["Cosinus", "Dans un triangle rectangle, côté adjacent ÷ hypoténuse."],
       ["Sinus", "Dans un triangle rectangle, côté opposé ÷ hypoténuse."],
       ["Tangente", "Dans un triangle rectangle, côté opposé ÷ côté adjacent."],
-      ["SOH-CAH-TOA", "Moyen mnémotechnique : Sinus = Opposé/Hypoténuse, Cosinus = Adjacent/Hypoténuse, Tangente = Opposé/Adjacent."],
+      ["Arccos", "Donne l'angle dont on connaît le cosinus : si cos x = 0,5, alors x = arccos(0,5) = 60°. De même arcsin pour le sinus et arctan pour la tangente."],
       ["Angles complémentaires", "Deux angles dont la somme vaut 90°, comme les deux angles aigus d'un triangle rectangle."],
       ["Mode degré", "Réglage de la calculatrice indispensable en trigonométrie au collège. Test : cos 60 doit donner 0,5."]
     ],
@@ -168,12 +168,12 @@ DATA.chapitres.push(
       { q: "Dans un triangle rectangle, le sinus d'un angle aigu est égal à :",
         choix: ["côté adjacent ÷ hypoténuse", "côté opposé ÷ hypoténuse", "côté opposé ÷ côté adjacent", "hypoténuse ÷ côté opposé"],
         bonne: 1,
-        why: "C'est le SOH de SOH-CAH-TOA : Sinus = Opposé / Hypoténuse." },
+        why: "sin = opposé ÷ hypoténuse, et cos = adjacent ÷ hypoténuse." },
 
-      { q: "Que signifie TOA dans SOH-CAH-TOA ?",
-        choix: ["Tangente = Opposé ÷ Adjacent", "Tangente = Opposé ÷ Hypoténuse", "Triangle = Opposé + Adjacent", "Tangente = Adjacent ÷ Opposé"],
+      { q: "Dans un triangle rectangle, le cosinus d'un angle aigu est égal à :",
+        choix: ["côté adjacent ÷ hypoténuse", "côté opposé ÷ hypoténuse", "côté opposé ÷ côté adjacent", "hypoténuse ÷ côté adjacent"],
         bonne: 0,
-        why: "La tangente est le seul rapport qui n'utilise pas l'hypoténuse." },
+        why: "cos = adjacent ÷ hypoténuse ; c'est le sinus qui utilise le côté opposé." },
 
       { q: "ABC est rectangle en A. Que vaut cos ABC ?",
         choix: ["AC/BC", "AC/AB", "AB/AC", "AB/BC"],
@@ -195,10 +195,10 @@ DATA.chapitres.push(
         bonne: 1,
         why: "sin 30° = AC/BC = 5/BC, donc BC = 5 ÷ sin 30° = 5 ÷ 0,5 = 10 cm." },
 
-      { q: "Pour trouver un angle dont on connaît la tangente, on utilise la touche :",
-        choix: ["tan", "√", "1/x", "tan⁻¹ (Arctan)"],
+      { q: "Pour trouver un angle dont on connaît la tangente, on utilise :",
+        choix: ["tan", "√", "1/x", "arctan"],
         bonne: 3,
-        why: "La touche tan donne la tangente d'un angle ; tan⁻¹ fait le chemin inverse et donne l'angle." },
+        why: "tan donne la tangente d'un angle ; arctan fait le chemin inverse et donne l'angle." },
 
       { q: "Dans quel mode doit être la calculatrice pour la trigonométrie au collège ?",
         choix: ["Radian", "Grade", "Degré", "Statistique"],
@@ -208,7 +208,7 @@ DATA.chapitres.push(
       { q: "DEF est rectangle en D, DE = 7 cm et DF = 4 cm. Combien mesure l'angle DEF, au degré près ?",
         choix: ["30°", "60°", "35°", "4°"],
         bonne: 0,
-        why: "tan DEF = DF/DE = 4/7 (opposé ÷ adjacent), donc DEF = tan⁻¹(4/7) ≈ 30°." },
+        why: "tan DEF = DF/DE = 4/7 (opposé ÷ adjacent), donc DEF = arctan(4/7) ≈ 30°." },
 
       { q: "Le cosinus d'un angle aigu peut-il valoir 1,2 ?",
         choix: ["Oui, si le triangle est grand", "Oui, si l'angle est petit", "Seulement en mode radian", "Non, il est toujours compris entre 0 et 1"],
@@ -274,6 +274,7 @@ DATA.chapitres.push(
           "<b>Double distributivité</b> : (a + b)(c + d) = ac + ad + bc + bd. Chaque terme de la première parenthèse multiplie chaque terme de la seconde : on obtient 4 produits.",
           "Exemple : (x + 4)(2x − 3) = 2x² − 3x + 8x − 12 = <b>2x² + 5x − 12</b>.",
           "Piège du carré : (x + 3)² = (x + 3)(x + 3) = x² + 3x + 3x + 9 = <b>x² + 6x + 9</b>, et non x² + 9.",
+          "<b>Identités remarquables</b> : <b>(a + b)² = a² + 2ab + b²</b> ; <b>(a − b)² = a² − 2ab + b²</b> ; <b>(a + b)(a − b) = a² − b²</b>. Exemples : (x + 5)² = <b>x² + 10x + 25</b> ; (3x − 2)² = <b>9x² − 12x + 4</b> ; (x + 4)(x − 4) = <b>x² − 16</b>.",
           "Un signe − devant un produit : on développe d'abord le produit <b>en gardant les parenthèses</b>, puis on les supprime. 3(x + 2) − (x + 2)(x − 1) = 3x + 6 − (x² + x − 2) = 3x + 6 − x² − x + 2 = <b>−x² + 2x + 8</b>."
         ]
       },
@@ -521,10 +522,10 @@ DATA.chapitres.push(
           "On commence toujours par : « Le triangle ABC est rectangle en A. » La trigonométrie ne s'utilise que dans un triangle rectangle.",
           "On écrit la formule <b>avec les noms des points</b>, puis on remplace : « cos ABC = AB/BC, soit cos 52° = AB/6. »",
           "<b>Pour une longueur</b>, on l'isole par produit en croix : « AB = 6 × cos 52° ≈ 3,7 cm. »",
-          "<b>Pour un angle</b> : « tan ABC = AC/AB = 5/8, donc ABC = tan⁻¹(5/8) ≈ 32°. » La calculatrice doit être en <b>mode degré</b>.",
+          "<b>Pour un angle</b> : « tan ABC = AC/AB = 5/8, donc ABC = arctan(5/8) ≈ 32°. » La calculatrice doit être en <b>mode degré</b>.",
           "On tape le calcul en une seule fois à la calculatrice : on n'arrondit jamais un cosinus au milieu du calcul."
         ],
-        exemple: "<b>Énoncé</b> : EFG est rectangle en E, EF = 5 cm et FG = 8 cm. Calculer l'angle EFG, arrondi au degré.<br><b>Rédaction</b> : Le triangle EFG est rectangle en E. Pour l'angle EFG, [EF] est le côté adjacent et [FG] l'hypoténuse.<br>cos EFG = EF/FG = 5/8.<br>Donc EFG = cos⁻¹(5/8) ≈ 51°.<br><b>Réponse</b> : l'angle EFG mesure environ 51°."
+        exemple: "<b>Énoncé</b> : EFG est rectangle en E, EF = 5 cm et FG = 8 cm. Calculer l'angle EFG, arrondi au degré.<br><b>Rédaction</b> : Le triangle EFG est rectangle en E. Pour l'angle EFG, [EF] est le côté adjacent et [FG] l'hypoténuse.<br>cos EFG = EF/FG = 5/8.<br>Donc EFG = arccos(5/8) ≈ 51°.<br><b>Réponse</b> : l'angle EFG mesure environ 51°."
       },
       {
         titre: "Arrondis, unités et erreurs fréquentes",
