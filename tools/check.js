@@ -92,7 +92,7 @@ for (const r of RL) {
     if ((r.cours || []).length > 1 && !(r.cours || []).includes(e.cours)) err(id, `exemple ${i + 1} : cours absent ou hors de la fiche`);
     if (!str(e.titre) || !str(e.enonce) || !str(e.piege)) err(id, `exemple ${i + 1} : titre, enonce ou piege manquant`);
     if (!Array.isArray(e.sol) || !e.sol.length || !e.sol.every(str)) err(id, `exemple ${i + 1} : sol (lignes) invalide`);
-    if (!/^<svg [^>]*viewBox="0 0 120 /.test(e.fig || '')) err(id, `exemple ${i + 1} : schéma SVG de 120 de large attendu`);
+    if (!new RegExp('^<svg [^>]*viewBox="0 0 ' + (e.large ? 156 : 120) + ' ').test(e.fig || '')) err(id, `exemple ${i + 1} : schéma SVG de ${e.large ? 156 : 120} de large attendu`);
     for (const t of ['svg', 'g', 'text']) if (((e.fig || '').match(new RegExp('<' + t + '[\\s>]', 'g')) || []).length !== ((e.fig || '').match(new RegExp('</' + t + '>', 'g')) || []).length) err(id, `exemple ${i + 1} : balises <${t}> non fermées`);
   });
 }

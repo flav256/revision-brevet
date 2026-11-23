@@ -311,14 +311,14 @@
     <text class="at" x="46" y="28" font-size="9" font-weight="700" text-anchor="middle">10</text>
     <text class="aot" x="97" y="37" font-size="9" font-weight="700">?</text>`);
 
-  const formule = (x, nom, haut, cls) => `
-    <rect class="${cls}" x="${x}" y="1" width="57" height="44" rx="3" fill="none" stroke="currentColor" stroke-width=".9"/>
-    <text class="at" x="${x + 28.5}" y="14" font-size="11.5" font-weight="700" text-anchor="middle">${nom} =</text>
-    <text x="${x + 28.5}" y="27" font-size="9" text-anchor="middle">${haut}</text>
-    <line x1="${x + 5}" y1="30.5" x2="${x + 52}" y2="30.5" stroke="currentColor" stroke-width=".9"/>
-    <text x="${x + 28.5}" y="40.5" font-size="9" text-anchor="middle">hypoténuse</text>`;
-  const figCosSin = svg(46, "cos = côté adjacent sur hypoténuse ; sin = côté opposé sur hypoténuse.",
-    formule(1, 'cos', 'adjacent', 'al ac') + formule(62, 'sin', 'opposé', ''));
+  const formule = (x, nom, haut, bas, cls) => `
+    <rect class="${cls}" x="${x}" y="1" width="50" height="44" rx="3" fill="none" stroke="currentColor" stroke-width=".9"/>
+    <text class="at" x="${x + 25}" y="14" font-size="11.5" font-weight="700" text-anchor="middle">${nom} =</text>
+    <text x="${x + 25}" y="27" font-size="8.2" text-anchor="middle">${haut}</text>
+    <line x1="${x + 3.5}" y1="30.5" x2="${x + 46.5}" y2="30.5" stroke="currentColor" stroke-width=".9"/>
+    <text x="${x + 25}" y="40.5" font-size="8.2" text-anchor="middle">${bas}</text>`;
+  const figTrigo3 = `<svg viewBox="0 0 156 46" role="img" aria-label="cos = côté adjacent sur hypoténuse ; sin = côté opposé sur hypoténuse ; tan = côté opposé sur côté adjacent." stroke-linecap="round" stroke-linejoin="round">${
+    formule(1, 'cos', 'adjacent', 'hypoténuse', 'al ac') + formule(53, 'sin', 'opposé', 'hypoténuse', '') + formule(105, 'tan', 'opposé', 'adjacent', '')}</svg>`;
 
   /* ch. 5 */
   const figDistrib = svg(56, "Tableau de la double distributivité : 2x fois x = 2x² ; 2x fois −4 = −8x ; 3 fois x = 3x ; 3 fois −4 = −12.", `
@@ -333,13 +333,15 @@
     <g font-size="8.5" text-anchor="middle"><text x="25" y="34">produit</text><text x="95" y="34">somme</text></g>
     <text x="60" y="47" font-size="9" text-anchor="middle">développer → · <tspan class="at" font-weight="700">← factoriser</tspan></text>`);
 
-  /* (a + b)² : le grand carré se découpe en a², ab, ab et b² */
-  const figCarre = svg(68, "Un carré de côté a + b découpé en quatre : un carré a², deux rectangles ab et un carré b². Donc (a + b)² = a² + 2ab + b².", `
-    <rect class="am" x="26" y="10" width="36" height="36"/><rect class="al" x="62" y="10" width="20" height="36"/><rect class="al" x="26" y="46" width="36" height="20"/><rect class="aol" x="62" y="46" width="20" height="20"/>
-    <g fill="none" stroke="currentColor" stroke-width=".9"><rect x="26" y="10" width="56" height="56"/><line x1="62" y1="10" x2="62" y2="66"/><line x1="26" y1="46" x2="82" y2="46"/></g>
-    <g font-size="10" text-anchor="middle"><text x="44" y="7">a</text><text x="72" y="7">b</text><text x="19" y="31">a</text><text x="19" y="59">b</text></g>
-    <g font-size="11" font-weight="700" text-anchor="middle"><text x="44" y="32">${ex('a', '2')}</text><text x="72" y="32">ab</text><text x="44" y="60">ab</text><text x="72" y="60">${ex('b', '2')}</text></g>
-    <g class="at" font-size="10" font-weight="700"><text x="88" y="26">= ${ex('a', '2')}</text><text x="88" y="40">+ 2ab</text><text x="88" y="54">+ ${ex('b', '2')}</text></g>`);
+  /* les trois identités remarquables, alignées sur le signe = */
+  const ligneId = (y, g, d) => `<text x="67" y="${y}" text-anchor="end">${g}</text><text x="73" y="${y}" text-anchor="middle">=</text><text x="79" y="${y}">${d}</text>`;
+  const ab2 = '<tspan class="at" font-weight="700">2ab</tspan>';
+  const figIdentites = `<svg viewBox="0 0 156 50" role="img" aria-label="Les trois identités remarquables : (a + b)² = a² + 2ab + b² ; (a − b)² = a² − 2ab + b² ; (a + b)(a − b) = a² − b²." stroke-linecap="round" stroke-linejoin="round">
+    <rect class="al ac" x="1" y="1" width="154" height="48" rx="3" stroke-width=".9"/>
+    <g font-size="9.3">
+      ${ligneId(16, ex('(a + b)', '2'), `${ex('a', '2')} + ${ab2} + ${ex('b', '2')}`)}
+      ${ligneId(31, ex('(a − b)', '2'), `${ex('a', '2')} − ${ab2} + ${ex('b', '2')}`)}
+      ${ligneId(46, '(a + b)(a − b)', `${ex('a', '2')} − ${ex('b', '2')}`)}</g></svg>`;
 
   /* un quotient est nul si son numérateur est nul (et son dénominateur ne l'est pas) */
   const figQuotient = svg(40, "N sur D égale 0 : donc N = 0, avec D différent de 0.", `
@@ -464,10 +466,10 @@
             piege: 'calculatrice en mode <b>degrés</b>.' },
           { cours: 'ma-ch4', titre: 'Trigonométrie : un angle',
             enonce: 'EFG rectangle en E, EF = 5 cm, FG = 8 cm. Calculer l\'angle EFG au degré.',
-            fig: figCosSin,
+            fig: figTrigo3, large: true,
             sol: ['Pour l\'angle F : [EF] est adjacent, [FG] est l\'hypoténuse, donc cos F = EF/FG = 5/8.',
                   'F = arccos(5/8) ≈ <b>51°</b> (calculatrice en degrés).'],
-            piege: 'choisir la formule qui utilise les deux longueurs connues.' }
+            piege: 'choisir la formule qui utilise les deux longueurs connues (tan : opposé et adjacent).' }
         ] },
       { titre: 'Verso · Chapitres 5 à 7',
         conseil: "Toujours <b>vérifier</b> : remplacer x par la solution trouvée, regarder l'ordre de grandeur et l'unité.",
@@ -479,11 +481,11 @@
                   '= 2x² − 8x + 3x − 12 = <b>2x² − 5x − 12</b>.'],
             piege: 'les signes : 3 × (−4) = −12.' },
           { cours: 'ma-ch5', titre: 'Les identités remarquables',
-            enonce: 'Développer (x + 5)² et (3x − 2)². Factoriser 4x² − 9.',
-            fig: figCarre,
-            sol: ['(a + b)² = a² + 2ab + b² : (x + 5)² = x² + 2 × x × 5 + 5² = <b>x² + 10x + 25</b>.',
-                  '(a − b)² = a² − 2ab + b² : (3x − 2)² = 9x² − 2 × 3x × 2 + 4 = <b>9x² − 12x + 4</b>.',
-                  'a² − b² = (a − b)(a + b) : 4x² − 9 = (2x)² − 3² = <b>(2x − 3)(2x + 3)</b>.'],
+            enonce: 'Développer (x + 5)² et (3x − 2)². Factoriser ' + nw('4x² − 9') + '.',
+            fig: figIdentites, large: true,
+            sol: ['(x + 5)² = x² + 2 × x × 5 + 5² = <b>x² + 10x + 25</b>.',
+                  '(3x − 2)² = (3x)² − 2 × 3x × 2 + 2² = <b>9x² − 12x + 4</b>.',
+                  '4x² − 9 = (2x)² − 3² = <b>(2x − 3)(2x + 3)</b>.'],
             piege: '(x + 5)² n\'est pas x² + 25 : il manque le double produit 2ab.' },
           { cours: 'ma-ch5', titre: 'Factoriser',
             enonce: 'Factoriser 6x + 15, puis (x + 1)(2x + 3) + (x + 1)(x − 5).',
@@ -536,6 +538,7 @@
     .replace(/ ([−+×÷=→]) (?=[\d(a-zA-Z√<−])/g, ' $1\u00a0')
     .replace(/(\d) (?=\d)/g, '$1 ')
     .replace(/(\d) (?=[^\d\s=×÷+−:;<(→,.])/g, '$1 ')
+    .replace(/(^|[\s(;,])([A-Za-z]{1,3}) (?==)/g, '$1$2\u00a0')   // « EF = 5 cm » d'un seul tenant
     .replace(/ ([:;!?»])/g, ' $1').replace(/« /g, '« ')
     /* pas de retour à la ligne dans une petite parenthèse, ni entre « )( » */
     .replace(/\(([^()<>]{1,14})\)/g, (m, c) => '(' + c.replace(/ /g, '\u00a0') + ')')

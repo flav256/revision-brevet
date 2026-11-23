@@ -967,7 +967,7 @@ const tagChapitre = e => { const c = e.cours && chapitre(e.cours); return c ? c.
 function exempleRelire(e, n, classe = '', tag = '') {
   return `<article class="rl-ex${classe}">
     <h3><span class="rl-n">${n}</span><span class="rl-t">${esc(e.titre)}</span>${tag ? `<span class="rl-tag">${esc(tag)}</span>` : ''}</h3>
-    <figure class="rl-fig">${e.fig}</figure>
+    <figure class="rl-fig${e.large ? ' rl-fig-l' : ''}">${e.fig}</figure>
     <p class="rl-q">${e.enonce}</p>
     <div class="rl-sol">${e.sol.map(l => `<p>${l}</p>`).join('')}</div>
     ${e.piege ? `<p class="rl-piege"><b>Piège</b> : ${e.piege}</p>` : ''}

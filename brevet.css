@@ -244,7 +244,8 @@ h2.section.auj { color: var(--blue); }
 .rl-sol b { color: var(--ink); }
 .rl-piege { margin: 9px 0 0; font-size: .93em; color: #7A4600; }
 .rl-piege b { color: #C25E00; }
-@media (min-width: 1000px) { .rl-fig { width: 160px; } }
+.rl-fig-l { width: 172px; }
+@media (min-width: 1000px) { .rl-fig { width: 160px; } .rl-fig-l { width: 208px; } }
 
 /* les couleurs des schémas : --mc = la couleur de la matière, orange pour un second objet */
 .rl-fig text { fill: currentColor; stroke: none; font-family: inherit; }
@@ -285,6 +286,7 @@ h2.section.auj { color: var(--blue); }
 .feuille .rl-ex h3 { font-size: 1.04em; gap: .45em; margin: 0 0 .22em; color: #1B2232; }
 .feuille .rl-n { font-size: .8em; }
 .feuille .rl-fig { width: 10em; margin: .15em 0 .25em .7em; color: #1B2232; }
+.feuille .rl-fig-l { width: 13em; }
 .feuille .rl-q { margin: 0 0 .3em; color: #1B2232; font-weight: 600; }
 .feuille .rl-sol { border-left-width: .7mm; padding: 0 0 0 .55em; }
 .feuille .rl-sol p { margin: .1em 0; }
